@@ -1,12 +1,38 @@
 import { useState } from 'react';
 
+import Button from './components/Button';
+
 const App = () => {
-  // save clicks of each button to its own state
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
 
-  return <div>code here</div>;
+  return (
+    <section>
+      <article>
+        <h2>give feedback</h2>
+        <Button
+          onClick={() => setGood((prevGood) => prevGood + 1)}
+          text='good'
+        />
+        <Button
+          onClick={() => setNeutral((prevNeutral) => prevNeutral + 1)}
+          text='neutral'
+        />
+        <Button
+          onClick={() => setBad((prevBad) => prevBad + 1)}
+          text='bad'
+        />
+      </article>
+
+      <article>
+        <h2>statistics</h2>
+        <p>good {good}</p>
+        <p>neutral {neutral}</p>
+        <p>bad {bad}</p>
+      </article>
+    </section>
+  );
 };
 
 export default App;
