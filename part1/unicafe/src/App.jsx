@@ -9,9 +9,9 @@ const App = () => {
   const [bad, setBad] = useState(0);
 
   const feedbacks = [
-    { text: 'good', setState: setGood },
-    { text: 'neutral', setState: setNeutral },
-    { text: 'bad', setState: setBad }
+    { text: 'good', setFeedback: setGood },
+    { text: 'neutral', setFeedback: setNeutral },
+    { text: 'bad', setFeedback: setBad }
   ];
 
   const hasFeedbackGathered = good || neutral || bad;
@@ -24,7 +24,9 @@ const App = () => {
           <Button
             key={feedback.text}
             text={feedback.text}
-            onClick={() => feedback.setState((prevState) => prevState + 1)}
+            onClick={() =>
+              feedback.setFeedback((prevFeedback) => prevFeedback + 1)
+            }
           />
         ))}
       </article>

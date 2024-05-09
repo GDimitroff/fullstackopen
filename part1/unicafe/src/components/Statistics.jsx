@@ -15,15 +15,17 @@ const Statistics = ({ good, neutral, bad }) => {
   ];
 
   return (
-    <div>
-      {stats.map((stat) => (
-        <StatisticsLine
-          key={stat.text}
-          text={stat.text}
-          value={stat.value}
-        />
-      ))}
-    </div>
+    <table>
+      <tbody>
+        {stats.map((stat) => (
+          <StatisticsLine
+            key={stat.text}
+            text={stat.text}
+            value={stat.value}
+          />
+        ))}
+      </tbody>
+    </table>
   );
 };
 
