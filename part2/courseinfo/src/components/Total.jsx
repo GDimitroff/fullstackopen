@@ -1,3 +1,7 @@
-const Total = ({ sum }) => <p>Number of exercises {sum}</p>;
+const Total = ({ sum }) => (
+  <p>
+    <strong>total of {sum} exercises</strong>
+  </p>
+);
 
 export default Total;
