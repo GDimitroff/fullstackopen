@@ -29,16 +29,7 @@ const App = () => {
     }
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    const nameAlreadyExist = persons.find((person) => person.name === newName);
-
-    if (nameAlreadyExist) {
-      alert(`${newName} is already added to phonebook`);
-      return;
-    }
-
+  const createPerson = () => {
     const newPerson = {
       name: newName,
       number: newNumber
@@ -49,6 +40,31 @@ const App = () => {
       setNewName('');
       setNewNumber('');
     });
+  };
+
+  const updatePerson = (person) => {
+    const confirmationMessage = `${person.name} is already added to phonebook, replace the old number with a new one?`;
+
+    if (window.confirm(confirmationMessage)) {
+      const changedPerson = { ...person, number: newNumber };
+
+      personsService.update(person.id, changedPerson).then((returnedPerson) => {
+        setPersons(
+          persons.map((p) => {
+            return p.id !== person.id ? p : returnedPerson;
+          })
+        );
+        setNewName('');
+        setNewNumber('');
+      });
+    }
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const person = persons.find((person) => person.name === newName);
+    person ? updatePerson(person) : createPerson();
   };
 
   return (
