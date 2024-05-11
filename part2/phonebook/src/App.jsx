@@ -31,12 +31,16 @@ const App = () => {
       return;
     }
 
-    setPersons([
-      ...persons,
-      { name: newName, number: newNumber, id: persons.length + 1 }
-    ]);
-    setNewName('');
-    setNewNumber('');
+    const newPerson = {
+      name: newName,
+      number: newNumber
+    };
+
+    personsService.create(newPerson).then((returnedPerson) => {
+      setPersons([...persons, returnedPerson]);
+      setNewName('');
+      setNewNumber('');
+    });
   };
 
   return (
