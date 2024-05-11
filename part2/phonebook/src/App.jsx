@@ -21,6 +21,14 @@ const App = () => {
     });
   }, []);
 
+  const handleDelete = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personsService.deletePerson(person.id).then(() => {
+        setPersons(persons.filter((p) => p.id !== person.id));
+      });
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -61,7 +69,10 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Persons persons={personsToShow} />
+      <Persons
+        persons={personsToShow}
+        onDelete={handleDelete}
+      />
     </div>
   );
 };
