@@ -4,12 +4,14 @@ import personsService from './services/phonebook';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import Notification from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
+  const [notification, setNotification] = useState(null);
 
   const personsToShow = persons.filter((person) => {
     return person.name.toLowerCase().includes(filter.toLowerCase());
@@ -39,6 +41,11 @@ const App = () => {
       setPersons([...persons, returnedPerson]);
       setNewName('');
       setNewNumber('');
+      setNotification(`Added ${returnedPerson.name}`);
+
+      setTimeout(() => {
+        setNotification(null);
+      }, 3000);
     });
   };
 
@@ -56,6 +63,11 @@ const App = () => {
         );
         setNewName('');
         setNewNumber('');
+        setNotification(`Updated ${returnedPerson.name}`);
+
+        setTimeout(() => {
+          setNotification(null);
+        }, 3000);
       });
     }
   };
@@ -70,6 +82,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} />
       <Filter
         filter={filter}
         onFilterChange={(e) => setFilter(e.target.value)}
