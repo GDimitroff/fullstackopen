@@ -23,11 +23,27 @@ const App = () => {
     });
   }, []);
 
+  const setNotificationMessage = (type, message) => {
+    setNotification({ type, message });
+    setTimeout(() => {
+      setNotification(null);
+    }, 3000);
+  };
+
   const handleDelete = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
-      personsService.deletePerson(person.id).then(() => {
-        setPersons(persons.filter((p) => p.id !== person.id));
-      });
+      personsService
+        .deletePerson(person.id)
+        .then(() => {
+          setPersons(persons.filter((p) => p.id !== person.id));
+        })
+        .catch(() => {
+          setPersons(persons.filter((p) => p.id !== person.id));
+          setNotificationMessage(
+            'error',
+            `Information of ${person.name} has already been removed from the server`
+          );
+        });
     }
   };
 
@@ -41,11 +57,7 @@ const App = () => {
       setPersons([...persons, returnedPerson]);
       setNewName('');
       setNewNumber('');
-      setNotification(`Added ${returnedPerson.name}`);
-
-      setTimeout(() => {
-        setNotification(null);
-      }, 3000);
+      setNotificationMessage('success', `Added ${returnedPerson.name}`);
     });
   };
 
@@ -63,11 +75,7 @@ const App = () => {
         );
         setNewName('');
         setNewNumber('');
-        setNotification(`Updated ${returnedPerson.name}`);
-
-        setTimeout(() => {
-          setNotification(null);
-        }, 3000);
+        setNotificationMessage('success', `Updated ${returnedPerson.name}`);
       });
     }
   };
@@ -82,7 +90,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} />
+      <Notification notification={notification} />
       <Filter
         filter={filter}
         onFilterChange={(e) => setFilter(e.target.value)}
