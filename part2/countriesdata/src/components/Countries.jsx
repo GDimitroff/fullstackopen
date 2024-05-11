@@ -1,7 +1,7 @@
 import { filterCountries } from '../utils/helpers';
 import Country from './Country';
 
-const Countries = ({ countries, filter }) => {
+const Countries = ({ countries, filter, onSelectCountry }) => {
   const filteredCountries = filterCountries(countries, filter);
 
   if (filter.trim().length === 0) {
@@ -18,11 +18,12 @@ const Countries = ({ countries, filter }) => {
 
   return (
     <div>
-      <ul>
-        {filteredCountries.map((country) => (
-          <li key={country.name.common}>{country.name.common}</li>
-        ))}
-      </ul>
+      {filteredCountries.map((country) => (
+        <div key={country.name.common}>
+          <span>{country.name.common} </span>
+          <button onClick={() => onSelectCountry(country)}>show</button>
+        </div>
+      ))}
     </div>
   );
 };

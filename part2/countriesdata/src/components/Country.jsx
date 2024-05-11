@@ -1,4 +1,6 @@
 const Country = ({ country }) => {
+  if (country === null) return;
+
   return (
     <div>
       <h1>{country.name.common}</h1>
