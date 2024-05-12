@@ -32,8 +32,14 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' });
 };
 
+morgan.token('post-body', (req, res) => JSON.stringify(req.body));
+
 app.use(express.json());
-app.use(morgan('tiny'));
+app.use(
+  morgan(
+    ':method :url :status :res[content-length] - :response-time ms :post-body'
+  )
+);
 
 app.get('/info', (request, response) => {
   const date = new Date();
@@ -48,15 +54,15 @@ app.get('/api/persons', (request, response) => {
 });
 
 app.post('/api/persons', (request, response) => {
-  const body = request.body;
+  const { name, number } = request.body;
 
-  if (!body.name || !body.number) {
+  if (!name || !number) {
     return response.status(400).json({
       error: 'name or number is missing'
     });
   }
 
-  if (persons.find((person) => person.name === body.name)) {
+  if (persons.find((person) => person.name === name)) {
     return response.status(400).json({
       error: 'name must be unique'
     });
@@ -64,11 +70,11 @@ app.post('/api/persons', (request, response) => {
 
   const person = {
     id: Math.floor(Math.random() * 1000),
-    name: body.name,
-    number: body.number
+    name,
+    number
   };
 
-  persons = persons.concat(person);
+  persons = [...persons, person];
   response.json(person);
 });
 
