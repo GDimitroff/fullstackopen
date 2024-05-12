@@ -3,7 +3,7 @@ const morgan = require('morgan');
 
 const app = express();
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 let persons = [
   {
@@ -40,6 +40,7 @@ app.use(
     ':method :url :status :res[content-length] - :response-time ms :post-body'
   )
 );
+app.use(express.static('dist'));
 
 app.get('/info', (request, response) => {
   const date = new Date();
