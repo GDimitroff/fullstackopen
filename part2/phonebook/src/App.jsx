@@ -53,12 +53,17 @@ const App = () => {
       number: newNumber
     };
 
-    personsService.create(newPerson).then((returnedPerson) => {
-      setPersons([...persons, returnedPerson]);
-      setNewName('');
-      setNewNumber('');
-      setNotificationMessage('success', `Added ${returnedPerson.name}`);
-    });
+    personsService
+      .create(newPerson)
+      .then((returnedPerson) => {
+        setPersons([...persons, returnedPerson]);
+        setNewName('');
+        setNewNumber('');
+        setNotificationMessage('success', `Added ${returnedPerson.name}`);
+      })
+      .catch((error) => {
+        setNotificationMessage('error', error.response.data.error);
+      });
   };
 
   const updatePerson = (person) => {
@@ -67,16 +72,21 @@ const App = () => {
     if (window.confirm(confirmationMessage)) {
       const changedPerson = { ...person, number: newNumber };
 
-      personsService.update(person.id, changedPerson).then((returnedPerson) => {
-        setPersons(
-          persons.map((p) => {
-            return p.id !== person.id ? p : returnedPerson;
-          })
-        );
-        setNewName('');
-        setNewNumber('');
-        setNotificationMessage('success', `Updated ${returnedPerson.name}`);
-      });
+      personsService
+        .update(person.id, changedPerson)
+        .then((returnedPerson) => {
+          setPersons(
+            persons.map((p) => {
+              return p.id !== person.id ? p : returnedPerson;
+            })
+          );
+          setNewName('');
+          setNewNumber('');
+          setNotificationMessage('success', `Updated ${returnedPerson.name}`);
+        })
+        .catch((error) => {
+          setNotificationMessage('error', error.response.data.error);
+        });
     }
   };
 
