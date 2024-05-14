@@ -9,7 +9,8 @@
     "build:ui": "rimraf dist && cd ../../part2/phonebook && npm run build && shx cp -R dist ../../part3/phonebook",
     "deploy": "fly deploy",
     "deploy:full": "npm run build:ui && npm run deploy",
-    "logs:prod": "fly logs"
+    "logs:prod": "fly logs",
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",
@@ -17,6 +18,8 @@
   "description": "",
   "devDependencies": {
     "@flydotio/dockerfile": "^0.5.7",
+    "@stylistic/eslint-plugin-js": "^2.1.0",
+    "eslint": "^8.57.0",
     "nodemon": "^3.1.0",
     "rimraf": "^5.0.7",
     "shx": "^0.3.4"
