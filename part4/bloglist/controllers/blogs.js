@@ -7,12 +7,22 @@ blogsRouter.get('/', (request, response) => {
   });
 });
 
-blogsRouter.post('/', (request, response) => {
-  const blog = new Blog(request.body);
+blogsRouter.post('/', (request, response, next) => {
+  const { title, author, url, likes } = request.body;
 
-  blog.save().then((result) => {
-    response.status(201).json(result);
+  const blog = new Blog({
+    title,
+    author,
+    url,
+    likes
   });
+
+  blog
+    .save()
+    .then((savedBlog) => {
+      response.status(201).json(savedBlog);
+    })
+    .catch((error) => next(error));
 });
 
 module.exports = blogsRouter;
