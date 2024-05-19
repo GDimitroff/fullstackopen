@@ -59,6 +59,13 @@ test.only('a valid blog can be added ', async () => {
   assert(titles.includes('Testing patterns'));
 });
 
+test.only('verify that the unique identifier property of the blog posts is named id and not _id', async () => {
+  const response = await api.get('/api/blogs');
+
+  assert(response.body[0].id);
+  assert.strictEqual(response.body[0]._id, undefined);
+});
+
 after(async () => {
   await mongoose.connection.close();
 });
