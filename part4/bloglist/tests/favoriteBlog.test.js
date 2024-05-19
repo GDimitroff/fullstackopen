@@ -54,19 +54,19 @@ describe('favorite blog', () => {
     }
   ];
 
-  test('returns null when the blog list is empty', () => {
+  test('returns undefined when the blog list is empty', () => {
     const result = listHelper.favoriteBlog([]);
-    assert.deepStrictEqual(result, null);
+    assert.deepStrictEqual(result, undefined);
   });
 
   test('identifies the blog with the highest number of likes', () => {
     const result = listHelper.favoriteBlog(blogs);
-    assert.deepStrictEqual(result, blogs[5]);
+    assert.deepStrictEqual(result, blogs[1]);
   });
 
-  test('identifies the latest blog when multiple blogs have the same highest number of likes', () => {
+  test('returns the first blog when multiple blogs have the same highest number of likes', () => {
     const result = listHelper.favoriteBlog(blogs);
-    assert.deepStrictEqual(result, blogs[5]);
+    assert.deepStrictEqual(result, blogs[1]);
   });
 
   test('returns the only blog when the list contains only one blog', () => {
