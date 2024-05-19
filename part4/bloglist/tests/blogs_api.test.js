@@ -5,7 +5,7 @@ const supertest = require('supertest');
 const app = require('../app');
 const api = supertest(app);
 
-const helper = require('./test_helper');
+const helper = require('./helper');
 
 const Blog = require('../models/blog');
 
@@ -33,6 +33,32 @@ describe.only('when there is initially some blogs saved', () => {
 
     const titles = response.body.map((e) => e.title);
     assert.strictEqual(titles.includes('React patterns'), true);
+  });
+
+  describe.only('viewing a specific blog', () => {
+    test.only('succeeds with a valid id', async () => {
+      const blogsAtStart = await helper.blogsInDb();
+      const blogToView = blogsAtStart[0];
+
+      const response = await api
+        .get(`/api/blogs/${blogToView.id}`)
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
+
+      assert.deepStrictEqual(response.body, blogToView);
+    });
+
+    test.only('fails with statuscode 404 if blog does not exist', async () => {
+      const validNonexistingId = await helper.nonExistingId();
+
+      await api.get(`/api/blogs/${validNonexistingId}`).expect(404);
+    });
+
+    test.only('fails with statuscode 400 if id is invalid', async () => {
+      const invalidId = '5a3d5da59070081a82a3445';
+
+      await api.get(`/api/blogs/${invalidId}`).expect(400);
+    });
   });
 
   describe.only('addition of a new blog', () => {
@@ -104,6 +130,33 @@ describe.only('when there is initially some blogs saved', () => {
 
       const blogsAtEnd = await helper.blogsInDb();
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length);
+    });
+  });
+
+  describe.only('updating a blog', () => {
+    test.only('succeeds with a valid id', async () => {
+      const blogsAtStart = await helper.blogsInDb();
+      const blogToUpdate = blogsAtStart[0];
+
+      const response = await api
+        .put(`/api/blogs/${blogToUpdate.id}`)
+        .send({ title: 'Updated Blog', likes: 99 })
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
+
+      assert.strictEqual(response.body.title, 'Updated Blog');
+      assert.strictEqual(response.body.likes, 99);
+    });
+
+    test.only('fails with statuscode 404 if blog does not exist', async () => {
+      const validNonexistingId = await helper.nonExistingId();
+
+      await api.put(`/api/blogs/${validNonexistingId}`).expect(404);
+    });
+
+    test.only('fails with status code 400 if id is invalid', async () => {
+      const invalidId = '5a3d5da59070081a82a3445';
+      await api.put(`/api/blogs/${invalidId}`).expect(400);
     });
   });
 });
