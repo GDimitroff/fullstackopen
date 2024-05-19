@@ -2,32 +2,19 @@ const { test, after, beforeEach } = require('node:test');
 const assert = require('node:assert');
 const Blog = require('../models/blog');
 const mongoose = require('mongoose');
+const helper = require('./test_helper');
 const supertest = require('supertest');
 const app = require('../app');
 
 const api = supertest(app);
 
-const initialBlogs = [
-  {
-    title: 'React patterns',
-    author: 'Michael Chan',
-    url: 'https://reactpatterns.com/',
-    likes: 7
-  },
-  {
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 12
-  }
-];
-
 beforeEach(async () => {
   await Blog.deleteMany({});
 
-  let blogObject = new Blog(initialBlogs[0]);
+  let blogObject = new Blog(helper.initialBlogs[0]);
   await blogObject.save();
-  blogObject = new Blog(initialBlogs[1]);
+
+  blogObject = new Blog(helper.initialBlogs[1]);
   await blogObject.save();
 });
 
@@ -38,10 +25,10 @@ test.only('blogs are returned as json', async () => {
     .expect('Content-Type', /application\/json/);
 });
 
-test.only('there are two blogs', async () => {
+test.only('all blogs are returned', async () => {
   const response = await api.get('/api/blogs');
 
-  assert.strictEqual(response.body.length, 2);
+  assert.strictEqual(response.body.length, helper.initialBlogs.length);
 });
 
 test.only('the first blog is about React patterns', async () => {
@@ -65,10 +52,10 @@ test.only('a valid blog can be added ', async () => {
     .expect(201)
     .expect('Content-Type', /application\/json/);
 
-  const response = await api.get('/api/blogs');
-  const titles = response.body.map((r) => r.title);
+  const blogsAtEnd = await helper.blogsInDb();
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1);
 
-  assert.strictEqual(response.body.length, initialBlogs.length + 1);
+  const titles = blogsAtEnd.map((b) => b.title);
   assert(titles.includes('Testing patterns'));
 });
 
