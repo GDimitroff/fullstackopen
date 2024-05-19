@@ -54,7 +54,18 @@ describe('most blogs', () => {
     }
   ];
 
-  test('of empty list is null', () => {
+  test('of empty list is undefined', () => {
+    const result = listHelper.mostBlogs([]);
+    assert.strictEqual(result, undefined);
+  });
+
+  test('when list has only one blog, equals the author of that', () => {
+    const result = listHelper.mostBlogs([blogs[0]]);
+    assert.deepStrictEqual(result, { author: 'Michael Chan', blogs: 1 });
+  });
+
+  test('of a bigger list is calculated right', () => {
     const result = listHelper.mostBlogs(blogs);
+    assert.deepStrictEqual(result, { author: 'Robert C. Martin', blogs: 3 });
   });
 });
