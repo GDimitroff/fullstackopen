@@ -13,7 +13,7 @@ blogsRouter.post('/', async (request, response, next) => {
     title,
     author,
     url,
-    likes
+    likes: likes ?? 0
   });
 
   try {

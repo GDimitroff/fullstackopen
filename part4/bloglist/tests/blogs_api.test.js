@@ -66,6 +66,26 @@ test.only('verify that the unique identifier property of the blog posts is named
   assert.strictEqual(response.body[0]._id, undefined);
 });
 
+test.only('if the likes property is missing from the request, it will default to the value 0', async () => {
+  const newBlog = {
+    title: 'Likes missing',
+    author: 'no likes :(',
+    url: 'https://testingtpatterns.com/'
+  };
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1);
+
+  const newlySavedBlog = blogsAtEnd.find((b) => b.title === 'Likes missing');
+  assert.strictEqual(newlySavedBlog.likes, 0);
+});
+
 after(async () => {
   await mongoose.connection.close();
 });
