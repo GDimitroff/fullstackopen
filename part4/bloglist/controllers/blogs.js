@@ -1,5 +1,7 @@
-const blogsRouter = require('express').Router();
+const { Router } = require('express');
 const Blog = require('../models/blog');
+
+const blogsRouter = Router();
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({});
@@ -7,13 +9,13 @@ blogsRouter.get('/', async (request, response) => {
 });
 
 blogsRouter.post('/', async (request, response, next) => {
-  const { title, author, url, likes } = request.body;
+  const { title, author, url, likes = 0 } = request.body;
 
   const blog = new Blog({
     title,
     author,
     url,
-    likes: likes ?? 0
+    likes
   });
 
   try {

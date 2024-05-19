@@ -73,7 +73,7 @@ test.only('if the likes property is missing from the request, it will default to
     url: 'https://testingtpatterns.com/'
   };
 
-  await api
+  const response = await api
     .post('/api/blogs')
     .send(newBlog)
     .expect(201)
@@ -81,9 +81,31 @@ test.only('if the likes property is missing from the request, it will default to
 
   const blogsAtEnd = await helper.blogsInDb();
   assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1);
+  assert.strictEqual(response.body.likes, 0);
+});
 
-  const newlySavedBlog = blogsAtEnd.find((b) => b.title === 'Likes missing');
-  assert.strictEqual(newlySavedBlog.likes, 0);
+test.only('if the title property is missing from the request', async () => {
+  const newBlog = {
+    author: 'no likes :(',
+    url: 'https://testingtpatterns.com/'
+  };
+
+  await api.post('/api/blogs').send(newBlog).expect(400);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length);
+});
+
+test.only('if the url property is missing from the request', async () => {
+  const newBlog = {
+    title: 'Likes missing',
+    author: 'no likes :('
+  };
+
+  await api.post('/api/blogs').send(newBlog).expect(400);
+
+  const blogsAtEnd = await helper.blogsInDb();
+  assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length);
 });
 
 after(async () => {
