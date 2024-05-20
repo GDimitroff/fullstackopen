@@ -8,7 +8,7 @@ As feedback is collected, the application displays the following statistics:
 - The average score (calculated as: good = 1, neutral = 0, bad = -1)
 - The percentage of positive (good) feedback
 
-## Start the application
+## Running the Application
 
 Follow these steps to run the application:
 

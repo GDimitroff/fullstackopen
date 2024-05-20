@@ -2,7 +2,7 @@
 
 This application is a collection of insightful and humorous anecdotes from the world of software engineering. It allows users to vote for their favorite anecdotes, and displays the one with the most votes.
 
-## Start the application
+## Running the Application
 
 Follow these steps to run the application:
 

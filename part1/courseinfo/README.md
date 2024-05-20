@@ -2,7 +2,7 @@
 
 Simple web application for understanding the core concepts of React.
 
-## Start the application
+## Running the Application
 
 Follow these steps to run the application:
 
