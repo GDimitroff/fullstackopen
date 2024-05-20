@@ -6,7 +6,7 @@ Initially, the application used a `db.json` file, which acted as a mock database
 
 ## Running the Application
 
-To run the application, you must first start the backend server from the `part3/phonebook` directory:
+You must first start the backend server from the `part3/phonebook` directory:
 
 ```bash
 # Navigate to the backend server directory

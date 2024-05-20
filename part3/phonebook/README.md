@@ -10,8 +10,6 @@ To integrate the `part2/phonebook` application with the backend, several modific
 
 ## Running the Application
 
-Follow these steps to run the application:
-
 ```bash
 # Install the necessary dependencies
 $ npm install

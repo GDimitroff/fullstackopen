@@ -4,8 +4,6 @@ This application is a collection of insightful and humorous anecdotes from the w
 
 ## Running the Application
 
-Follow these steps to run the application:
-
 ```bash
 # Install the necessary dependencies
 $ npm install

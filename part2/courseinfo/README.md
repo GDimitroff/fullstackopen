@@ -4,8 +4,6 @@ This is a basic web application designed to familiarize users with the concepts 
 
 ## Running the Application
 
-Follow these steps to run the application:
-
 ```bash
 # Install the necessary dependencies
 $ npm install

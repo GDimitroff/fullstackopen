@@ -10,8 +10,6 @@ As feedback is collected, the application displays the following statistics:
 
 ## Running the Application
 
-Follow these steps to run the application:
-
 ```bash
 # Install the necessary dependencies
 $ npm install

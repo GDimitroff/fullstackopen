@@ -4,8 +4,6 @@ Simple web application for understanding the core concepts of React.
 
 ## Running the Application
 
-Follow these steps to run the application:
-
 ```bash
 # Install the necessary dependencies
 $ npm install

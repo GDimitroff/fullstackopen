@@ -6,8 +6,6 @@ The user interface is straightforward. Users can search for a country by typing 
 
 ## Running the Application
 
-Follow these steps to run the application:
-
 ```bash
 # Install the necessary dependencies
 $ npm install
