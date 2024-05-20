@@ -1,13 +1,33 @@
-# phonebook application
+# Phonebook
 
-This project contains the backend and the production build of the frontend app from `part2\phonebook` (placed in `dist` directory, served as static content).
+This project includes both the backend and a production build of the frontend application from `part2\phonebook`. The production build is located in the `dist` directory and is served as static content.
 
-Few changes were made to the frontend app to make it work with the backend:
+To integrate the `part2/phonebook` application with the backend, several modifications were made:
 
-- The `json-server` module and `db.json` file were removed (no longer needed for development)
-- The hardcoded backend URL is changed to a relative URL
-- vite.config changed to use proxy for API requests
+- The `json-server` and `db.json` file were removed as they are no longer required for development.
+- The hardcoded backend URL was replaced with a relative URL.
+- The `vite.config` file was updated to use a proxy for API requests.
 
-## live demo
+## Running the Application
+
+Follow these steps to run the application:
+
+```bash
+# Install the necessary dependencies
+$ npm install
+
+# Create a `.env` file in the root directory of your project and add the `MONGODB_URI` and `PORT` variables
+$ MONGODB_URI=<YOUR_MONGODB_URI>
+$ PORT=3001
+
+# Build the UI
+$ npm run build:ui
+
+# Start the application
+$ npm run dev
+```
+
+You can then access the application on: [http://localhost:3001/](http://localhost:3001/)  
+You can then access the server on: [http://localhost:3001/api/persons](http://localhost:3001/api/persons)
 
 The App is deployed via Fly.io at the following URL: https://fso2024-phonebook.fly.dev/
