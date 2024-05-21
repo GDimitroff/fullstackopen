@@ -107,8 +107,8 @@ describe('when there is initially some blogs saved', () => {
         usersAtStart[0].blogs.length + 1
       );
 
-      const newlyAddedBlogId = response.body.user.toString();
-      assert.strictEqual(newlyAddedBlogId, usersAtStart[0].id);
+      const newlyAddedBlogUserId = response.body.user.toString();
+      assert.strictEqual(newlyAddedBlogUserId, usersAtStart[0].id);
     });
 
     test('verify that the unique identifier property is named id', async () => {
