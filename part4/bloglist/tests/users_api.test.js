@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const { test, after, beforeEach, describe } = require('node:test');
 const assert = require('node:assert');
 const mongoose = require('mongoose');
@@ -8,25 +7,9 @@ const api = supertest(app);
 
 const helper = require('./helper');
 
-const User = require('../models/user');
-
 describe('when there is initially one user in db', () => {
   beforeEach(async () => {
-    await User.deleteMany({});
-
-    const userData = {
-      username: 'root',
-      name: 'Superuser',
-      password: 'admin'
-    };
-    const passwordHash = await bcrypt.hash(userData.password, 10);
-    const user = new User({
-      username: userData.username,
-      name: userData.name,
-      passwordHash
-    });
-
-    await user.save();
+    await helper.initializeTestDatabase();
   });
 
   test('creation succeeds with a valid user data', async () => {
@@ -55,7 +38,7 @@ describe('when there is initially one user in db', () => {
     const usersAtStart = await helper.usersInDb();
 
     const newUser = {
-      username: 'root',
+      username: 'King',
       name: 'Superuser',
       password: 'admin'
     };

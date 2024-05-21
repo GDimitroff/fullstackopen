@@ -7,12 +7,9 @@ const api = supertest(app);
 
 const helper = require('./helper');
 
-const Blog = require('../models/blog');
-
 describe('when there is initially some blogs saved', () => {
   beforeEach(async () => {
-    await Blog.deleteMany({});
-    await Blog.insertMany(helper.initialBlogs);
+    await helper.initializeTestDatabase();
   });
 
   test('blogs are returned as json', async () => {
@@ -45,6 +42,7 @@ describe('when there is initially some blogs saved', () => {
         .expect(200)
         .expect('Content-Type', /application\/json/);
 
+      blogToView.user = blogToView.user.toString();
       assert.deepStrictEqual(response.body, blogToView);
     });
 
@@ -63,11 +61,14 @@ describe('when there is initially some blogs saved', () => {
 
   describe('addition of a new blog', () => {
     test('succeeds with valid data', async () => {
+      const usersAtStart = await helper.usersInDb();
+
       const newBlog = {
         title: 'Testing patterns',
         author: 'Tests are funny',
         url: 'https://testingtpatterns.com/',
-        likes: 7
+        likes: 7,
+        userId: usersAtStart[0].id
       };
 
       await api
@@ -83,6 +84,33 @@ describe('when there is initially some blogs saved', () => {
       assert(titles.includes('Testing patterns'));
     });
 
+    test('verify that newly created blog is added to the user', async () => {
+      const usersAtStart = await helper.usersInDb();
+
+      const newBlog = {
+        title: 'Testing patterns',
+        author: 'Tests are funny',
+        url: 'https://testingtpatterns.com/',
+        likes: 7,
+        userId: usersAtStart[0].id
+      };
+
+      const response = await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/);
+
+      const usersAtEnd = await helper.usersInDb();
+      assert.strictEqual(
+        usersAtEnd[0].blogs.length,
+        usersAtStart[0].blogs.length + 1
+      );
+
+      const newlyAddedBlogId = response.body.user.toString();
+      assert.strictEqual(newlyAddedBlogId, usersAtStart[0].id);
+    });
+
     test('verify that the unique identifier property is named id', async () => {
       const response = await api.get('/api/blogs');
 
@@ -91,10 +119,13 @@ describe('when there is initially some blogs saved', () => {
     });
 
     test('verify that if missing the default value of likes is 0', async () => {
+      const usersAtStart = await helper.usersInDb();
+
       const newBlog = {
         title: 'Likes missing',
         author: 'no likes :(',
-        url: 'https://testingtpatterns.com/'
+        url: 'https://testingtpatterns.com/',
+        userId: usersAtStart[0].id
       };
 
       const response = await api
@@ -109,9 +140,12 @@ describe('when there is initially some blogs saved', () => {
     });
 
     test('fails with status code 400 if title property is missing', async () => {
+      const usersAtStart = await helper.usersInDb();
+
       const newBlog = {
         author: 'no likes :(',
-        url: 'https://testingtpatterns.com/'
+        url: 'https://testingtpatterns.com/',
+        userId: usersAtStart[0].id
       };
 
       await api.post('/api/blogs').send(newBlog).expect(400);
@@ -121,9 +155,12 @@ describe('when there is initially some blogs saved', () => {
     });
 
     test('fails with status code 400 if url property is missing', async () => {
+      const usersAtStart = await helper.usersInDb();
+
       const newBlog = {
         title: 'Likes missing',
-        author: 'no likes :('
+        author: 'no likes :(',
+        userId: usersAtStart[0].id
       };
 
       await api.post('/api/blogs').send(newBlog).expect(400);

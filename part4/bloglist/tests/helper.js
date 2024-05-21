@@ -1,6 +1,19 @@
 const User = require('../models/user');
 const Blog = require('../models/blog');
 
+const initialUsers = [
+  {
+    username: 'King',
+    name: 'King Tester',
+    passwordHash: '$2b$10$8e9ZDlpVDePBb/eH8i2HxePYReQqBdbPQCDKGZ7No5EKguHeZz6VS'
+  },
+  {
+    username: 'Looser',
+    name: 'Looser Tester',
+    passwordHash: '$2b$10$8e9ZDlpVDePBb/eH8i2HxePYReQqBdbPQCDKGZ7No5EKguHeZz6VS'
+  }
+];
+
 const initialBlogs = [
   {
     title: 'React patterns',
@@ -15,6 +28,27 @@ const initialBlogs = [
     likes: 12
   }
 ];
+
+const initializeTestDatabase = async () => {
+  await User.deleteMany({});
+  await Blog.deleteMany({});
+
+  const users = await User.insertMany(initialUsers);
+
+  const blogPromises = initialBlogs.map((blog, index) => {
+    const newBlog = new Blog({ ...blog, user: users[index]._id });
+    return newBlog.save();
+  });
+
+  const blogs = await Promise.all(blogPromises);
+
+  const userPromises = users.map((user, index) => {
+    user.blogs = [blogs[index]._id];
+    return user.save();
+  });
+
+  await Promise.all(userPromises);
+};
 
 const nonExistingId = async () => {
   const blog = new Blog({
@@ -41,6 +75,8 @@ const blogsInDb = async () => {
 };
 
 module.exports = {
+  initializeTestDatabase,
+  initialUsers,
   initialBlogs,
   nonExistingId,
   usersInDb,
