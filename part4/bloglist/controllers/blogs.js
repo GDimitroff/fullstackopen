@@ -1,7 +1,5 @@
-const jwt = require('jsonwebtoken');
 const { Router } = require('express');
 const Blog = require('../models/blog');
-const User = require('../models/user');
 
 const blogsRouter = Router();
 
@@ -13,14 +11,7 @@ blogsRouter.get('/', async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   const { title, author, url, likes = 0 } = request.body;
-
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' });
-  }
-
-  const user = await User.findById(decodedToken.id);
+  const user = request.user;
 
   const blog = new Blog({
     title,
@@ -48,19 +39,24 @@ blogsRouter.get('/:id', async (request, response) => {
 
 blogsRouter.put('/:id', async (request, response) => {
   const { title, author, url, likes } = request.body;
+  const blogId = request.params.id;
 
-  const blog = {
-    title,
-    author,
-    url,
-    likes
-  };
+  const user = request.user;
+  const blog = await Blog.findById(blogId);
 
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
-    new: true,
-    runValidators: true,
-    context: 'query'
-  });
+  if (!blog.user.equals(user._id)) {
+    return response.status(401).json({ error: 'unauthorized operation' });
+  }
+
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    request.params.id,
+    { title, author, url, likes },
+    {
+      new: true,
+      runValidators: true,
+      context: 'query'
+    }
+  );
 
   if (updatedBlog) {
     response.json(updatedBlog);
@@ -72,13 +68,7 @@ blogsRouter.put('/:id', async (request, response) => {
 blogsRouter.delete('/:id', async (request, response) => {
   const blogId = request.params.id;
 
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'token invalid' });
-  }
-
-  const user = await User.findById(decodedToken.id);
+  const user = request.user;
   const blog = await Blog.findById(blogId);
 
   if (!blog.user.equals(user._id)) {
