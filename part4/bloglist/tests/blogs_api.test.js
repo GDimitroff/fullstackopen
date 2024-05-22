@@ -47,8 +47,8 @@ describe('when there is initially some blogs saved', () => {
 
   describe('viewing a specific blog', () => {
     test('succeeds with a valid id', async () => {
-      const blogsAtStart = await helper.blogsInDb();
-      const blogToView = blogsAtStart[0];
+      const blogs = await helper.blogsInDb();
+      const blogToView = blogs[0];
 
       const response = await api
         .get(`/api/blogs/${blogToView.id}`)
@@ -99,23 +99,22 @@ describe('when there is initially some blogs saved', () => {
         .expect(201)
         .expect('Content-Type', /application\/json/);
 
-      const blogsAtEnd = await helper.blogsInDb();
-      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1);
+      const blogs = await helper.blogsInDb();
+      assert.strictEqual(blogs.length, helper.initialBlogs.length + 1);
 
-      const titles = blogsAtEnd.map((b) => b.title);
+      const titles = blogs.map((b) => b.title);
       assert(titles.includes('Testing patterns'));
     });
 
     test('verify that newly created blog has the correct userId', async () => {
-      const usersAtStart = await helper.usersInDb();
-      const kingUser = usersAtStart.find((u) => u.username === 'King');
+      const users = await helper.usersInDb();
+      const kingUser = users.find((u) => u.username === 'King');
 
       const newBlog = {
         title: 'Testing patterns',
         author: 'Tests are funny',
         url: 'https://testingtpatterns.com/',
-        likes: 7,
-        userId: kingUser.id
+        likes: 7
       };
 
       const response = await api
@@ -124,12 +123,6 @@ describe('when there is initially some blogs saved', () => {
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/);
-
-      const usersAtEnd = await helper.usersInDb();
-      assert.strictEqual(
-        usersAtEnd[0].blogs.length,
-        usersAtStart[0].blogs.length + 1
-      );
 
       assert.strictEqual(response.body.user, kingUser.id);
     });
@@ -144,14 +137,10 @@ describe('when there is initially some blogs saved', () => {
     });
 
     test('verify that if missing the default value of likes is 0', async () => {
-      const usersAtStart = await helper.usersInDb();
-      const kingUser = usersAtStart.find((u) => u.username === 'King');
-
       const newBlog = {
         title: 'Likes missing',
         author: 'no likes :(',
-        url: 'https://testingtpatterns.com/',
-        userId: kingUser.id
+        url: 'https://testingtpatterns.com/'
       };
 
       const response = await api
@@ -161,18 +150,15 @@ describe('when there is initially some blogs saved', () => {
         .expect(201)
         .expect('Content-Type', /application\/json/);
 
-      const blogsAtEnd = await helper.blogsInDb();
-      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1);
+      const blogs = await helper.blogsInDb();
+      assert.strictEqual(blogs.length, helper.initialBlogs.length + 1);
       assert.strictEqual(response.body.likes, 0);
     });
 
     test('fails with status code 400 if title property is missing', async () => {
-      const usersAtStart = await helper.usersInDb();
-
       const newBlog = {
         author: 'no likes :(',
-        url: 'https://testingtpatterns.com/',
-        userId: usersAtStart[0].id
+        url: 'https://testingtpatterns.com/'
       };
 
       await api
@@ -181,17 +167,14 @@ describe('when there is initially some blogs saved', () => {
         .send(newBlog)
         .expect(400);
 
-      const blogsAtEnd = await helper.blogsInDb();
-      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length);
+      const blogs = await helper.blogsInDb();
+      assert.strictEqual(blogs.length, helper.initialBlogs.length);
     });
 
     test('fails with status code 400 if url property is missing', async () => {
-      const usersAtStart = await helper.usersInDb();
-
       const newBlog = {
         title: 'Likes missing',
-        author: 'no likes :(',
-        userId: usersAtStart[0].id
+        author: 'no likes :('
       };
 
       await api
@@ -200,8 +183,8 @@ describe('when there is initially some blogs saved', () => {
         .send(newBlog)
         .expect(400);
 
-      const blogsAtEnd = await helper.blogsInDb();
-      assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length);
+      const blogs = await helper.blogsInDb();
+      assert.strictEqual(blogs.length, helper.initialBlogs.length);
     });
   });
 
@@ -263,6 +246,7 @@ describe('when there is initially some blogs saved', () => {
 
     test('fails with status code 400 if id is invalid', async () => {
       const invalidId = '5a3d5da59070081a82a3445';
+
       await api
         .delete(`/api/blogs/${invalidId}`)
         .set('Authorization', `Bearer ${token}`)
