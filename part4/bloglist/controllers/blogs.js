@@ -44,6 +44,10 @@ blogsRouter.put('/:id', async (request, response) => {
   const user = request.user;
   const blog = await Blog.findById(blogId);
 
+  if (!blog) {
+    return response.status(404).end();
+  }
+
   if (!blog.user.equals(user._id)) {
     return response.status(401).json({ error: 'unauthorized operation' });
   }
@@ -70,6 +74,10 @@ blogsRouter.delete('/:id', async (request, response) => {
 
   const user = request.user;
   const blog = await Blog.findById(blogId);
+
+  if (!blog) {
+    return response.status(404).end();
+  }
 
   if (!blog.user.equals(user._id)) {
     return response.status(401).json({ error: 'unauthorized operation' });

@@ -131,8 +131,7 @@ describe('when there is initially some blogs saved', () => {
         usersAtStart[0].blogs.length + 1
       );
 
-      const newBlogUserId = response.body.user.toString();
-      assert.strictEqual(newBlogUserId, kingUser.id);
+      assert.strictEqual(response.body.user, kingUser.id);
     });
 
     test('verify that the unique identifier property is named id', async () => {
@@ -208,11 +207,14 @@ describe('when there is initially some blogs saved', () => {
 
   describe('updating a blog', () => {
     test('succeeds with a valid id', async () => {
-      const blogsAtStart = await helper.blogsInDb();
-      const blogToUpdate = blogsAtStart[0];
+      const blogs = await helper.blogsInDb();
+      const users = await helper.usersInDb();
+      const kingUser = users.find((u) => u.username === 'King');
+      const kingsBlog = blogs.find((b) => b.user.toString() === kingUser.id);
 
       const response = await api
-        .put(`/api/blogs/${blogToUpdate.id}`)
+        .put(`/api/blogs/${kingsBlog.id}`)
+        .set('Authorization', `Bearer ${token}`)
         .send({ title: 'Updated Blog', likes: 99 })
         .expect(200)
         .expect('Content-Type', /application\/json/);
@@ -224,33 +226,47 @@ describe('when there is initially some blogs saved', () => {
     test('fails with statuscode 404 if blog does not exist', async () => {
       const validNonexistingId = await helper.nonExistingId();
 
-      await api.put(`/api/blogs/${validNonexistingId}`).expect(404);
+      await api
+        .put(`/api/blogs/${validNonexistingId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(404);
     });
 
     test('fails with status code 400 if id is invalid', async () => {
       const invalidId = '5a3d5da59070081a82a3445';
-      await api.put(`/api/blogs/${invalidId}`).expect(400);
+      await api
+        .put(`/api/blogs/${invalidId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(400);
     });
   });
 
   describe('deletion of a blog', () => {
     test('succeeds with status code 204 if id is valid', async () => {
-      const blogsAtStart = await helper.blogsInDb();
-      const blogToDelete = blogsAtStart[0];
+      const blogs = await helper.blogsInDb();
+      const users = await helper.usersInDb();
+      const kingUser = users.find((u) => u.username === 'King');
+      const kingsBlog = blogs.find((b) => b.user.toString() === kingUser.id);
 
-      await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204);
+      await api
+        .delete(`/api/blogs/${kingsBlog.id}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(204);
 
       const blogsAtEnd = await helper.blogsInDb();
 
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1);
 
       const titles = blogsAtEnd.map((b) => b.title);
-      assert(!titles.includes(blogToDelete.title));
+      assert(!titles.includes(kingsBlog.title));
     });
 
     test('fails with status code 400 if id is invalid', async () => {
       const invalidId = '5a3d5da59070081a82a3445';
-      await api.delete(`/api/blogs/${invalidId}`).expect(400);
+      await api
+        .delete(`/api/blogs/${invalidId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(400);
     });
   });
 });
