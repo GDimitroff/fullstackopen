@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const Blog = require('../models/blog');
 
@@ -5,12 +6,12 @@ const initialUsers = [
   {
     username: 'King',
     name: 'King Tester',
-    passwordHash: '$2b$10$8e9ZDlpVDePBb/eH8i2HxePYReQqBdbPQCDKGZ7No5EKguHeZz6VS'
+    password: 'king'
   },
   {
-    username: 'Looser',
-    name: 'Looser Tester',
-    passwordHash: '$2b$10$8e9ZDlpVDePBb/eH8i2HxePYReQqBdbPQCDKGZ7No5EKguHeZz6VS'
+    username: 'Average',
+    name: 'Average Tester',
+    password: 'average'
   }
 ];
 
@@ -33,7 +34,8 @@ const initializeTestDatabase = async () => {
   await User.deleteMany({});
   await Blog.deleteMany({});
 
-  const users = await User.insertMany(initialUsers);
+  const hashedUsers = await Promise.all(initialUsers.map(hashUserPassword));
+  const users = await User.insertMany(hashedUsers);
 
   const blogPromises = initialBlogs.map((blog, index) => {
     const newBlog = new Blog({ ...blog, user: users[index]._id });
@@ -74,11 +76,21 @@ const blogsInDb = async () => {
   return blogs.map((blog) => blog.toJSON());
 };
 
+async function hashUserPassword(user) {
+  const passwordHash = await bcrypt.hash(user.password, 10);
+
+  return {
+    username: user.username,
+    name: user.name,
+    passwordHash
+  };
+}
+
 module.exports = {
   initializeTestDatabase,
-  initialUsers,
   initialBlogs,
   nonExistingId,
   usersInDb,
-  blogsInDb
+  blogsInDb,
+  getToken
 };

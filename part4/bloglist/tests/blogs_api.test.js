@@ -8,25 +8,38 @@ const api = supertest(app);
 const helper = require('./helper');
 
 describe('when there is initially some blogs saved', () => {
+  let token;
+
   beforeEach(async () => {
     await helper.initializeTestDatabase();
+
+    const response = await api
+      .post('/api/login')
+      .send({ username: 'King', password: 'king' });
+
+    token = response.body.token;
   });
 
   test('blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .expect('Content-Type', /application\/json/);
   });
 
   test('all blogs are returned', async () => {
-    const response = await api.get('/api/blogs');
+    const response = await api
+      .get('/api/blogs')
+      .set('Authorization', `Bearer ${token}`);
 
     assert.strictEqual(response.body.length, helper.initialBlogs.length);
   });
 
   test('a specific blog is within the returned blogs', async () => {
-    const response = await api.get('/api/blogs');
+    const response = await api
+      .get('/api/blogs')
+      .set('Authorization', `Bearer ${token}`);
 
     const titles = response.body.map((e) => e.title);
     assert.strictEqual(titles.includes('React patterns'), true);
@@ -39,6 +52,7 @@ describe('when there is initially some blogs saved', () => {
 
       const response = await api
         .get(`/api/blogs/${blogToView.id}`)
+        .set('Authorization', `Bearer ${token}`)
         .expect(200)
         .expect('Content-Type', /application\/json/);
 
@@ -49,13 +63,19 @@ describe('when there is initially some blogs saved', () => {
     test('fails with statuscode 404 if blog does not exist', async () => {
       const validNonexistingId = await helper.nonExistingId();
 
-      await api.get(`/api/blogs/${validNonexistingId}`).expect(404);
+      await api
+        .get(`/api/blogs/${validNonexistingId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(404);
     });
 
     test('fails with statuscode 400 if id is invalid', async () => {
       const invalidId = '5a3d5da59070081a82a3445';
 
-      await api.get(`/api/blogs/${invalidId}`).expect(400);
+      await api
+        .get(`/api/blogs/${invalidId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .expect(400);
     });
   });
 
