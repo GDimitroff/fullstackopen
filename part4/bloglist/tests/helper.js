@@ -9,9 +9,9 @@ const initialUsers = [
     password: 'king'
   },
   {
-    username: 'Average',
-    name: 'Average Tester',
-    password: 'average'
+    username: 'Dummy',
+    name: 'Dummy Dummy',
+    password: 'dummy'
   }
 ];
 
