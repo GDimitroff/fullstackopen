@@ -81,18 +81,20 @@ describe('when there is initially some blogs saved', () => {
 
   describe('addition of a new blog', () => {
     test('succeeds with valid data', async () => {
-      const usersAtStart = await helper.usersInDb();
+      const users = await helper.usersInDb();
+      const kingUser = users.find((u) => u.username === 'King');
 
       const newBlog = {
         title: 'Testing patterns',
         author: 'Tests are funny',
         url: 'https://testingtpatterns.com/',
         likes: 7,
-        userId: usersAtStart[0].id
+        userId: kingUser.id
       };
 
       await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/);
@@ -104,19 +106,21 @@ describe('when there is initially some blogs saved', () => {
       assert(titles.includes('Testing patterns'));
     });
 
-    test('verify that newly created blog is added to the user', async () => {
+    test('verify that newly created blog has the correct userId', async () => {
       const usersAtStart = await helper.usersInDb();
+      const kingUser = usersAtStart.find((u) => u.username === 'King');
 
       const newBlog = {
         title: 'Testing patterns',
         author: 'Tests are funny',
         url: 'https://testingtpatterns.com/',
         likes: 7,
-        userId: usersAtStart[0].id
+        userId: kingUser.id
       };
 
       const response = await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/);
@@ -127,12 +131,14 @@ describe('when there is initially some blogs saved', () => {
         usersAtStart[0].blogs.length + 1
       );
 
-      const newlyAddedBlogUserId = response.body.user.toString();
-      assert.strictEqual(newlyAddedBlogUserId, usersAtStart[0].id);
+      const newBlogUserId = response.body.user.toString();
+      assert.strictEqual(newBlogUserId, kingUser.id);
     });
 
     test('verify that the unique identifier property is named id', async () => {
-      const response = await api.get('/api/blogs');
+      const response = await api
+        .get('/api/blogs')
+        .set('Authorization', `Bearer ${token}`);
 
       assert(response.body[0].id);
       assert.strictEqual(response.body[0]._id, undefined);
@@ -140,16 +146,18 @@ describe('when there is initially some blogs saved', () => {
 
     test('verify that if missing the default value of likes is 0', async () => {
       const usersAtStart = await helper.usersInDb();
+      const kingUser = usersAtStart.find((u) => u.username === 'King');
 
       const newBlog = {
         title: 'Likes missing',
         author: 'no likes :(',
         url: 'https://testingtpatterns.com/',
-        userId: usersAtStart[0].id
+        userId: kingUser.id
       };
 
       const response = await api
         .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/);
@@ -168,7 +176,11 @@ describe('when there is initially some blogs saved', () => {
         userId: usersAtStart[0].id
       };
 
-      await api.post('/api/blogs').send(newBlog).expect(400);
+      await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newBlog)
+        .expect(400);
 
       const blogsAtEnd = await helper.blogsInDb();
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length);
@@ -183,7 +195,11 @@ describe('when there is initially some blogs saved', () => {
         userId: usersAtStart[0].id
       };
 
-      await api.post('/api/blogs').send(newBlog).expect(400);
+      await api
+        .post('/api/blogs')
+        .set('Authorization', `Bearer ${token}`)
+        .send(newBlog)
+        .expect(400);
 
       const blogsAtEnd = await helper.blogsInDb();
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length);

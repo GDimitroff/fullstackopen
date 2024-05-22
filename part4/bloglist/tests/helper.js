@@ -91,6 +91,5 @@ module.exports = {
   initialBlogs,
   nonExistingId,
   usersInDb,
-  blogsInDb,
-  getToken
+  blogsInDb
 };
