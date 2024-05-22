@@ -186,6 +186,17 @@ describe('when there is initially some blogs saved', () => {
       const blogs = await helper.blogsInDb();
       assert.strictEqual(blogs.length, helper.initialBlogs.length);
     });
+
+    test('fails with status code 401 if there is no authorization token', async () => {
+      const newBlog = {
+        title: 'Testing patterns',
+        author: 'Tests are funny',
+        url: 'https://testingtpatterns.com/',
+        likes: 7
+      };
+
+      await api.post('/api/blogs').send(newBlog).expect(401);
+    });
   });
 
   describe('updating a blog', () => {
@@ -222,6 +233,25 @@ describe('when there is initially some blogs saved', () => {
         .set('Authorization', `Bearer ${token}`)
         .expect(400);
     });
+
+    test("fails with status code 401 if user tries to update another's blog", async () => {
+      const blogs = await helper.blogsInDb();
+      const users = await helper.usersInDb();
+      const kingUser = users.find((u) => u.username === 'King');
+      const kingsBlog = blogs.find((b) => b.user.toString() === kingUser.id);
+
+      const response = await api
+        .post('/api/login')
+        .send({ username: 'Average', password: 'average' });
+
+      const averageToken = response.body.token;
+
+      await api
+        .put(`/api/blogs/${kingsBlog.id}`)
+        .set('Authorization', `Bearer ${averageToken}`)
+        .send({ title: 'Updated Blog', likes: 99 })
+        .expect(401);
+    });
   });
 
   describe('deletion of a blog', () => {
@@ -251,6 +281,24 @@ describe('when there is initially some blogs saved', () => {
         .delete(`/api/blogs/${invalidId}`)
         .set('Authorization', `Bearer ${token}`)
         .expect(400);
+    });
+
+    test("fails with status code 401 if user tries to delete another's blog", async () => {
+      const blogs = await helper.blogsInDb();
+      const users = await helper.usersInDb();
+      const kingUser = users.find((u) => u.username === 'King');
+      const kingsBlog = blogs.find((b) => b.user.toString() === kingUser.id);
+
+      const response = await api
+        .post('/api/login')
+        .send({ username: 'Average', password: 'average' });
+
+      const averageToken = response.body.token;
+
+      await api
+        .delete(`/api/blogs/${kingsBlog.id}`)
+        .set('Authorization', `Bearer ${averageToken}`)
+        .expect(401);
     });
   });
 });
