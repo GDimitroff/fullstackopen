@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const Blog = require('../models/blog');
+const { userExtractor } = require('../utils/middleware');
 
 const blogsRouter = Router();
 
@@ -9,7 +10,7 @@ blogsRouter.get('/', async (request, response) => {
   response.json(blogs);
 });
 
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', userExtractor, async (request, response) => {
   const { title, author, url, likes = 0 } = request.body;
   const user = request.user;
 
@@ -37,7 +38,7 @@ blogsRouter.get('/:id', async (request, response) => {
   }
 });
 
-blogsRouter.put('/:id', async (request, response) => {
+blogsRouter.put('/:id', userExtractor, async (request, response) => {
   const { title, author, url, likes } = request.body;
   const blogId = request.params.id;
 
@@ -69,7 +70,7 @@ blogsRouter.put('/:id', async (request, response) => {
   }
 });
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', userExtractor, async (request, response) => {
   const blogId = request.params.id;
 
   const user = request.user;
