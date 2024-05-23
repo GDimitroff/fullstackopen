@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
 import authService from '../services/authentication';
+import blogService from '../services/blogs';
 
-const Authentication = ({ setUser, setNotification }) => {
+const Authentication = ({ user, setUser, setNotification }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -12,6 +13,8 @@ const Authentication = ({ setUser, setNotification }) => {
     try {
       const user = await authService.login({ username, password });
 
+      window.localStorage.setItem('loggedBlogsAppUser', JSON.stringify(user));
+      blogService.setToken(user.token);
       setUser(user);
       setUsername('');
       setPassword('');
@@ -22,6 +25,21 @@ const Authentication = ({ setUser, setNotification }) => {
       }, 5000);
     }
   };
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedBlogsAppUser');
+    blogService.setToken(null);
+    setUser(null);
+  };
+
+  if (user) {
+    return (
+      <div>
+        <span>{user.name} logged in</span>
+        <button onClick={handleLogout}>logout</button>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleLogin}>

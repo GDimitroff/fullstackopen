@@ -1,9 +1,10 @@
 import Blog from './Blog';
 
 const Blogs = ({ user, blogs }) => {
+  if (!blogs || blogs.length === 0 || !user) return null;
+
   return (
     <div>
-      <p>{user.username} logged in</p>
       {blogs.map((blog) => (
         <Blog
           key={blog.id}
