@@ -3,7 +3,7 @@ import { useState } from 'react';
 import authService from '../services/authentication';
 import blogService from '../services/blogs';
 
-const Authentication = ({ user, setUser, setNotification }) => {
+const Authentication = ({ user, setUser, setNotificationMessage }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -19,10 +19,7 @@ const Authentication = ({ user, setUser, setNotification }) => {
       setUsername('');
       setPassword('');
     } catch (error) {
-      setNotification({ type: 'error', message: 'wrong credentials' });
-      setTimeout(() => {
-        setNotification(null);
-      }, 5000);
+      setNotificationMessage('error', error.response.data.error);
     }
   };
 

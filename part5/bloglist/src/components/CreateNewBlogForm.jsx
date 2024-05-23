@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import blogService from '../services/blogs';
 
-const CreateNewBlogForm = ({ setBlogs }) => {
+const CreateNewBlogForm = ({ setBlogs, setNotificationMessage }) => {
   const [state, setState] = useState({ title: '', author: '', url: '' });
 
   const handleChange = (e) => {
@@ -19,9 +19,17 @@ const CreateNewBlogForm = ({ setBlogs }) => {
       url: state.url,
     };
 
-    await blogService.create(newBlog);
-    setBlogs((prevBlogs) => [...prevBlogs, newBlog]);
-    setState({ title: '', author: '', url: '' });
+    try {
+      const response = await blogService.create(newBlog);
+      setBlogs((prevBlogs) => [...prevBlogs, response]);
+      setState({ title: '', author: '', url: '' });
+      setNotificationMessage(
+        'success',
+        `a new blog ${response.title} by ${response.author} added`
+      );
+    } catch (error) {
+      setNotificationMessage('error', error.response.data.error);
+    }
   };
 
   return (

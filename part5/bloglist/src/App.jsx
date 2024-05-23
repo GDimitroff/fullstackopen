@@ -12,6 +12,13 @@ const App = () => {
   const [blogs, setBlogs] = useState(null);
   const [notification, setNotification] = useState(null);
 
+  const setNotificationMessage = (type, message) => {
+    setNotification({ type, message });
+    setTimeout(() => {
+      setNotification(null);
+    }, 3000);
+  };
+
   const fetchBlogs = useCallback(async () => {
     setIsLoading(true);
     const blogs = await blogService.getAll();
@@ -43,10 +50,18 @@ const App = () => {
       <Authentication
         user={user}
         setUser={setUser}
-        setNotification={setNotification}
+        setNotificationMessage={setNotificationMessage}
       />
-      {user && <CreateNewBlogForm setBlogs={setBlogs} />}
-      {user && <Blogs blogs={blogs} />}
+      {user && (
+        <>
+          <CreateNewBlogForm
+            setBlogs={setBlogs}
+            setNotificationMessage={setNotificationMessage}
+          />
+          <hr />
+          <Blogs blogs={blogs} />
+        </>
+      )}
     </div>
   );
 };
