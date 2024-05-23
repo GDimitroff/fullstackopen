@@ -242,13 +242,13 @@ describe('when there is initially some blogs saved', () => {
 
       const response = await api
         .post('/api/login')
-        .send({ username: 'Average', password: 'average' });
+        .send({ username: 'Dummy', password: 'dummy' });
 
-      const averageToken = response.body.token;
+      const dummyUserToken = response.body.token;
 
       await api
         .put(`/api/blogs/${kingsBlog.id}`)
-        .set('Authorization', `Bearer ${averageToken}`)
+        .set('Authorization', `Bearer ${dummyUserToken}`)
         .send({ title: 'Updated Blog', likes: 99 })
         .expect(401);
     });
