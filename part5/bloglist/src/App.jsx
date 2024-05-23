@@ -4,6 +4,7 @@ import blogService from './services/blogs';
 import Authentication from './components/Authentication';
 import Blog from './components/Blog';
 import Notification from './components/Notification';
+import Blogs from './components/Blogs';
 
 const App = () => {
   const [user, setUser] = useState(null);
@@ -16,15 +17,14 @@ const App = () => {
 
   return (
     <div>
-      <h1>{user ? 'blogs' : 'log in to application'}</h1>
+      <h2>{user ? 'blogs' : 'log in to application'}</h2>
       <Notification notification={notification} />
+
       {user ? (
-        blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-          />
-        ))
+        <Blogs
+          user={user}
+          blogs={blogs}
+        />
       ) : (
         <Authentication
           setUser={setUser}
