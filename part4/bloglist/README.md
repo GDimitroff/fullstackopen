@@ -27,7 +27,7 @@ Once successfully connected, the API allows you to perform the following operati
 
 - Register and retrieve `Users` (POST, GET)
 - Login using username and password (POST)
-- Create, retrieve, update, and delete `Blogs` (POST, GET, PUT, DELETE) for an authenticated user
+- Create, retrieve, update, and delete `Blogs` (POST, GET, PUT, DELETE)
 
 Those operations are possible using the following endpoints:
 
@@ -58,7 +58,7 @@ POST `/api/login`
 }
 ```
 
-All requests to the `/api/blogs` or `/api/blogs/:id` require a valid JWT token in Authorization header `{"Authorization": "Bearer <YOUR_JWT_TOKEN>"}`  
+POST, PUT and DELETE requests to `/api/blogs` or `/api/blogs/:id` require a valid JWT token in Authorization header `{"Authorization": "Bearer <YOUR_JWT_TOKEN>"}`  
 POST `/api/blogs`
 
 ```json
