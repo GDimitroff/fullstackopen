@@ -45,7 +45,7 @@ const App = () => {
         setUser={setUser}
         setNotification={setNotification}
       />
-      {user && <CreateNewBlogForm />}
+      {user && <CreateNewBlogForm setBlogs={setBlogs} />}
       {user && <Blogs blogs={blogs} />}
     </div>
   );

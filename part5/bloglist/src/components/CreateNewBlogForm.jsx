@@ -1,6 +1,8 @@
 import { useState } from 'react';
 
-const CreateNewBlogForm = () => {
+import blogService from '../services/blogs';
+
+const CreateNewBlogForm = ({ setBlogs }) => {
   const [state, setState] = useState({ title: '', author: '', url: '' });
 
   const handleChange = (e) => {
@@ -8,8 +10,18 @@ const CreateNewBlogForm = () => {
     setState({ ...state, [name]: value });
   };
 
-  const handleCreateForm = (e) => {
+  const handleCreateForm = async (e) => {
     e.preventDefault();
+
+    const newBlog = {
+      title: state.title,
+      author: state.author,
+      url: state.url,
+    };
+
+    await blogService.create(newBlog);
+    setBlogs((prevBlogs) => [...prevBlogs, newBlog]);
+    setState({ title: '', author: '', url: '' });
   };
 
   return (
@@ -28,7 +40,7 @@ const CreateNewBlogForm = () => {
         <div>
           author:
           <input
-            type="author"
+            type="text"
             value={state.author}
             name="author"
             onChange={handleChange}
