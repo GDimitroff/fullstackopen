@@ -4,6 +4,7 @@ import blogService from './services/blogs';
 import Authentication from './components/Authentication';
 import Notification from './components/Notification';
 import Blogs from './components/Blogs';
+import CreateNewBlogForm from './components/CreateNewBlogForm';
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -44,10 +45,8 @@ const App = () => {
         setUser={setUser}
         setNotification={setNotification}
       />
-      <Blogs
-        blogs={blogs}
-        user={user}
-      />
+      {user && <CreateNewBlogForm />}
+      {user && <Blogs blogs={blogs} />}
     </div>
   );
 };

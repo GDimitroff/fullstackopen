@@ -46,22 +46,22 @@ const Authentication = ({ user, setUser, setNotification }) => {
       <div>
         username
         <input
-          type='text'
+          type="text"
           value={username}
-          name='username'
+          name="username"
           onChange={({ target }) => setUsername(target.value)}
         />
       </div>
       <div>
         password
         <input
-          type='password'
+          type="password"
           value={password}
-          name='password'
+          name="password"
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type='submit'>login</button>
+      <button type="submit">login</button>
     </form>
   );
 };
