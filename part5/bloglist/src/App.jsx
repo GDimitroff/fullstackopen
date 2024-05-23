@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
 
-import Blog from './components/Blog';
 import blogService from './services/blogs';
+import Authentication from './components/Authentication';
+import Blog from './components/Blog';
+import Notification from './components/Notification';
 
 const App = () => {
+  const [user, setUser] = useState(null);
   const [blogs, setBlogs] = useState([]);
+  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -12,13 +16,21 @@ const App = () => {
 
   return (
     <div>
-      <h2>blogs</h2>
-      {blogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
+      <h1>{user ? 'blogs' : 'log in to application'}</h1>
+      <Notification notification={notification} />
+      {user ? (
+        blogs.map((blog) => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+          />
+        ))
+      ) : (
+        <Authentication
+          setUser={setUser}
+          setNotification={setNotification}
         />
-      ))}
+      )}
     </div>
   );
 };
