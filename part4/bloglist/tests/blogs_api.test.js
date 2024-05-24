@@ -84,7 +84,7 @@ describe('when there is initially some blogs saved', () => {
         author: 'Tests are funny',
         url: 'https://testingtpatterns.com/',
         likes: 7,
-        userId: kingUser.id
+        userId: kingUser.id,
       };
 
       await api
@@ -109,7 +109,7 @@ describe('when there is initially some blogs saved', () => {
         title: 'Testing patterns',
         author: 'Tests are funny',
         url: 'https://testingtpatterns.com/',
-        likes: 7
+        likes: 7,
       };
 
       const response = await api
@@ -119,14 +119,14 @@ describe('when there is initially some blogs saved', () => {
         .expect(201)
         .expect('Content-Type', /application\/json/);
 
-      assert.strictEqual(response.body.user, kingUser.id);
+      assert.strictEqual(response.body.user.id, kingUser.id);
     });
 
     test('verify that if missing the default value of likes is 0', async () => {
       const newBlog = {
         title: 'Likes missing',
         author: 'no likes :(',
-        url: 'https://testingtpatterns.com/'
+        url: 'https://testingtpatterns.com/',
       };
 
       const response = await api
@@ -144,7 +144,7 @@ describe('when there is initially some blogs saved', () => {
     test('fails with status code 400 if title property is missing', async () => {
       const newBlog = {
         author: 'no likes :(',
-        url: 'https://testingtpatterns.com/'
+        url: 'https://testingtpatterns.com/',
       };
 
       await api
@@ -160,7 +160,7 @@ describe('when there is initially some blogs saved', () => {
     test('fails with status code 400 if url property is missing', async () => {
       const newBlog = {
         title: 'Likes missing',
-        author: 'no likes :('
+        author: 'no likes :(',
       };
 
       await api
@@ -178,7 +178,7 @@ describe('when there is initially some blogs saved', () => {
         title: 'Testing patterns',
         author: 'Tests are funny',
         url: 'https://testingtpatterns.com/',
-        likes: 7
+        likes: 7,
       };
 
       await api.post('/api/blogs').send(newBlog).expect(401);
@@ -203,6 +203,27 @@ describe('when there is initially some blogs saved', () => {
       assert.strictEqual(response.body.likes, 99);
     });
 
+    test("succeeds updating only likes field if user tries to update another's blog", async () => {
+      const blogs = await helper.blogsInDb();
+      const users = await helper.usersInDb();
+      const kingUser = users.find((u) => u.username === 'King');
+      const kingsBlog = blogs.find((b) => b.user.toString() === kingUser.id);
+
+      const response = await api
+        .post('/api/login')
+        .send({ username: 'Dummy', password: 'dummy' });
+
+      const dummyUserToken = response.body.token;
+
+      const updatedBlog = await api
+        .put(`/api/blogs/${kingsBlog.id}`)
+        .set('Authorization', `Bearer ${dummyUserToken}`)
+        .send({ title: 'Updated Blog', likes: 99 });
+
+      assert.strictEqual(updatedBlog.body.likes, 99);
+      assert.notStrictEqual(updatedBlog.body.title, 'Updated Blog');
+    });
+
     test('fails with statuscode 404 if blog does not exist', async () => {
       const validNonexistingId = await helper.nonExistingId();
 
@@ -220,23 +241,15 @@ describe('when there is initially some blogs saved', () => {
         .expect(400);
     });
 
-    test("fails with status code 401 if user tries to update another's blog", async () => {
+    test('fails with status code 401 if user is not authenticated', async () => {
       const blogs = await helper.blogsInDb();
       const users = await helper.usersInDb();
       const kingUser = users.find((u) => u.username === 'King');
       const kingsBlog = blogs.find((b) => b.user.toString() === kingUser.id);
 
-      const response = await api
-        .post('/api/login')
-        .send({ username: 'Dummy', password: 'dummy' });
-
-      const dummyUserToken = response.body.token;
-
       await api
         .put(`/api/blogs/${kingsBlog.id}`)
-        .set('Authorization', `Bearer ${dummyUserToken}`)
-        .send({ title: 'Updated Blog', likes: 99 })
-        .expect(401);
+        .send({ title: 'Updated Blog', likes: 99 });
     });
   });
 
