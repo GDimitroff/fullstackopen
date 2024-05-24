@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
 const Blog = ({ user, blog, onLikeBlog, onRemoveBlog }) => {
-  const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(false)
 
   const blogStyle = {
     paddingTop: 10,
@@ -11,14 +11,14 @@ const Blog = ({ user, blog, onLikeBlog, onRemoveBlog }) => {
     borderWidth: 1,
     marginBottom: 5,
     marginTop: 5,
-  };
+  }
 
   const deleteButtonStyle = {
     background: 'lightcoral',
     color: 'white',
     border: 'none',
     padding: '4px 8px',
-  };
+  }
 
   return (
     <div style={blogStyle}>
@@ -45,7 +45,7 @@ const Blog = ({ user, blog, onLikeBlog, onRemoveBlog }) => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog

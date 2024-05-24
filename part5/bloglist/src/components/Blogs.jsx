@@ -1,7 +1,7 @@
-import Blog from './Blog';
+import Blog from './Blog'
 
 const Blogs = ({ user, blogs, onLikeBlog, onRemoveBlog }) => {
-  if (!blogs || blogs.length === 0) return null;
+  if (!blogs || blogs.length === 0) return null
 
   return (
     <div>
@@ -15,7 +15,7 @@ const Blogs = ({ user, blogs, onLikeBlog, onRemoveBlog }) => {
         />
       ))}
     </div>
-  );
-};
+  )
+}
 
-export default Blogs;
+export default Blogs
