@@ -21,13 +21,13 @@ const Blog = ({ user, blog, onLikeBlog, onRemoveBlog }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div data-testid="blog" style={blogStyle}>
       {blog.title} {blog.author}{' '}
       <button onClick={() => setShowDetails(!showDetails)}>
         {showDetails ? 'hide' : 'view'}
       </button>
       {showDetails && (
-        <div>
+        <div data-testid="togglableDetails">
           {blog.url}
           <div>
             likes {blog.likes}{' '}
