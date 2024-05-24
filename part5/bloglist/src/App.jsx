@@ -66,6 +66,23 @@ const App = () => {
     }
   };
 
+  const handleRemoveBlog = async (blogObject) => {
+    const confirmText = `Remove blog ${blogObject.title} by ${blogObject.author}`;
+
+    if (window.confirm(confirmText)) {
+      try {
+        await blogService.remove(blogObject.id);
+        setBlogs((prev) => prev.filter((b) => b.id !== blogObject.id));
+        setNotificationMessage(
+          'success',
+          `blog ${blogObject.title} by ${blogObject.author} removed`
+        );
+      } catch (error) {
+        setNotificationMessage('error', error.response.data.error);
+      }
+    }
+  };
+
   useEffect(() => {
     fetchBlogs();
     checkUser();
@@ -88,7 +105,11 @@ const App = () => {
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm createBlog={handleCreateBlog} />
           </Togglable>
-          <Blogs blogs={sortedBlogs} onLikeBlog={handleLikeBlog} />
+          <Blogs
+            blogs={sortedBlogs}
+            onLikeBlog={handleLikeBlog}
+            onRemoveBlog={handleRemoveBlog}
+          />
         </>
       )}
     </div>
