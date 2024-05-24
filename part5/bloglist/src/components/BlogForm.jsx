@@ -21,7 +21,7 @@ const BlogForm = ({ createBlog }) => {
   }
 
   return (
-    <div>
+    <div data-testid="blogform">
       <h2>create new</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -31,6 +31,7 @@ const BlogForm = ({ createBlog }) => {
             value={blog.title}
             name="title"
             onChange={handleChange}
+            placeholder="react is awesome"
           />
         </div>
         <div>
@@ -40,6 +41,7 @@ const BlogForm = ({ createBlog }) => {
             value={blog.author}
             name="author"
             onChange={handleChange}
+            placeholder="john doe"
           />
         </div>
         <div>
@@ -49,6 +51,7 @@ const BlogForm = ({ createBlog }) => {
             value={blog.url}
             name="url"
             onChange={handleChange}
+            placeholder="https://example.com/"
           />
         </div>
         <button type="submit">create</button>
