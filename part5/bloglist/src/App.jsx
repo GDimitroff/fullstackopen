@@ -14,6 +14,8 @@ const App = () => {
   const [notification, setNotification] = useState(null);
   const blogFormRef = useRef();
 
+  const sortedBlogs = blogs?.sort((a, b) => b.likes - a.likes);
+
   const setNotificationMessage = (type, message) => {
     setNotification({ type, message });
     setTimeout(() => {
@@ -86,7 +88,7 @@ const App = () => {
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm createBlog={handleCreateBlog} />
           </Togglable>
-          <Blogs blogs={blogs} onLikeBlog={handleLikeBlog} />
+          <Blogs blogs={sortedBlogs} onLikeBlog={handleLikeBlog} />
         </>
       )}
     </div>
