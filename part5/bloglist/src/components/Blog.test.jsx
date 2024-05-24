@@ -19,9 +19,21 @@ const blog = {
 
 describe('<Blog />', () => {
   let component
+  let mockLikeHandler
+  let mockRemoveHandler
 
   beforeEach(() => {
-    component = render(<Blog blog={blog} user={user} />)
+    mockLikeHandler = vi.fn()
+    mockRemoveHandler = vi.fn()
+
+    component = render(
+      <Blog
+        user={user}
+        blog={blog}
+        onLikeBlog={mockLikeHandler}
+        onRemoveBlog={mockRemoveHandler}
+      />
+    )
   })
 
   test('renders content', () => {
@@ -61,5 +73,17 @@ describe('<Blog />', () => {
     screen.getByText('https://example.com/', {
       exact: false,
     })
+  })
+
+  test('clicking the like button twice calls the event handler twice', async () => {
+    const button = screen.getByText('view')
+    const user = userEvent.setup()
+    await user.click(button)
+
+    const likeButton = screen.getByText('like')
+    await user.click(likeButton)
+    await user.click(likeButton)
+
+    expect(mockLikeHandler.mock.calls).toHaveLength(2)
   })
 })
