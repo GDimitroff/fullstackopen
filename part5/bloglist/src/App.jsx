@@ -37,15 +37,28 @@ const App = () => {
     }
   }, []);
 
-  const handleCreateBlog = async (blogData) => {
+  const handleCreateBlog = async (blogObject) => {
     try {
-      const newBlog = await blogService.create(blogData);
+      const newBlog = await blogService.create(blogObject);
       setBlogs((prevBlogs) => [...prevBlogs, newBlog]);
       setNotificationMessage(
         'success',
         `a new blog ${newBlog.title} by ${newBlog.author} added`
       );
       blogFormRef.current.toggleVisibility();
+    } catch (error) {
+      setNotificationMessage('error', error.response.data.error);
+    }
+  };
+
+  const handleLikeBlog = async (blogObject) => {
+    const blogData = { ...blogObject, likes: blogObject.likes + 1 };
+
+    try {
+      const updated = await blogService.update(blogObject.id, blogData);
+      setBlogs((prev) =>
+        prev.map((b) => (b.id === blogObject.id ? updated : b))
+      );
     } catch (error) {
       setNotificationMessage('error', error.response.data.error);
     }
@@ -73,7 +86,7 @@ const App = () => {
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm createBlog={handleCreateBlog} />
           </Togglable>
-          <Blogs blogs={blogs} />
+          <Blogs blogs={blogs} onLikeBlog={handleLikeBlog} />
         </>
       )}
     </div>

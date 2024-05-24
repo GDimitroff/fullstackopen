@@ -19,10 +19,12 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
     author,
     url,
     likes,
-    user: user._id
+    user: user._id,
   });
 
-  const savedBlog = await blog.save();
+  let savedBlog = await blog.save();
+  savedBlog = await savedBlog.populate('user', { username: 1, name: 1 });
+
   user.blogs = user.blogs.concat(savedBlog._id);
   await user.save();
 
@@ -49,19 +51,19 @@ blogsRouter.put('/:id', userExtractor, async (request, response) => {
     return response.status(404).end();
   }
 
-  if (!blog.user.equals(user._id)) {
-    return response.status(401).json({ error: 'unauthorized operation' });
-  }
+  const updateFields = blog.user.equals(user._id)
+    ? { title, author, url, likes }
+    : { likes };
 
-  const updatedBlog = await Blog.findByIdAndUpdate(
+  let updatedBlog = await Blog.findByIdAndUpdate(
     request.params.id,
-    { title, author, url, likes },
+    updateFields,
     {
       new: true,
       runValidators: true,
-      context: 'query'
+      context: 'query',
     }
-  );
+  ).populate('user', { username: 1, name: 1 });
 
   if (updatedBlog) {
     response.json(updatedBlog);
