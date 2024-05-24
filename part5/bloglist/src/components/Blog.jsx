@@ -27,7 +27,7 @@ const Blog = ({ user, blog, onLikeBlog, onRemoveBlog }) => {
         {showDetails ? 'hide' : 'view'}
       </button>
       {showDetails && (
-        <div data-testid="togglableDetails">
+        <div data-testid="blog-details">
           {blog.url}
           <div>
             likes {blog.likes}{' '}
