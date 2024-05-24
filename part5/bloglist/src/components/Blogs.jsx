@@ -1,6 +1,6 @@
 import Blog from './Blog';
 
-const Blogs = ({ blogs, onLikeBlog, onRemoveBlog }) => {
+const Blogs = ({ user, blogs, onLikeBlog, onRemoveBlog }) => {
   if (!blogs || blogs.length === 0) return null;
 
   return (
@@ -8,6 +8,7 @@ const Blogs = ({ blogs, onLikeBlog, onRemoveBlog }) => {
       {blogs.map((blog) => (
         <Blog
           key={blog.id}
+          user={user}
           blog={blog}
           onLikeBlog={onLikeBlog}
           onRemoveBlog={onRemoveBlog}

@@ -106,6 +106,7 @@ const App = () => {
             <BlogForm createBlog={handleCreateBlog} />
           </Togglable>
           <Blogs
+            user={user}
             blogs={sortedBlogs}
             onLikeBlog={handleLikeBlog}
             onRemoveBlog={handleRemoveBlog}
