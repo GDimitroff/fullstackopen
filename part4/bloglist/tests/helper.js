@@ -1,89 +1,89 @@
-const bcrypt = require('bcrypt');
-const User = require('../models/user');
-const Blog = require('../models/blog');
+const bcrypt = require('bcrypt')
+const User = require('../models/user')
+const Blog = require('../models/blog')
 
 const initialUsers = [
   {
     username: 'King',
     name: 'King Tester',
-    password: 'king'
+    password: 'king',
   },
   {
     username: 'Dummy',
     name: 'Dummy Dummy',
-    password: 'dummy'
-  }
-];
+    password: 'dummy',
+  },
+]
 
 const initialBlogs = [
   {
     title: 'React patterns',
     author: 'Michael Chan',
     url: 'https://reactpatterns.com/',
-    likes: 7
+    likes: 7,
   },
   {
     title: 'Go To Statement Considered Harmful',
     author: 'Edsger W. Dijkstra',
     url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 12
-  }
-];
+    likes: 12,
+  },
+]
 
 const initializeTestDatabase = async () => {
-  await User.deleteMany({});
-  await Blog.deleteMany({});
+  await User.deleteMany({})
+  await Blog.deleteMany({})
 
-  const hashedUsers = await Promise.all(initialUsers.map(hashUserPassword));
-  const users = await User.insertMany(hashedUsers);
+  const hashedUsers = await Promise.all(initialUsers.map(hashUserPassword))
+  const users = await User.insertMany(hashedUsers)
 
   const blogPromises = initialBlogs.map((blog, index) => {
-    const newBlog = new Blog({ ...blog, user: users[index]._id });
-    return newBlog.save();
-  });
+    const newBlog = new Blog({ ...blog, user: users[index]._id })
+    return newBlog.save()
+  })
 
-  const blogs = await Promise.all(blogPromises);
+  const blogs = await Promise.all(blogPromises)
 
   const userPromises = users.map((user, index) => {
-    user.blogs = [blogs[index]._id];
-    return user.save();
-  });
+    user.blogs = [blogs[index]._id]
+    return user.save()
+  })
 
-  await Promise.all(userPromises);
-};
+  await Promise.all(userPromises)
+}
 
 const nonExistingId = async () => {
   const blog = new Blog({
     title: 'will-remove-soon',
     author: 'does not matter',
     url: 'https://placeholder.com/',
-    likes: 0
-  });
+    likes: 0,
+  })
 
-  await blog.save();
-  await blog.deleteOne();
+  await blog.save()
+  await blog.deleteOne()
 
-  return blog._id.toString();
-};
+  return blog._id.toString()
+}
 
 const usersInDb = async () => {
-  const users = await User.find({});
-  return users.map((user) => user.toJSON());
-};
+  const users = await User.find({})
+  return users.map((user) => user.toJSON())
+}
 
 const blogsInDb = async () => {
-  const blogs = await Blog.find({});
-  return blogs.map((blog) => blog.toJSON());
-};
+  const blogs = await Blog.find({})
+  return blogs.map((blog) => blog.toJSON())
+}
 
 async function hashUserPassword(user) {
-  const passwordHash = await bcrypt.hash(user.password, 10);
+  const passwordHash = await bcrypt.hash(user.password, 10)
 
   return {
     username: user.username,
     name: user.name,
-    passwordHash
-  };
+    passwordHash,
+  }
 }
 
 module.exports = {
@@ -91,5 +91,5 @@ module.exports = {
   initialBlogs,
   nonExistingId,
   usersInDb,
-  blogsInDb
-};
+  blogsInDb,
+}
