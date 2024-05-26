@@ -46,4 +46,26 @@ test.describe('blogs app', () => {
       await expect(page.getByText('password')).toBeVisible()
     })
   })
+
+  test.describe('when logged in', () => {
+    test.beforeEach(async ({ page }) => {
+      await loginWith(page, 'King', 'king')
+    })
+
+    test('successfully logout', async ({ page }) => {
+      await page.getByRole('button', { name: 'logout' }).click()
+      await expect(
+        page.getByRole('heading', { name: 'log in to application' })
+      ).toBeVisible()
+    })
+
+    test('a new blog can be created', async ({ page }) => {
+      await page.getByRole('button', { name: 'new blog' }).click()
+      await page.getByTestId('title').fill('New Blog')
+      await page.getByTestId('author').fill('dummy user')
+      await page.getByTestId('url').fill('http://localhost:3001')
+      await page.getByRole('button', { name: 'create' }).click()
+      await expect(page.getByText('New Blog dummy user')).toBeVisible()
+    })
+  })
 })

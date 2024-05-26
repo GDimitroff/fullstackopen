@@ -30,6 +30,7 @@ const BlogForm = ({ createBlog }) => {
             type="text"
             value={blog.title}
             name="title"
+            data-testid="title"
             onChange={handleChange}
             placeholder="react is awesome"
           />
@@ -40,6 +41,7 @@ const BlogForm = ({ createBlog }) => {
             type="text"
             value={blog.author}
             name="author"
+            data-testid="author"
             onChange={handleChange}
             placeholder="john doe"
           />
@@ -50,6 +52,7 @@ const BlogForm = ({ createBlog }) => {
             type="url"
             value={blog.url}
             name="url"
+            data-testid="url"
             onChange={handleChange}
             placeholder="https://example.com/"
           />
