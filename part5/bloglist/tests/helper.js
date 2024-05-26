@@ -4,12 +4,23 @@ const loginWith = async (page, username, password) => {
   await page.getByRole('button', { name: 'login' }).click()
 }
 
-const createNewBlog = async (page, title, author, url) => {
+const createBlog = async (page, { title, author, url }) => {
   await page.getByRole('button', { name: 'new blog' }).click()
   await page.getByTestId('title').fill(title)
   await page.getByTestId('author').fill(author)
   await page.getByTestId('url').fill(url)
-  await page.getByRole('button', { name: 'create' }).click()
+
+  await Promise.all([
+    page.getByRole('button', { name: 'create' }).click(),
+    page.waitForResponse(
+      (response) =>
+        response.url().includes('/api/blogs') && response.status() === 201
+    ),
+  ])
 }
 
-export { loginWith, createNewBlog }
+const createUser = async (request, user) => {
+  return request.post('http://localhost:3001/api/users', { data: user })
+}
+
+export { loginWith, createBlog, createUser }

@@ -4,7 +4,10 @@ const Notification = ({ notification }) => {
   }
 
   return (
-    <div className={`notification ${notification.type}`}>
+    <div
+      className={`notification ${notification.type}`}
+      data-testid="notification"
+    >
       {notification.message}
     </div>
   )
