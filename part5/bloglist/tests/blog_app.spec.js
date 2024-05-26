@@ -1,6 +1,6 @@
 // @ts-check
 import { test, expect } from '@playwright/test'
-import { loginWith } from './helper'
+import { loginWith, createNewBlog } from './helper'
 
 test.describe('blogs app', () => {
   test.beforeEach(async ({ page, request }) => {
@@ -60,12 +60,44 @@ test.describe('blogs app', () => {
     })
 
     test('a new blog can be created', async ({ page }) => {
-      await page.getByRole('button', { name: 'new blog' }).click()
-      await page.getByTestId('title').fill('New Blog')
-      await page.getByTestId('author').fill('dummy user')
-      await page.getByTestId('url').fill('http://localhost:3001')
-      await page.getByRole('button', { name: 'create' }).click()
+      await createNewBlog(
+        page,
+        'New Blog',
+        'dummy user',
+        'http://localhost:3001'
+      )
+
       await expect(page.getByText('New Blog dummy user')).toBeVisible()
+    })
+
+    test('blog can be liked', async ({ page }) => {
+      await createNewBlog(
+        page,
+        'New Blog',
+        'dummy user',
+        'http://localhost:3001'
+      )
+
+      await expect(page.getByText('New Blog dummy user')).toBeVisible()
+
+      await page
+        .locator('div')
+        .filter({ hasText: /^New Blog dummy user view$/ })
+        .getByRole('button')
+        .click()
+
+      expect(page.getByTestId('blog-likes')).toHaveText('likes 0 like')
+
+      await Promise.all([
+        page.getByRole('button', { name: 'like' }).click(),
+        page.waitForResponse((response) => {
+          return (
+            response.url().includes('/api/blogs') && response.status() === 200
+          )
+        }),
+      ])
+
+      expect(page.getByTestId('blog-likes')).toHaveText('likes 1 like')
     })
   })
 })

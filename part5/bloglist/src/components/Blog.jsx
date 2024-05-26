@@ -29,7 +29,7 @@ const Blog = ({ user, blog, onLikeBlog, onRemoveBlog }) => {
       {showDetails && (
         <div data-testid="blog-details">
           {blog.url}
-          <div>
+          <div data-testid="blog-likes">
             likes {blog.likes}{' '}
             <button onClick={() => onLikeBlog(blog)}>like</button>
           </div>
