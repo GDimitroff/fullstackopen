@@ -38,6 +38,8 @@ $ npm install
 $ npm run dev
 ```
 
+## Testing the Application
+
 In order to run the tests, you must follow these steps:
 
 ```bash
