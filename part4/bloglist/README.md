@@ -1,4 +1,4 @@
-# Blog List API
+# Bloglist API
 
 This is a REST API for a blog list application. It allows users to register, login, and store details about interesting blogs they've discovered online. Each blog entry records the author's name, the title of the blog, its URL, and the number of likes it has received.
 
