@@ -1,19 +1,6 @@
 // @ts-check
 import { test, expect } from '@playwright/test'
-import { loginWith, createBlog, createUser } from './helper'
-
-const users = [
-  {
-    name: 'King Tester',
-    username: 'King',
-    password: 'king',
-  },
-  {
-    name: 'Dummy Tester',
-    username: 'Dummy',
-    password: 'dummy',
-  },
-]
+import { resetDatabase, login, createBlog, viewAndLikeBlog } from './helper'
 
 const blog = {
   title: 'New Blog',
@@ -23,9 +10,7 @@ const blog = {
 
 test.describe('blogs app', () => {
   test.beforeEach(async ({ page, request }) => {
-    await request.post('/api/testing/reset')
-    await Promise.all(users.map((user) => createUser(request, user)))
-
+    await resetDatabase(request)
     await page.goto('/')
   })
 
@@ -37,12 +22,12 @@ test.describe('blogs app', () => {
 
   test.describe('login', () => {
     test('succeeds with correct credentials', async ({ page }) => {
-      await loginWith(page, 'King', 'king')
+      await login(page, 'King', 'king')
       await expect(page.getByText('King Tester logged in')).toBeVisible()
     })
 
     test('fails with wrong credentials', async ({ page }) => {
-      await loginWith(page, 'King', 'wrong-password')
+      await login(page, 'King', 'wrong-password')
       await expect(page.getByTestId('notification')).toHaveText(
         'invalid username or password'
       )
@@ -51,7 +36,7 @@ test.describe('blogs app', () => {
 
   test.describe('when logged in', () => {
     test.beforeEach(async ({ page }) => {
-      await loginWith(page, 'King', 'king')
+      await login(page, 'King', 'king')
     })
 
     test('user can logout', async ({ page }) => {
@@ -92,7 +77,7 @@ test.describe('blogs app', () => {
     test('blog cannot be deleted by another user', async ({ page }) => {
       await createBlog(page, blog)
       await page.getByRole('button', { name: 'logout' }).click()
-      await loginWith(page, 'Dummy', 'dummy')
+      await login(page, 'Dummy', 'dummy')
 
       await page.getByRole('button', { name: 'view' }).click()
 
@@ -120,33 +105,15 @@ test.describe('blogs app', () => {
         url: 'http://example.com',
       })
 
-      const blogs = page.locator('[data-testid="blog"]')
+      await viewAndLikeBlog(page, 'title1', 1)
+      await viewAndLikeBlog(page, 'title2', 3)
+      await viewAndLikeBlog(page, 'title3', 2)
 
-      const secondBlog = page.getByText('title2 author2')
-      await secondBlog.getByRole('button', { name: 'view' }).click()
-      await secondBlog.getByRole('button', { name: 'like' }).click()
-      await expect(secondBlog.getByText('likes 1')).toBeVisible()
+      const blogDivs = await page.locator('[data-testid="blog"]').all()
 
-      await secondBlog.getByRole('button', { name: 'like' }).click()
-      await expect(secondBlog.getByText('likes 2')).toBeVisible()
-
-      await secondBlog.getByRole('button', { name: 'like' }).click()
-      await expect(secondBlog.getByText('likes 3')).toBeVisible()
-
-      await secondBlog.getByRole('button', { name: 'like' }).click()
-      await expect(secondBlog.getByText('likes 4')).toBeVisible()
-
-      const thirdBlog = page.getByText('title3 author3')
-      await thirdBlog.getByRole('button', { name: 'view' }).click()
-      await thirdBlog.getByRole('button', { name: 'like' }).click()
-      await expect(thirdBlog.getByText('likes 1')).toBeVisible()
-
-      await thirdBlog.getByRole('button', { name: 'like' }).click()
-      await expect(thirdBlog.getByText('likes 2')).toBeVisible()
-
-      await expect(blogs.first().getByText('title2 author2')).toBeVisible()
-      await expect(blogs.nth(1).getByText('title3 author3')).toBeVisible()
-      await expect(blogs.last().getByText('title1 author1')).toBeVisible()
+      await expect(blogDivs[0].getByText('title2 author2')).toBeVisible()
+      await expect(blogDivs[1].getByText('title3 author3')).toBeVisible()
+      await expect(blogDivs[2].getByText('title1 author1')).toBeVisible()
     })
   })
 })
