@@ -9,18 +9,12 @@ const createBlog = async (page, { title, author, url }) => {
   await page.getByTestId('title').fill(title)
   await page.getByTestId('author').fill(author)
   await page.getByTestId('url').fill(url)
-
-  await Promise.all([
-    page.getByRole('button', { name: 'create' }).click(),
-    page.waitForResponse(
-      (response) =>
-        response.url().includes('/api/blogs') && response.status() === 201
-    ),
-  ])
+  page.getByRole('button', { name: 'create' }).click()
+  await page.getByText(`${title} ${author}`).waitFor()
 }
 
 const createUser = async (request, user) => {
-  return request.post('http://localhost:3001/api/users', { data: user })
+  return request.post('/api/users', { data: user })
 }
 
 export { loginWith, createBlog, createUser }
