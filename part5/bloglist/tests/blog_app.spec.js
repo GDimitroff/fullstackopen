@@ -72,7 +72,7 @@ test.describe('blogs app', () => {
       await expect(page.getByTestId('blog-likes')).toHaveText('likes 0 like')
 
       await page.getByRole('button', { name: 'like' }).click()
-      await expect(page.getByTestId('blog-likes')).toHaveText('likes 0 like')
+      await expect(page.getByTestId('blog-likes')).toHaveText('likes 1 like')
     })
 
     test('blog can be deleted', async ({ page }) => {
@@ -99,6 +99,54 @@ test.describe('blogs app', () => {
       await expect(
         page.getByRole('button', { name: 'remove' })
       ).not.toBeVisible()
+    })
+
+    test('blogs are ordered by likes', async ({ page }) => {
+      await createBlog(page, {
+        title: 'title1',
+        author: 'author1',
+        url: 'http://example.com',
+      })
+
+      await createBlog(page, {
+        title: 'title2',
+        author: 'author2',
+        url: 'http://example.com',
+      })
+
+      await createBlog(page, {
+        title: 'title3',
+        author: 'author3',
+        url: 'http://example.com',
+      })
+
+      const blogs = page.locator('[data-testid="blog"]')
+
+      const secondBlog = page.getByText('title2 author2')
+      await secondBlog.getByRole('button', { name: 'view' }).click()
+      await secondBlog.getByRole('button', { name: 'like' }).click()
+      await expect(secondBlog.getByText('likes 1')).toBeVisible()
+
+      await secondBlog.getByRole('button', { name: 'like' }).click()
+      await expect(secondBlog.getByText('likes 2')).toBeVisible()
+
+      await secondBlog.getByRole('button', { name: 'like' }).click()
+      await expect(secondBlog.getByText('likes 3')).toBeVisible()
+
+      await secondBlog.getByRole('button', { name: 'like' }).click()
+      await expect(secondBlog.getByText('likes 4')).toBeVisible()
+
+      const thirdBlog = page.getByText('title3 author3')
+      await thirdBlog.getByRole('button', { name: 'view' }).click()
+      await thirdBlog.getByRole('button', { name: 'like' }).click()
+      await expect(thirdBlog.getByText('likes 1')).toBeVisible()
+
+      await thirdBlog.getByRole('button', { name: 'like' }).click()
+      await expect(thirdBlog.getByText('likes 2')).toBeVisible()
+
+      await expect(blogs.first().getByText('title2 author2')).toBeVisible()
+      await expect(blogs.nth(1).getByText('title3 author3')).toBeVisible()
+      await expect(blogs.last().getByText('title1 author1')).toBeVisible()
     })
   })
 })

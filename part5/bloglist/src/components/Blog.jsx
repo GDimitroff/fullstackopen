@@ -31,7 +31,12 @@ const Blog = ({ user, blog, onLikeBlog, onRemoveBlog }) => {
           {blog.url}
           <div data-testid="blog-likes">
             likes {blog.likes}{' '}
-            <button onClick={() => onLikeBlog(blog)}>like</button>
+            <button
+              data-testid="blog-likes-button"
+              onClick={() => onLikeBlog(blog)}
+            >
+              like
+            </button>
           </div>
           <div>{blog.user.name}</div>
           {user.username === blog.user.username && (
