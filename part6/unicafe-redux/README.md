@@ -1,4 +1,4 @@
-# Unicafe Redux
+# Unicafe - Redux
 
 In this exercise, we've created a streamlined version of the Unicafe exercise from Part 1, with state management handled by `Redux`. To recap, the Unicafe application gathers customer feedback through three options: good, neutral, and bad.
 

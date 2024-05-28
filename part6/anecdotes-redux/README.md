@@ -1,8 +1,20 @@
-# React + Vite
+# Anecdotes - Redux
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+In this exercise, we've remade the anecdote voting application from `Part 1`, this time utilizing Redux. To recap, this application enables users to cast votes among various anecdotes, subsequently showcasing the most popular one.
 
-Currently, two official plugins are available:
+The initial list of anecdotes is stored in the `db.json` file. This file is utilized by `JSON Server`, a tool that emulates a backend server for data storage.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Running the Application
+
+```bash
+# Install the necessary dependencies
+$ npm install
+
+# Start the backend JSON server in separate terminal
+$ npm run server
+
+# Start the server
+$ npm run dev
+```
+
+You can then access the app on: [http://localhost:5173/](http://localhost:5173/)
