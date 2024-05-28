@@ -1,8 +1,15 @@
-# React + Vite
+# Unicafe Redux
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+In this exercise, we've created a streamlined version of the Unicafe exercise from Part 1, with state management handled by `Redux`. To recap, the Unicafe application gathers customer feedback through three options: good, neutral, and bad.
 
-Currently, two official plugins are available:
+## Running the Application
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+# Install the necessary dependencies
+$ npm install
+
+# Start the server
+$ npm run dev
+```
+
+You can then access the app on: [http://localhost:5173/](http://localhost:5173/)
