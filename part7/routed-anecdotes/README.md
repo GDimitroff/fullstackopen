@@ -1,8 +1,19 @@
-# React + Vite
+# Routed Anecdotes
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+In this exercise, we've revamped the anecdote voting application from `Part 1`, incorporating React Router for better navigation.
 
-Currently, two official plugins are available:
+Previously, the application's URL remained static, regardless of the view being displayed. This was suboptimal, as ideally, each view should have its own unique URL to facilitate actions like bookmarking. Furthermore, as the application evolves to include individual views for the anecdote list, anecdote details, and the creation of new anecdotes, managing navigation without a routing solution could become complex and inefficient.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To address these issues, we've integrated [React Router](https://reactrouter.com/en/main) into our application.
+
+## Running the Application
+
+```bash
+# Install the necessary dependencies
+$ npm install
+
+# Start the application
+$ npm run dev
+```
+
+You can then access the app on: [http://localhost:5173/](http://localhost:5173/)
