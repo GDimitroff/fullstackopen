@@ -13,7 +13,7 @@ $ npm install
 # Start the backend JSON server in separate terminal
 $ npm run server
 
-# Start the server
+# Start the application
 $ npm run dev
 ```
 

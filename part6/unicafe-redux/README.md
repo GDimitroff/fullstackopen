@@ -8,7 +8,7 @@ In this exercise, we've created a streamlined version of the Unicafe exercise fr
 # Install the necessary dependencies
 $ npm install
 
-# Start the server
+# Start the application
 $ npm run dev
 ```
 
