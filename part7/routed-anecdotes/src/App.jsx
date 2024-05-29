@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
+
 import Footer from './components/Footer'
-import Menu from './components/Menu'
+import Navigation from './components/Navigation'
 import AnecdoteList from './components/AnecdoteList'
 import About from './components/About'
 import CreateNew from './components/CreateNew'
@@ -47,7 +48,7 @@ const App = () => {
   return (
     <>
       <h1>Software anecdotes</h1>
-      <Menu />
+      <Navigation />
 
       <Routes>
         <Route
