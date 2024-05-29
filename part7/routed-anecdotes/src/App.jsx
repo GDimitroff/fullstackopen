@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import { Routes, Route, Navigate, useMatch } from 'react-router-dom'
+import {
+  Routes,
+  Route,
+  Navigate,
+  useMatch,
+  useNavigate,
+} from 'react-router-dom'
 
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
@@ -26,16 +32,24 @@ const App = () => {
     },
   ])
 
+  const navigate = useNavigate()
+
   const match = useMatch('/anecdotes/:id')
   const anecdote = match
     ? anecdotes.find((a) => a.id === Number(match.params.id))
     : null
 
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState(null)
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)
     setAnecdotes(anecdotes.concat(anecdote))
+    navigate('/')
+
+    setNotification(`new anecdote "${anecdote.content}" created!`)
+    setTimeout(() => {
+      setNotification(null)
+    }, 5000)
   }
 
   const anecdoteById = (id) => anecdotes.find((a) => a.id === id)
@@ -55,6 +69,16 @@ const App = () => {
     <>
       <h1>Software anecdotes</h1>
       <Navigation />
+      {notification && (
+        <div
+          style={{
+            padding: '5px',
+            border: '1px solid black',
+          }}
+        >
+          <em>{notification}</em>
+        </div>
+      )}
 
       <Routes>
         <Route
