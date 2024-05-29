@@ -1,6 +1,6 @@
 # Anecdotes - Redux
 
-In this exercise, we've remade the anecdote voting application from `Part 1`, this time utilizing Redux. To recap, this application enables users to cast votes among various anecdotes, subsequently showcasing the most popular one.
+In this exercise, we've remade the anecdote voting application from `Part 1`, this time utilizing Redux. To recap, this application enables users to cast votes among various anecdotes.
 
 The initial list of anecdotes is stored in the `db.json` file. This file is utilized by `JSON Server`, a tool that emulates a backend server for data storage.
 
