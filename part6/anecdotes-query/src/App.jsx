@@ -3,9 +3,11 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import anecdoteService from './services/anecdotes'
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
+import { useNotification } from './NotificationContext'
 
 const App = () => {
   const queryClient = useQueryClient()
+  const { showNotification } = useNotification()
 
   const {
     isPending,
@@ -18,13 +20,11 @@ const App = () => {
     retry: 1,
   })
 
-  const {
-    mutate,
-    isPending: isVoting,
-    variables,
-  } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: anecdoteService.update,
     onSuccess: (updatedAnecdote) => {
+      showNotification(`you voted for '${updatedAnecdote.content}'`)
+
       const anecdotes = queryClient.getQueryData(['anecdotes'])
       queryClient.setQueryData(
         ['anecdotes'],
@@ -58,11 +58,7 @@ const App = () => {
           <div>{anecdote.content}</div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => handleVote(anecdote)}>
-              {variables && variables.id === anecdote.id && isVoting
-                ? 'voting...'
-                : 'vote'}
-            </button>
+            <button onClick={() => handleVote(anecdote)}>vote</button>
           </div>
         </div>
       ))}
