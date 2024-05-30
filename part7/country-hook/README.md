@@ -1,8 +1,17 @@
-# React + Vite
+# Countries exercises with custom hooks
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+In this exercise, we made a new version of the countries exercise from `Part 2` using custom hooks.
 
-Currently, two official plugins are available:
+This application is used to search for country details from the https://studies.cs.helsinki.fi/restcountries/ API. If country is found, the details of the country are displayed.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Running the Application
+
+```bash
+# Install the necessary dependencies
+$ npm install
+
+# Start the application
+$ npm run dev
+```
+
+You can then access the app on: [http://localhost:5173/](http://localhost:5173/)
