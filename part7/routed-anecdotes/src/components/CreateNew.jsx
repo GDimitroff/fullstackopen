@@ -1,17 +1,23 @@
 import { useField } from '../hooks'
 
 const CreateNew = ({ addNew }) => {
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
+  const { reset: resetContent, ...content } = useField('text')
+  const { reset: resetAuthor, ...author } = useField('text')
+  const { reset: resetInfo, ...info } = useField('text')
+
+  const handleReset = () => {
+    resetContent()
+    resetAuthor()
+    resetInfo()
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
     addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0,
     })
   }
@@ -32,7 +38,13 @@ const CreateNew = ({ addNew }) => {
           url for more info
           <input {...info} />
         </div>
-        <button>create</button>
+        <button type='submit'>create</button>
+        <button
+          onClick={handleReset}
+          type='button'
+        >
+          reset
+        </button>
       </form>
     </div>
   )
