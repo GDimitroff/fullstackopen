@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 
 import blogService from './services/blogs'
 import Authentication from './components/Authentication'
-import Notification from './components/Notification'
+import Notifications from './components/Notifications'
 import Blogs from './components/Blogs'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
@@ -13,7 +13,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState(null)
   const blogFormRef = useRef()
-  const { notification, setNotification } = useNotification()
+  const { notifications, setNotification } = useNotification()
 
   const sortedBlogs = blogs?.sort((a, b) => b.likes - a.likes)
 
@@ -87,7 +87,7 @@ const App = () => {
   return (
     <div>
       <h2>{user ? 'blogs' : 'log in to application'}</h2>
-      <Notification notification={notification} />
+      <Notifications notifications={notifications} />
 
       <Authentication
         user={user}
