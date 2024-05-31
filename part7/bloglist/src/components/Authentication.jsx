@@ -3,7 +3,7 @@ import { useState } from 'react'
 import authService from '../services/authentication'
 import blogService from '../services/blogs'
 
-const Authentication = ({ user, setUser, setNotificationMessage }) => {
+const Authentication = ({ user, setUser, setNotification }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -19,7 +19,10 @@ const Authentication = ({ user, setUser, setNotificationMessage }) => {
       setUsername('')
       setPassword('')
     } catch (error) {
-      setNotificationMessage('error', error.response.data.error)
+      setNotification({
+        type: 'error',
+        message: error.response.data.error,
+      })
     }
   }
 
@@ -43,24 +46,24 @@ const Authentication = ({ user, setUser, setNotificationMessage }) => {
       <div>
         username
         <input
-          type="text"
+          type='text'
           value={username}
-          name="username"
-          data-testid="username"
+          name='username'
+          data-testid='username'
           onChange={({ target }) => setUsername(target.value)}
         />
       </div>
       <div>
         password
         <input
-          type="password"
+          type='password'
           value={password}
-          name="password"
-          data-testid="password"
+          name='password'
+          data-testid='password'
           onChange={({ target }) => setPassword(target.value)}
         />
       </div>
-      <button type="submit">login</button>
+      <button type='submit'>login</button>
     </form>
   )
 }

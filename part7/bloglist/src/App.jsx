@@ -6,22 +6,16 @@ import Notification from './components/Notification'
 import Blogs from './components/Blogs'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
+import { useNotification } from './contexts/hooks'
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState(null)
-  const [notification, setNotification] = useState(null)
   const blogFormRef = useRef()
+  const { notification, setNotification } = useNotification()
 
   const sortedBlogs = blogs?.sort((a, b) => b.likes - a.likes)
-
-  const setNotificationMessage = (type, message) => {
-    setNotification({ type, message })
-    setTimeout(() => {
-      setNotification(null)
-    }, 3000)
-  }
 
   const fetchBlogs = useCallback(async () => {
     setIsLoading(true)
@@ -43,13 +37,13 @@ const App = () => {
     try {
       const newBlog = await blogService.create(blogObject)
       setBlogs((prevBlogs) => [...prevBlogs, newBlog])
-      setNotificationMessage(
-        'success',
-        `a new blog ${newBlog.title} by ${newBlog.author} added`
-      )
+      setNotification({
+        type: 'success',
+        message: `a new blog ${newBlog.title} by ${newBlog.author} added`,
+      })
       blogFormRef.current.toggleVisibility()
     } catch (error) {
-      setNotificationMessage('error', error.response.data.error)
+      setNotification({ type: 'error', message: error.response.data.error })
     }
   }
 
@@ -59,10 +53,10 @@ const App = () => {
     try {
       const updated = await blogService.update(blogObject.id, blogData)
       setBlogs((prev) =>
-        prev.map((b) => (b.id === blogObject.id ? updated : b))
+        prev.map((b) => (b.id === blogObject.id ? updated : b)),
       )
     } catch (error) {
-      setNotificationMessage('error', error.response.data.error)
+      setNotification({ type: 'error', message: error.response.data.error })
     }
   }
 
@@ -73,12 +67,12 @@ const App = () => {
       try {
         await blogService.remove(blogObject.id)
         setBlogs((prev) => prev.filter((b) => b.id !== blogObject.id))
-        setNotificationMessage(
-          'success',
-          `blog ${blogObject.title} by ${blogObject.author} removed`
-        )
+        setNotification({
+          type: 'success',
+          message: `blog ${blogObject.title} by ${blogObject.author} removed`,
+        })
       } catch (error) {
-        setNotificationMessage('error', error.response.data.error)
+        setNotification({ type: 'error', message: error.response.data.error })
       }
     }
   }
@@ -98,11 +92,14 @@ const App = () => {
       <Authentication
         user={user}
         setUser={setUser}
-        setNotificationMessage={setNotificationMessage}
+        setNotification={setNotification}
       />
       {user && (
         <>
-          <Togglable buttonLabel="new blog" ref={blogFormRef}>
+          <Togglable
+            buttonLabel='new blog'
+            ref={blogFormRef}
+          >
             <BlogForm createBlog={handleCreateBlog} />
           </Togglable>
           <Blogs
