@@ -21,43 +21,43 @@ const BlogForm = ({ createBlog }) => {
   }
 
   return (
-    <div data-testid="blogform">
+    <div data-testid='blogform'>
       <h2>create new</h2>
       <form onSubmit={handleSubmit}>
         <div>
           title:
           <input
-            type="text"
+            type='text'
             value={blog.title}
-            name="title"
-            data-testid="title"
+            name='title'
+            data-testid='title'
             onChange={handleChange}
-            placeholder="react is awesome"
+            placeholder='react is awesome'
           />
         </div>
         <div>
           author:
           <input
-            type="text"
+            type='text'
             value={blog.author}
-            name="author"
-            data-testid="author"
+            name='author'
+            data-testid='author'
             onChange={handleChange}
-            placeholder="john doe"
+            placeholder='john doe'
           />
         </div>
         <div>
           url:
           <input
-            type="url"
+            type='url'
             value={blog.url}
-            name="url"
-            data-testid="url"
+            name='url'
+            data-testid='url'
             onChange={handleChange}
-            placeholder="https://example.com/"
+            placeholder='https://example.com/'
           />
         </div>
-        <button type="submit">create</button>
+        <button type='submit'>create</button>
       </form>
     </div>
   )

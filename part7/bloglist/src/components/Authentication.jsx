@@ -1,35 +1,23 @@
 import { useState } from 'react'
 
-import authService from '../services/authentication'
-import blogService from '../services/blogs'
+import { useAuth } from '../contexts/hooks'
 
-const Authentication = ({ user, setUser, setNotification }) => {
+const Authentication = () => {
+  const { user, login, logout } = useAuth()
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const handleLogin = async (event) => {
     event.preventDefault()
 
-    try {
-      const user = await authService.login({ username, password })
-
-      window.localStorage.setItem('loggedBlogsAppUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
-      setUsername('')
-      setPassword('')
-    } catch (error) {
-      setNotification({
-        type: 'error',
-        message: error.response.data.error,
-      })
-    }
+    await login({ username, password })
+    setUsername('')
+    setPassword('')
   }
 
   const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogsAppUser')
-    blogService.setToken(null)
-    setUser(null)
+    logout()
   }
 
   if (user) {

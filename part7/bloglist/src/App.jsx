@@ -6,14 +6,15 @@ import Notifications from './components/Notifications'
 import Blogs from './components/Blogs'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
-import { useNotification } from './contexts/hooks'
+import { useAuth, useNotification } from './contexts/hooks'
 
 const App = () => {
+  const { user } = useAuth()
+  const { notifications, setNotification } = useNotification()
+
   const [isLoading, setIsLoading] = useState(true)
-  const [user, setUser] = useState(null)
   const [blogs, setBlogs] = useState(null)
   const blogFormRef = useRef()
-  const { notifications, setNotification } = useNotification()
 
   const sortedBlogs = blogs?.sort((a, b) => b.likes - a.likes)
 
@@ -24,14 +25,9 @@ const App = () => {
     setIsLoading(false)
   }, [])
 
-  const checkUser = useCallback(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogsAppUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
+  useEffect(() => {
+    fetchBlogs()
+  }, [fetchBlogs])
 
   const handleCreateBlog = async (blogObject) => {
     try {
@@ -77,11 +73,6 @@ const App = () => {
     }
   }
 
-  useEffect(() => {
-    fetchBlogs()
-    checkUser()
-  }, [fetchBlogs, checkUser])
-
   if (isLoading) return <div>loading...</div>
 
   return (
@@ -89,11 +80,7 @@ const App = () => {
       <h2>{user ? 'blogs' : 'log in to application'}</h2>
       <Notifications notifications={notifications} />
 
-      <Authentication
-        user={user}
-        setUser={setUser}
-        setNotification={setNotification}
-      />
+      <Authentication />
       {user && (
         <>
           <Togglable
