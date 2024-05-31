@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 import { useAuth, useNotification } from './contexts/hooks'
 import { useBlogsQuery } from './queries/blogQueries'
-import { useCreateBlogMutation } from './mutations/blogMutations'
 import Authentication from './components/Authentication'
 import Notifications from './components/Notifications'
 import Blogs from './components/Blogs'
@@ -13,14 +12,9 @@ const App = () => {
   const { user } = useAuth()
   const { data: blogs, isLoading, error } = useBlogsQuery()
   const { notifications } = useNotification()
-  const { mutate } = useCreateBlogMutation()
   const [visible, setVisible] = useState(false)
 
   const sortedBlogs = blogs?.sort((a, b) => b.likes - a.likes)
-
-  const handleCreateBlog = (blogObject) => {
-    mutate(blogObject)
-  }
 
   if (isLoading) return <div>loading...</div>
 
@@ -39,7 +33,7 @@ const App = () => {
             visible={visible}
             setVisible={() => setVisible(!visible)}
           >
-            <BlogForm createBlog={handleCreateBlog} />
+            <BlogForm />
           </Togglable>
           <Blogs
             user={user}

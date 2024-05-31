@@ -1,6 +1,9 @@
 import { useState } from 'react'
 
-const BlogForm = ({ createBlog }) => {
+import { useCreateBlogMutation } from '../mutations/blogMutations'
+
+const BlogForm = () => {
+  const { mutateAsync, isPending } = useCreateBlogMutation()
   const [blog, setBlog] = useState({ title: '', author: '', url: '' })
 
   const handleChange = (e) => {
@@ -8,10 +11,10 @@ const BlogForm = ({ createBlog }) => {
     setBlog({ ...blog, [name]: value })
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    createBlog({
+    await mutateAsync({
       title: blog.title,
       author: blog.author,
       url: blog.url,
@@ -57,7 +60,12 @@ const BlogForm = ({ createBlog }) => {
             placeholder='https://example.com/'
           />
         </div>
-        <button type='submit'>create</button>
+        <button
+          type='submit'
+          disabled={isPending}
+        >
+          {isPending ? 'creating...' : 'create'}
+        </button>
       </form>
     </div>
   )
