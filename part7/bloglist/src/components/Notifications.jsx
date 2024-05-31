@@ -1,5 +1,4 @@
 const Notifications = ({ notifications }) => {
-  console.log(notifications)
   if (notifications.length === 0) {
     return null
   }
