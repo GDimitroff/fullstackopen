@@ -1,50 +1,70 @@
 import { useState } from 'react'
 
-const Blog = ({ user, blog, onLikeBlog, onRemoveBlog }) => {
-  const [showDetails, setShowDetails] = useState(false)
+import {
+  useLikeBlogMutation,
+  useRemoveBlogMutation,
+} from '../mutations/blogMutations'
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 5,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-    marginTop: 5,
+const blogStyle = {
+  paddingTop: 10,
+  paddingBottom: 10,
+  paddingLeft: 5,
+  border: 'solid',
+  borderWidth: 1,
+  marginBottom: 5,
+  marginTop: 5,
+}
+
+const deleteButtonStyle = {
+  background: 'lightcoral',
+  color: 'white',
+  border: 'none',
+  padding: '4px 8px',
+}
+
+const Blog = ({ user, blog }) => {
+  const [showDetails, setShowDetails] = useState(false)
+  const likeMutation = useLikeBlogMutation()
+  const removeMutation = useRemoveBlogMutation()
+
+  const handleLikeBlog = (blogObject) => {
+    const blogData = { ...blogObject, likes: blogObject.likes + 1 }
+    likeMutation.mutate(blogData)
   }
 
-  const deleteButtonStyle = {
-    background: 'lightcoral',
-    color: 'white',
-    border: 'none',
-    padding: '4px 8px',
+  const handleRemoveBlog = (blogObject) => {
+    const confirmText = `Remove blog ${blogObject.title} by ${blogObject.author}`
+
+    if (window.confirm(confirmText)) {
+      removeMutation.mutate(blogObject)
+    }
   }
 
   return (
-    <div data-testid="blog" style={blogStyle}>
+    <div style={blogStyle}>
       {blog.title} {blog.author}{' '}
       <button onClick={() => setShowDetails(!showDetails)}>
         {showDetails ? 'hide' : 'view'}
       </button>
       {showDetails && (
-        <div data-testid="blog-details">
+        <div>
           {blog.url}
-          <div data-testid="blog-likes">
+          <div>
             likes {blog.likes}{' '}
             <button
-              data-testid="blog-likes-button"
-              onClick={() => onLikeBlog(blog)}
+              onClick={() => handleLikeBlog(blog)}
+              disabled={likeMutation.isPending}
             >
-              like
+              {likeMutation.isPending ? 'liking...' : 'like'}
             </button>
           </div>
           <div>{blog.user.name}</div>
           {user.username === blog.user.username && (
             <button
               style={deleteButtonStyle}
-              onClick={() => onRemoveBlog(blog)}
+              onClick={() => handleRemoveBlog(blog)}
             >
-              remove
+              {removeMutation.isPending ? 'removing...' : 'remove'}
             </button>
           )}
         </div>

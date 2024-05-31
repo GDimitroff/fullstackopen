@@ -1,17 +1,15 @@
 import Blog from './Blog'
 
-const Blogs = ({ user, blogs, onLikeBlog, onRemoveBlog }) => {
+const Blogs = ({ user, blogs }) => {
   if (!blogs || blogs.length === 0) return null
 
   return (
     <div>
       {blogs.map((blog) => (
         <Blog
-          key={blog.id}
           user={user}
+          key={blog.id}
           blog={blog}
-          onLikeBlog={onLikeBlog}
-          onRemoveBlog={onRemoveBlog}
         />
       ))}
     </div>
