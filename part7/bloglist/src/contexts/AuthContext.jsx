@@ -1,8 +1,10 @@
 import { createContext, useEffect, useReducer } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import authService from '../services/authentication'
 import blogService from '../services/blogs'
 import {
+  INITIALIZE_USER,
   USER_LOGIN_SUBMIT,
   USER_LOGIN_SUCCESS,
   USER_LOGIN_FAILURE,
@@ -19,6 +21,9 @@ export const AuthContext = createContext()
 
 const autReducer = (state, action) => {
   switch (action.type) {
+    case INITIALIZE_USER: {
+      return { ...state, isLoading: false, user: action.payload }
+    }
     case USER_LOGIN_SUBMIT: {
       return { ...state, isLoading: true }
     }
@@ -40,15 +45,23 @@ const autReducer = (state, action) => {
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(autReducer, initialState)
   const { setNotification } = useNotification()
+  const navigate = useNavigate()
 
   useEffect(() => {
+    initializeUser()
+  }, [])
+
+  const initializeUser = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogsAppUser')
+
+    let user = null
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      dispatch({ type: USER_LOGIN_SUCCESS, payload: user })
+      user = JSON.parse(loggedUserJSON)
       blogService.setToken(user.token)
     }
-  }, [])
+
+    dispatch({ type: INITIALIZE_USER, payload: user })
+  }
 
   const login = async (userData) => {
     dispatch({ type: USER_LOGIN_SUBMIT })
@@ -58,6 +71,7 @@ const AuthProvider = ({ children }) => {
       dispatch({ type: USER_LOGIN_SUCCESS, payload: user })
       window.localStorage.setItem('loggedBlogsAppUser', JSON.stringify(user))
       blogService.setToken(user.token)
+      navigate('/', { replace: true })
     } catch (error) {
       dispatch({ type: USER_LOGIN_FAILURE })
       setNotification({
@@ -79,7 +93,11 @@ const AuthProvider = ({ children }) => {
     logout,
   }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={value}>
+      {state.isLoading ? <div>loading...</div> : children}
+    </AuthContext.Provider>
+  )
 }
 
 export default AuthProvider

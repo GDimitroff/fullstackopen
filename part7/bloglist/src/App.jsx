@@ -1,47 +1,34 @@
-import { useState } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
 
-import { useAuth, useNotification } from './contexts/hooks'
-import { useBlogsQuery } from './queries/blogQueries'
-import Authentication from './components/Authentication'
-import Notifications from './components/Notifications'
-import Blogs from './components/Blogs'
-import BlogForm from './components/BlogForm'
-import Togglable from './components/Togglable'
+import Authentication from './views/Authentication'
+import Blogs from './views/Blogs'
+import ProtectedComponent from './utils/ProtectedComponent'
 
 const App = () => {
-  const { user } = useAuth()
-  const { data: blogs, isLoading, error } = useBlogsQuery()
-  const { notifications } = useNotification()
-  const [visible, setVisible] = useState(false)
-
-  const sortedBlogs = blogs?.sort((a, b) => b.likes - a.likes)
-
-  if (isLoading) return <div>loading...</div>
-
-  if (error) return <div>error: {error.response.data.error}</div>
-
   return (
-    <div>
-      <h2>{user ? 'blogs' : 'log in to application'}</h2>
-      <Notifications notifications={notifications} />
-
-      <Authentication />
-      {user && (
-        <>
-          <Togglable
-            buttonLabel='new blog'
-            visible={visible}
-            setVisible={() => setVisible(!visible)}
-          >
-            <BlogForm />
-          </Togglable>
-          <Blogs
-            user={user}
-            blogs={sortedBlogs}
+    <Routes>
+      <Route
+        path='/auth'
+        element={<Authentication />}
+      />
+      <Route
+        path='/'
+        element={
+          <ProtectedComponent>
+            <Blogs />
+          </ProtectedComponent>
+        }
+      />
+      <Route
+        path='/blogs'
+        element={
+          <Navigate
+            to='/'
+            replace={true}
           />
-        </>
-      )}
-    </div>
+        }
+      />
+    </Routes>
   )
 }
 

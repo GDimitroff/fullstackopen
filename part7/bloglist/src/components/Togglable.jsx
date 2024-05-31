@@ -3,14 +3,11 @@ const Togglable = ({ children, visible = false, setVisible, buttonLabel }) => {
   const showWhenVisible = { display: visible ? '' : 'none' }
 
   return (
-    <div data-testid='togglable'>
+    <div>
       <div style={hideWhenVisible}>
         <button onClick={setVisible}>{buttonLabel}</button>
       </div>
-      <div
-        style={showWhenVisible}
-        data-testid='togglableContent'
-      >
+      <div style={showWhenVisible}>
         {children}
         <button onClick={setVisible}>cancel</button>
       </div>

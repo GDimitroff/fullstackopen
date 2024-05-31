@@ -1,4 +1,8 @@
-const Notifications = ({ notifications }) => {
+import { useNotification } from '../contexts/hooks'
+
+const Notifications = () => {
+  const { notifications } = useNotification()
+
   if (notifications.length === 0) {
     return null
   }
@@ -10,7 +14,6 @@ const Notifications = ({ notifications }) => {
           <div
             key={notification.id}
             className={`notification ${notification.type}`}
-            data-testid='notification'
           >
             {notification.message}
           </div>
