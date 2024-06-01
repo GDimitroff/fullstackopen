@@ -80,7 +80,10 @@ const Blog = () => {
           </button>
         )}
       </div>
-      <Comments comments={blog.comments} />
+      <Comments
+        blogId={blog.id}
+        comments={blog.comments}
+      />
     </div>
   )
 }

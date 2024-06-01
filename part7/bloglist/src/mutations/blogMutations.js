@@ -62,3 +62,19 @@ export const useRemoveBlogMutation = () => {
     },
   })
 }
+
+export const useAddCommentMutation = () => {
+  const queryClient = useQueryClient()
+  const { setNotification } = useNotification()
+
+  return useMutation({
+    mutationFn: (blogData) =>
+      blogService.addComment(blogData.blogId, blogData.newComment),
+    onSuccess: (updatedBlog) => {
+      queryClient.setQueryData(['blogs', updatedBlog.id], updatedBlog)
+    },
+    onError: (error) => {
+      setNotification({ type: 'error', message: error.response.data.error })
+    },
+  })
+}
