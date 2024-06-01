@@ -22,7 +22,7 @@ const Navigation = () => {
         }}
       >
         <li>
-          <Link to='/blogs'>blogs</Link>
+          <Link to='/'>blogs</Link>
         </li>
         <li>
           <Link to='/users'>users</Link>
