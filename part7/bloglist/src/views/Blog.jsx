@@ -7,6 +7,7 @@ import {
   useLikeBlogMutation,
   useRemoveBlogMutation,
 } from '../mutations/blogMutations'
+import Comments from '../components/Comments'
 
 const deleteButtonStyle = {
   background: 'lightcoral',
@@ -79,16 +80,7 @@ const Blog = () => {
           </button>
         )}
       </div>
-      {blog.comments.length > 0 && (
-        <div>
-          <h3>comments</h3>
-          <ul>
-            {blog.comments.map((comment, index) => (
-              <li key={index}>{comment}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <Comments comments={blog.comments} />
     </div>
   )
 }
