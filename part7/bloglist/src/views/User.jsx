@@ -1,7 +1,7 @@
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import { useUserQuery } from '../queries/userQueries'
-import { useEffect } from 'react'
 
 const User = () => {
   const { id } = useParams()
@@ -16,7 +16,7 @@ const User = () => {
 
   if (isLoading) return <div>loading...</div>
 
-  if (!user) return null
+  if (!user && error) return null
 
   return (
     <div>

@@ -1,27 +1,38 @@
-import { useAuth } from '../contexts/hooks'
+import { Link } from 'react-router-dom'
+
 import { useBlogsQuery } from '../queries/blogQueries'
-import Blog from './Blog'
+
+const listStyle = {
+  paddingTop: 10,
+  paddingBottom: 10,
+  paddingLeft: 5,
+  border: 'solid',
+  borderWidth: 1,
+  marginBottom: 5,
+  marginTop: 5,
+  listStyle: 'none',
+}
 
 const BlogList = () => {
-  const { user } = useAuth()
-  const { data: blogs, isLoading, error } = useBlogsQuery()
+  const { data: blogs, isLoading } = useBlogsQuery()
 
   const sortedBlogs = blogs?.sort((a, b) => b.likes - a.likes)
 
   if (isLoading) return <div>loading...</div>
 
-  if (error) return <div>error: {error.response.data.error}</div>
-
   return (
-    <div>
+    <ul style={{ paddingInlineStart: 0 }}>
       {sortedBlogs.map((blog) => (
-        <Blog
-          user={user}
+        <li
           key={blog.id}
-          blog={blog}
-        />
+          style={listStyle}
+        >
+          <Link to={`/blogs/${blog.id}`}>
+            {blog.title} {blog.author}
+          </Link>
+        </li>
       ))}
-    </div>
+    </ul>
   )
 }
 

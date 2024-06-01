@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import Authentication from './views/Authentication'
 import ProtectedComponent from './utils/ProtectedComponent'
 import Blogs from './views/Blogs'
+import Blog from './views/Blog'
 import Users from './views/Users'
 import User from './views/User'
 
@@ -28,6 +29,14 @@ const App = () => {
             to='/'
             replace={true}
           />
+        }
+      />
+      <Route
+        path='/blogs/:id'
+        element={
+          <ProtectedComponent>
+            <Blog />
+          </ProtectedComponent>
         }
       />
       <Route

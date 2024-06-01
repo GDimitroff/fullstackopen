@@ -10,3 +10,12 @@ export const useBlogsQuery = () => {
     retry: false,
   })
 }
+
+export const useBlogQuery = (id) => {
+  return useQuery({
+    queryKey: ['blog', id],
+    queryFn: () => blogService.getById(id),
+    refetchOnWindowFocus: false,
+    retry: false,
+  })
+}
