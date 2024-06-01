@@ -7,6 +7,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material'
 
 import { useBlogsQuery } from '../queries/blogQueries'
@@ -25,10 +26,18 @@ const BlogList = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>title</TableCell>
-              <TableCell align='right'>author</TableCell>
-              <TableCell align='right'>comments</TableCell>
-              <TableCell align='right'>likes</TableCell>
+              <TableCell>
+                <Typography fontWeight='bold'>title</Typography>
+              </TableCell>
+              <TableCell align='right'>
+                <Typography fontWeight='bold'>author</Typography>
+              </TableCell>
+              <TableCell align='right'>
+                <Typography fontWeight='bold'>comments</Typography>
+              </TableCell>
+              <TableCell align='right'>
+                <Typography fontWeight='bold'>likes</Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

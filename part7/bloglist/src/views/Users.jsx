@@ -7,6 +7,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material'
 
 import { useUsersQuery } from '../queries/userQueries'
@@ -25,8 +26,12 @@ const Users = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>username</TableCell>
-              <TableCell align='right'>blogs created</TableCell>
+              <TableCell>
+                <Typography fontWeight='bold'>username</Typography>
+              </TableCell>
+              <TableCell align='right'>
+                <Typography fontWeight='bold'>blogs created</Typography>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Button, TextField } from '@mui/material'
 
 import { useAuth } from '../contexts/hooks'
 
@@ -27,28 +28,45 @@ const Authentication = () => {
   return (
     <div>
       <h2>login</h2>
-      <form onSubmit={handleLogin}>
+      <form
+        onSubmit={handleLogin}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem',
+          width: '200px',
+        }}
+      >
         <div>
-          username
-          <input
+          <TextField
+            label='username'
             type='text'
-            value={username}
             name='username'
-            data-testid='username'
+            value={username}
             onChange={({ target }) => setUsername(target.value)}
+            size='small'
           />
         </div>
         <div>
-          password
-          <input
+          <TextField
+            label='password'
             type='password'
-            value={password}
             name='password'
-            data-testid='password'
+            value={password}
             onChange={({ target }) => setPassword(target.value)}
+            size='small'
           />
         </div>
-        <button type='submit'>login</button>
+        <div>
+          <Button
+            variant='contained'
+            color='primary'
+            type='submit'
+            size='small'
+          >
+            login
+          </Button>
+        </div>
       </form>
     </div>
   )
