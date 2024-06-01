@@ -13,7 +13,7 @@ export const useBlogsQuery = () => {
 
 export const useBlogQuery = (id) => {
   return useQuery({
-    queryKey: ['blog', id],
+    queryKey: ['blogs', id],
     queryFn: () => blogService.getById(id),
     refetchOnWindowFocus: false,
     retry: false,

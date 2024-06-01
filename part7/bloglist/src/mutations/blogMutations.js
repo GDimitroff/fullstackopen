@@ -31,11 +31,15 @@ export const useLikeBlogMutation = () => {
   return useMutation({
     mutationFn: blogService.update,
     onSuccess: (updatedBlog) => {
-      const blogs = queryClient.getQueryData(['blogs'])
-      queryClient.setQueryData(
-        ['blogs'],
-        blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog)),
-      )
+      queryClient.setQueriesData(['blogs'], (data) => {
+        if (Array.isArray(data)) {
+          return data.map((blog) =>
+            blog.id === updatedBlog.id ? updatedBlog : blog,
+          )
+        } else {
+          return updatedBlog
+        }
+      })
     },
     onError: (error) => {
       setNotification({ type: 'error', message: error.response.data.error })

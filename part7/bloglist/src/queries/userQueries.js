@@ -13,7 +13,7 @@ export const useUsersQuery = () => {
 
 export const useUserQuery = (id) => {
   return useQuery({
-    queryKey: ['user', id],
+    queryKey: ['users', id],
     queryFn: () => userService.getById(id),
     refetchOnWindowFocus: false,
     retry: false,
