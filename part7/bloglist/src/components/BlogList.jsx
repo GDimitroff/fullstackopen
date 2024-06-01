@@ -1,17 +1,15 @@
 import { Link } from 'react-router-dom'
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material'
 
 import { useBlogsQuery } from '../queries/blogQueries'
-
-const listStyle = {
-  paddingTop: 10,
-  paddingBottom: 10,
-  paddingLeft: 5,
-  border: 'solid',
-  borderWidth: 1,
-  marginBottom: 5,
-  marginTop: 5,
-  listStyle: 'none',
-}
 
 const BlogList = () => {
   const { data: blogs, isLoading } = useBlogsQuery()
@@ -21,18 +19,30 @@ const BlogList = () => {
   if (isLoading) return <div>loading...</div>
 
   return (
-    <ul style={{ paddingInlineStart: 0 }}>
-      {sortedBlogs.map((blog) => (
-        <li
-          key={blog.id}
-          style={listStyle}
-        >
-          <Link to={`/blogs/${blog.id}`}>
-            {blog.title} {blog.author}
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <TableContainer component={Paper}>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Title</TableCell>
+            <TableCell align='right'>Author</TableCell>
+            <TableCell align='right'>Comments</TableCell>
+            <TableCell align='right'>Likes</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {sortedBlogs.map((blog) => (
+            <TableRow key={blog.id}>
+              <TableCell>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </TableCell>
+              <TableCell align='right'>{blog.author}</TableCell>
+              <TableCell align='right'>{blog.comments.length}</TableCell>
+              <TableCell align='right'>{blog.likes}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }
 
