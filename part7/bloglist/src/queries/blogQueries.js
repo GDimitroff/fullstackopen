@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import blogService from '../services/blogs'
 
@@ -12,9 +12,20 @@ export const useBlogsQuery = () => {
 }
 
 export const useBlogQuery = (id) => {
+  const queryClient = useQueryClient()
+
   return useQuery({
     queryKey: ['blogs', id],
-    queryFn: () => blogService.getById(id),
+    queryFn: async () => {
+      const blogs = queryClient.getQueryData(['blogs'])
+      const blog = blogs?.find((b) => b.id === id)
+
+      if (blog) {
+        return blog
+      } else {
+        return await blogService.getById(id)
+      }
+    },
     refetchOnWindowFocus: false,
     retry: false,
   })

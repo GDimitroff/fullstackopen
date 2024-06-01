@@ -29,11 +29,12 @@ const Blog = () => {
     likeMutation.mutate(blogData)
   }
 
-  const handleRemoveBlog = (blogObject) => {
+  const handleRemoveBlog = async (blogObject) => {
     const confirmText = `Remove blog ${blogObject.title} by ${blogObject.author}`
 
     if (window.confirm(confirmText)) {
-      removeMutation.mutate(blogObject)
+      await removeMutation.mutateAsync(blogObject)
+      navigate('/blogs')
     }
   }
 
@@ -45,7 +46,7 @@ const Blog = () => {
 
   if (isLoading) return <div>loading...</div>
 
-  if (!blog && error) return null
+  if (!blog || error) return null
 
   return (
     <div>

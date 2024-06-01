@@ -16,7 +16,7 @@ const User = () => {
 
   if (isLoading) return <div>loading...</div>
 
-  if (!user && error) return null
+  if (!user || error) return null
 
   return (
     <div>
