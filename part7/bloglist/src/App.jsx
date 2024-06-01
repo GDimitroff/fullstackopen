@@ -1,8 +1,9 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import Authentication from './views/Authentication'
-import Blogs from './views/Blogs'
 import ProtectedComponent from './utils/ProtectedComponent'
+import Blogs from './views/Blogs'
+import Users from './views/Users'
 
 const App = () => {
   return (
@@ -26,6 +27,14 @@ const App = () => {
             to='/'
             replace={true}
           />
+        }
+      />
+      <Route
+        path='/users'
+        element={
+          <ProtectedComponent>
+            <Users />
+          </ProtectedComponent>
         }
       />
     </Routes>
