@@ -19,7 +19,7 @@ const ProtectedComponent = ({ children }) => {
   return (
     <main>
       <Navigation />
-      <h2>blog app</h2>
+      <h1>blog app</h1>
       {children}
     </main>
   )

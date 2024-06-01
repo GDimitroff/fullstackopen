@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { useCreateBlogMutation } from '../mutations/blogMutations'
+import { Button, TextField } from '@mui/material'
 
 const BlogForm = () => {
   const { mutateAsync, isPending } = useCreateBlogMutation()
@@ -24,48 +25,58 @@ const BlogForm = () => {
   }
 
   return (
-    <div data-testid='blogform'>
+    <div>
       <h2>create new</h2>
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem',
+          width: '200px',
+        }}
+      >
         <div>
-          title:
-          <input
+          <TextField
+            label='title'
             type='text'
-            value={blog.title}
             name='title'
-            data-testid='title'
+            value={blog.title}
             onChange={handleChange}
-            placeholder='react is awesome'
+            size='small'
           />
         </div>
         <div>
-          author:
-          <input
+          <TextField
+            label='author'
             type='text'
-            value={blog.author}
             name='author'
-            data-testid='author'
+            value={blog.author}
             onChange={handleChange}
-            placeholder='john doe'
+            size='small'
           />
         </div>
         <div>
-          url:
-          <input
-            type='url'
-            value={blog.url}
+          <TextField
+            label='url'
+            type='text'
             name='url'
-            data-testid='url'
+            value={blog.url}
             onChange={handleChange}
             placeholder='https://example.com/'
+            size='small'
           />
         </div>
-        <button
-          type='submit'
+        <Button
+          variant='contained'
+          color='success'
+          onClick={handleSubmit}
           disabled={isPending}
+          size='small'
+          type='submit'
         >
           {isPending ? 'creating...' : 'create'}
-        </button>
+        </Button>
       </form>
     </div>
   )

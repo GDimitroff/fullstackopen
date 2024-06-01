@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { Button } from '@mui/material'
 
 import { useAuth } from '../contexts/hooks'
 import { useBlogQuery } from '../queries/blogQueries'
@@ -8,13 +9,6 @@ import {
   useRemoveBlogMutation,
 } from '../mutations/blogMutations'
 import Comments from '../components/Comments'
-
-const deleteButtonStyle = {
-  background: 'lightcoral',
-  color: 'white',
-  border: 'none',
-  padding: '4px 8px',
-}
 
 const Blog = () => {
   const { id } = useParams()
@@ -63,21 +57,26 @@ const Blog = () => {
         </a>
         <div>
           likes {blog.likes}{' '}
-          <button
+          <Button
             onClick={() => handleLikeBlog(blog)}
-            disabled={likeMutation.isPending}
+            color='primary'
+            variant='contained'
+            size='small'
           >
-            {likeMutation.isPending ? 'liking...' : 'like'}
-          </button>
+            like
+          </Button>
         </div>
         <div>added by {blog.user.name}</div>
         {user.username === blog.user.username && (
-          <button
-            style={deleteButtonStyle}
+          <Button
             onClick={() => handleRemoveBlog(blog)}
+            color='error'
+            variant='contained'
+            size='small'
+            disabled={removeMutation.isPending}
           >
-            {removeMutation.isPending ? 'removing...' : 'remove'}
-          </button>
+            remove
+          </Button>
         )}
       </div>
       <Comments

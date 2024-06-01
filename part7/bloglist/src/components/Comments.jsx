@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Button, TextField } from '@mui/material'
 
 import { useAddCommentMutation } from '../mutations/blogMutations'
 
@@ -19,16 +20,28 @@ const Comments = ({ blogId, comments }) => {
     <div>
       <h3>comments</h3>
       <form onSubmit={handleSubmit}>
-        <div>
-          <input
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+          }}
+        >
+          <TextField
+            label='comment'
             type='text'
             name='comment'
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
+            size='small'
           />
-          <button disabled={addCommentMutation.isPending}>
-            {addCommentMutation.isPending ? 'adding...' : 'add a comment'}
-          </button>
+          <Button
+            color='success'
+            variant='contained'
+            type='submit'
+          >
+            add a comment
+          </Button>
         </div>
       </form>
       {comments.length > 0 ? (
