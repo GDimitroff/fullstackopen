@@ -4,6 +4,7 @@ import Authentication from './views/Authentication'
 import ProtectedComponent from './utils/ProtectedComponent'
 import Blogs from './views/Blogs'
 import Users from './views/Users'
+import User from './views/User'
 
 const App = () => {
   return (
@@ -34,6 +35,14 @@ const App = () => {
         element={
           <ProtectedComponent>
             <Users />
+          </ProtectedComponent>
+        }
+      />
+      <Route
+        path='/users/:id'
+        element={
+          <ProtectedComponent>
+            <User />
           </ProtectedComponent>
         }
       />

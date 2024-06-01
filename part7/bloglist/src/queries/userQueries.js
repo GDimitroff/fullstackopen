@@ -10,3 +10,12 @@ export const useUsersQuery = () => {
     retry: false,
   })
 }
+
+export const useUserQuery = (id) => {
+  return useQuery({
+    queryKey: ['user', id],
+    queryFn: () => userService.getById(id),
+    refetchOnWindowFocus: false,
+    retry: false,
+  })
+}
