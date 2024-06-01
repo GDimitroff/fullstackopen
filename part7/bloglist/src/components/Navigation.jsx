@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
+import { AppBar, Button, Toolbar, Typography } from '@mui/material'
 
 import { useAuth } from '../contexts/hooks'
 
@@ -12,27 +13,47 @@ const Navigation = () => {
   }
 
   return (
-    <nav>
-      <ul
-        style={{
-          paddingInlineStart: 0,
-          listStyleType: 'none',
-          display: 'flex',
-          gap: '10px',
-        }}
-      >
-        <li>
-          <Link to='/'>blogs</Link>
-        </li>
-        <li>
-          <Link to='/users'>users</Link>
-        </li>
-        <li>
-          <span>{user.name} logged in</span>
-          <button onClick={handleLogout}>logout</button>
-        </li>
-      </ul>
-    </nav>
+    <AppBar position='static'>
+      <Toolbar>
+        <Button
+          color='inherit'
+          component={Link}
+          to='/'
+        >
+          blogs
+        </Button>
+        <Button
+          color='inherit'
+          component={Link}
+          to='/users'
+        >
+          users
+        </Button>
+        <div
+          style={{
+            marginLeft: 'auto',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+          }}
+        >
+          <Typography
+            variant='subtitle2'
+            style={{
+              display: 'block',
+            }}
+          >
+            {user.name} logged in
+          </Typography>
+          <Button
+            color='inherit'
+            onClick={handleLogout}
+          >
+            logout
+          </Button>
+        </div>
+      </Toolbar>
+    </AppBar>
   )
 }
 

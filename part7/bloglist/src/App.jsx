@@ -9,6 +9,8 @@ import Blog from './views/Blog'
 import Users from './views/Users'
 import User from './views/User'
 
+import './index.css'
+
 const App = () => {
   return (
     <Container>
