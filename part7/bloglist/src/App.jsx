@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Container } from '@mui/material'
 
+import Notifications from './components/Notifications'
 import Authentication from './views/Authentication'
 import ProtectedComponent from './utils/ProtectedComponent'
 import Blogs from './views/Blogs'
@@ -11,6 +12,7 @@ import User from './views/User'
 const App = () => {
   return (
     <Container>
+      <Notifications />
       <Routes>
         <Route
           path='/auth'

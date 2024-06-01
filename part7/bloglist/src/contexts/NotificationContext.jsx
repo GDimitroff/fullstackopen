@@ -25,11 +25,11 @@ const NotificationProvider = ({ children }) => {
 
   const setNotification = (notification) => {
     const id = uuidv4()
-    const { type, message } = notification
+    const { severity, message } = notification
 
     dispatchNotification({
       type: 'SET_NOTIFICATION',
-      payload: { id, type, message },
+      payload: { id, severity, message },
     })
 
     setTimeout(() => {

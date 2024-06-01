@@ -75,7 +75,7 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
       dispatch({ type: USER_LOGIN_FAILURE })
       setNotification({
-        type: 'error',
+        severity: 'error',
         message: error.response.data.error,
       })
     }

@@ -14,12 +14,12 @@ export const useCreateBlogMutation = () => {
       queryClient.setQueryData(['blogs'], [...blogs, newBlog])
 
       setNotification({
-        type: 'success',
+        severity: 'success',
         message: `a new blog ${newBlog.title} by ${newBlog.author} added`,
       })
     },
     onError: (error) => {
-      setNotification({ type: 'error', message: error.response.data.error })
+      setNotification({ severity: 'error', message: error.response.data.error })
     },
   })
 }
@@ -34,7 +34,7 @@ export const useLikeBlogMutation = () => {
       queryClient.setQueryData(['blogs', updatedBlog.id], updatedBlog)
     },
     onError: (error) => {
-      setNotification({ type: 'error', message: error.response.data.error })
+      setNotification({ severity: 'error', message: error.response.data.error })
     },
   })
 }
@@ -53,7 +53,7 @@ export const useRemoveBlogMutation = () => {
       )
 
       setNotification({
-        type: 'success',
+        severity: 'success',
         message: `blog ${variables.title} by ${variables.author} removed`,
       })
     },
@@ -74,7 +74,7 @@ export const useAddCommentMutation = () => {
       queryClient.setQueryData(['blogs', updatedBlog.id], updatedBlog)
     },
     onError: (error) => {
-      setNotification({ type: 'error', message: error.response.data.error })
+      setNotification({ severity: 'error', message: error.response.data.error })
     },
   })
 }

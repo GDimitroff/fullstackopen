@@ -6,8 +6,6 @@ import App from './App.jsx'
 import AuthProvider from './contexts/AuthContext.jsx'
 import NotificationProvider from './contexts/NotificationContext.jsx'
 
-import './index.css'
-
 const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root')).render(

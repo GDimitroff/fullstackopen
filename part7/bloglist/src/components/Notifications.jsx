@@ -1,3 +1,5 @@
+import Alert from '@mui/material/Alert'
+
 import { useNotification } from '../contexts/hooks'
 
 const Notifications = () => {
@@ -11,12 +13,12 @@ const Notifications = () => {
     <div>
       {notifications.map((notification) => {
         return (
-          <div
+          <Alert
             key={notification.id}
-            className={`notification ${notification.type}`}
+            severity={notification.severity}
           >
             {notification.message}
-          </div>
+          </Alert>
         )
       })}
     </div>
