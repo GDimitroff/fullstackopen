@@ -1,5 +1,3 @@
-import { ApolloServer } from '@apollo/server'
-import { startStandaloneServer } from '@apollo/server/standalone'
 import { v4 as uuid } from 'uuid'
 
 let authors = [
@@ -80,47 +78,11 @@ let books = [
   },
 ]
 
-const typeDefs = `#graphql
-  type Author {
-    name: String!
-    id: ID!
-    born: Int
-    bookCount: Int!
-  }
-
-  type Book {
-    title: String!
-    published: Int!
-    author: String!
-    id: ID!
-    genres: [String!]!
-  }
-
-  type Query {
-    bookCount: Int!
-    authorCount: Int!
-    allBooks(author: String, genre: String): [Book!]!
-    allAuthors: [Author!]!
-  }
-
-  type Mutation {
-    addBook(
-      title: String!
-      author: String!
-      published: Int!
-      genres: [String!]!
-    ): Book
-
-    editAuthor(name: String!, setBornTo: Int!): Author
-}
-`
-
-const resolvers = {
+export const resolvers = {
   Query: {
     bookCount: () => books.length,
     authorCount: () => authors.length,
-    allBooks: (root, args) => {
-      const { author, genre } = args
+    allBooks: (_, { author, genre }) => {
       if (!author && !genre) {
         return books
       }
@@ -138,11 +100,9 @@ const resolvers = {
     },
     allAuthors: () => authors,
   },
-  Author: {
-    bookCount: (root) => books.filter((b) => b.author === root.name).length,
-  },
+
   Mutation: {
-    addBook: (root, args) => {
+    addBook: (_, args) => {
       const { title, author, published, genres } = args
       const book = { title, author, published, genres, id: uuid() }
 
@@ -153,7 +113,7 @@ const resolvers = {
 
       return book
     },
-    editAuthor: (root, args) => {
+    editAuthor: (_, args) => {
       const { name, setBornTo } = args
       const author = authors.find((a) => a.name === name)
 
@@ -166,15 +126,8 @@ const resolvers = {
       return updatedAuthor
     },
   },
+
+  Author: {
+    bookCount: ({ name }) => books.filter((b) => b.author === name).length,
+  },
 }
-
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-})
-
-startStandaloneServer(server, {
-  listen: { port: 4000 },
-}).then(({ url }) => {
-  console.log(`Server ready at ${url}`)
-})
