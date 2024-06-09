@@ -5,7 +5,17 @@ export const CREATE_BOOK = gql(`
     addBook(title: $title, author: $author, published: $published, genres: $genres) {
       title
       author
-      published
+      published,
+      genres
+    }
+  }
+`)
+
+export const EDIT_AUTHOR = gql(`
+  mutation editAuthor($name: String!, $setBornTo: Int!) {
+    editAuthor(name: $name, setBornTo: $setBornTo) {
+      name
+      born
     }
   }
 `)
