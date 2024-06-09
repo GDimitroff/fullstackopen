@@ -1,5 +1,8 @@
 import { v4 as uuid } from 'uuid'
 
+import Book from './models/book.js'
+import Author from './models/author.js'
+
 let authors = [
   {
     name: 'Robert Martin',
@@ -80,38 +83,31 @@ let books = [
 
 export const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (_, { author, genre }) => {
+    bookCount: async () => Book.collection.countDocuments(),
+    authorCount: async () => Author.collection.countDocuments(),
+    allBooks: async (_, { author, genre }) => {
       if (!author && !genre) {
-        return books
+        return Book.find({}).populate('author')
       }
-
-      return books.filter((b) => {
-        if (author && genre) {
-          return b.author === author && b.genres.includes(genre)
-        } else if (author) {
-          return b.author === author
-        } else if (genre) {
-          return b.genres.includes(genre)
-        }
-        return false
-      })
     },
-    allAuthors: () => authors,
+    allAuthors: async () => Author.find({}),
   },
 
   Mutation: {
-    addBook: (_, args) => {
-      const { title, author, published, genres } = args
-      const book = { title, author, published, genres, id: uuid() }
-
-      books = books.concat(book)
-      if (!authors.find((a) => a.name === author)) {
-        authors = authors.concat({ name: author, id: uuid() })
+    addBook: async (_, args) => {
+      const foundBook = await Book.findOne({ title: args.title })
+      if (foundBook) {
+        // TODO: throw error here
       }
 
-      return book
+      let foundAuthor = await Author.findOne({ name: args.author })
+      if (!foundAuthor) {
+        const author = new Author({ name: args.author })
+        foundAuthor = await author.save()
+      }
+
+      const book = new Book({ ...args, author: foundAuthor._id })
+      return book.save()
     },
     editAuthor: (_, args) => {
       const { name, setBornTo } = args
