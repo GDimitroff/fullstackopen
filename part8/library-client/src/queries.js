@@ -10,3 +10,14 @@ export const BOOKS = gql(`
     }
   }
 `)
+
+export const AUTHORS = gql(`
+  query GetAllAuthors {
+    allAuthors {
+      id
+      name
+      born
+      bookCount
+    }
+  }
+`)
