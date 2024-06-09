@@ -29,7 +29,7 @@ const Authors = () => {
       refetchQueries: [{ query: AUTHORS }],
     })
 
-    formRef.current.reset()
+    event.target.birthyear.value = ''
   }
 
   return (
@@ -58,11 +58,16 @@ const Authors = () => {
         ref={formRef}
       >
         <div>
-          <input
-            type='text'
-            name='author'
-            placeholder='author name'
-          />
+          <select name='author'>
+            {data.allAuthors.map((a) => (
+              <option
+                key={a.name}
+                value={a.name}
+              >
+                {a.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div>
           <input
