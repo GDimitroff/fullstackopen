@@ -1,3 +1,5 @@
+import { GraphQLError } from 'graphql'
+
 import Book from './models/book.js'
 import Author from './models/author.js'
 
@@ -24,21 +26,37 @@ export const resolvers = {
 
   Mutation: {
     addBook: async (_, args) => {
-      const foundBook = await Book.findOne({ title: args.title })
-      if (foundBook) {
-        // TODO: throw error here
-        return
-      }
-
       let foundAuthor = await Author.findOne({ name: args.author })
+
       if (!foundAuthor) {
-        const author = new Author({ name: args.author })
-        foundAuthor = await author.save()
+        try {
+          const author = new Author({ name: args.author })
+          foundAuthor = await author.save()
+        } catch (error) {
+          throw new GraphQLError('Creating author failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.author,
+              error,
+            },
+          })
+        }
       }
 
       const book = new Book({ ...args, author: foundAuthor._id })
-      await book.save()
-      return book.populate('author')
+
+      try {
+        await book.save()
+        return book.populate('author')
+      } catch (error) {
+        throw new GraphQLError('Creating book failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.title,
+            error,
+          },
+        })
+      }
     },
     editAuthor: async (_, { name, setBornTo }) => {
       const author = await Author.findOneAndUpdate(
