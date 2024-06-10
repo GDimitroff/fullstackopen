@@ -1,5 +1,3 @@
-import { v4 as uuid } from 'uuid'
-
 import Book from './models/book.js'
 import Author from './models/author.js'
 
