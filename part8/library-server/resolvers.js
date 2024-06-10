@@ -83,8 +83,8 @@ let books = [
 
 export const resolvers = {
   Query: {
-    bookCount: async () => Book.collection.countDocuments(),
-    authorCount: async () => Author.collection.countDocuments(),
+    bookCount: async () => Book.countDocuments(),
+    authorCount: async () => Author.countDocuments(),
     allBooks: async (_, { author, genre }) => {
       if (!author && !genre) {
         return Book.find({}).populate('author')
@@ -98,6 +98,7 @@ export const resolvers = {
       const foundBook = await Book.findOne({ title: args.title })
       if (foundBook) {
         // TODO: throw error here
+        return
       }
 
       let foundAuthor = await Author.findOne({ name: args.author })
@@ -124,6 +125,8 @@ export const resolvers = {
   },
 
   Author: {
-    bookCount: ({ name }) => books.filter((b) => b.author === name).length,
+    bookCount: async ({ _id }) => {
+      return await Book.countDocuments({ author: _id })
+    },
   },
 }
