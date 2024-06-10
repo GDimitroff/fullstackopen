@@ -6,9 +6,18 @@ export const resolvers = {
     bookCount: async () => Book.countDocuments(),
     authorCount: async () => Author.countDocuments(),
     allBooks: async (_, { author, genre }) => {
-      if (!author && !genre) {
-        return Book.find({}).populate('author')
+      const query = {}
+
+      const foundAuthor = await Author.findOne({ name: author }, '_id')
+      if (foundAuthor) {
+        query.author = foundAuthor._id
       }
+
+      if (genre) {
+        query.genres = { $in: [genre] }
+      }
+
+      return await Book.find(query).populate('author')
     },
     allAuthors: async () => Author.find({}),
   },
