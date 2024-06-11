@@ -1,5 +1,15 @@
 import { gql } from '@apollo/client'
 
+export const ME = gql(`
+  query getMe {
+    me {
+      id
+      username
+      favoriteGenre
+    }
+  }
+`)
+
 export const BOOKS = gql(`
   query getAllBooks($author: String, $genre: String) {
     allBooks(author: $author, genre: $genre) {
@@ -34,8 +44,8 @@ export const GENRES = gql(`
 `)
 
 export const RECOMMENDED = gql(`
-  query getRecommended {
-    recommended {
+  query getRecommended($genre: String!) {
+    recommended(genre: $genre) {
       title
       published
       author {
