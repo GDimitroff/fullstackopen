@@ -1,5 +1,7 @@
 import { GraphQLError } from 'graphql'
+import jwt from 'jsonwebtoken'
 
+import User from './models/user.js'
 import Book from './models/book.js'
 import Author from './models/author.js'
 
@@ -25,6 +27,40 @@ export const resolvers = {
   },
 
   Mutation: {
+    createUser: async (_, { username, favoriteGenre }) => {
+      const user = new User({ username, favoriteGenre })
+
+      try {
+        await user.save()
+        return user
+      } catch (error) {
+        throw new GraphQLError('Creating user failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: { username, favoriteGenre },
+            error,
+          },
+        })
+      }
+    },
+    login: async (_, { username, password }) => {
+      const user = await User.findOne({ username })
+
+      if (!user || password !== 'secret') {
+        throw new GraphQLError('wrong credentials', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          },
+        })
+      }
+
+      const userForToken = {
+        username: user.username,
+        id: user._id,
+      }
+
+      return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
+    },
     addBook: async (_, args) => {
       let foundAuthor = await Author.findOne({ name: args.author })
 

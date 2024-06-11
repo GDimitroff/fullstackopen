@@ -16,6 +16,7 @@
     "dotenv": "^16.4.5",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.1",
     "mongoose-unique-validator": "^5.0.0"
   },
