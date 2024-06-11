@@ -13,13 +13,14 @@ export const ME = gql(`
 export const BOOKS = gql(`
   query getAllBooks($author: String, $genre: String) {
     allBooks(author: $author, genre: $genre) {
+      id
       title
       published
       author {
+        id
         name
         born
       }
-      id
       genres
     }
   }
@@ -45,11 +46,13 @@ export const GENRES = gql(`
 export const RECOMMENDED = gql(`
   query getRecommended {
     recommended {
+      id
       title
       published
       author {
         id
         name
+        born
       }
       genres
     }
