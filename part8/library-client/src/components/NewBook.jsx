@@ -2,7 +2,7 @@ import { useMutation } from '@apollo/client'
 import { useState } from 'react'
 
 import { CREATE_BOOK } from '../mutations'
-import { AUTHORS, BOOKS } from '../queries'
+import { AUTHORS, BOOKS, GENRES } from '../queries'
 
 const NewBook = () => {
   const [createBook] = useMutation(CREATE_BOOK)
@@ -23,7 +23,12 @@ const NewBook = () => {
         published: Number(published),
         genres,
       },
-      refetchQueries: [{ query: BOOKS }, { query: AUTHORS }],
+      refetchQueries: [
+        { query: BOOKS, variables: { genre: 'all' } },
+        ...genres.map((g) => ({ query: BOOKS, variables: { genre: g } })),
+        { query: AUTHORS },
+        { query: GENRES },
+      ],
     })
 
     setTitle('')

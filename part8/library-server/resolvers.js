@@ -18,13 +18,17 @@ export const resolvers = {
         query.author = foundAuthor._id
       }
 
-      if (genre) {
+      if (genre && genre !== 'all') {
         query.genres = { $in: [genre] }
       }
 
       return await Book.find(query).populate('author')
     },
     allAuthors: async () => Author.find({}),
+    allGenres: async () => {
+      const genres = await Book.find({}, 'genres')
+      return ['all', ...new Set(genres.flatMap((book) => book.genres))]
+    },
   },
 
   Mutation: {
