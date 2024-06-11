@@ -1,4 +1,4 @@
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 import { useApolloClient } from '@apollo/client'
 import { useState } from 'react'
 
@@ -9,6 +9,8 @@ import LoginForm from './components/LoginForm'
 
 const App = () => {
   const client = useApolloClient()
+  const navigate = useNavigate()
+
   const [token, setToken] = useState(() => {
     const token = localStorage.getItem('library-fso-user-token')
     return token || null
@@ -18,6 +20,7 @@ const App = () => {
     setToken(null)
     localStorage.clear()
     client.resetStore()
+    navigate('/')
   }
 
   return (
