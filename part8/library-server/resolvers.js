@@ -7,6 +7,7 @@ import Author from './models/author.js'
 
 export const resolvers = {
   Query: {
+    me: (_, __, { currentUser }) => currentUser,
     bookCount: async () => Book.countDocuments(),
     authorCount: async () => Author.countDocuments(),
     allBooks: async (_, { author, genre }) => {
