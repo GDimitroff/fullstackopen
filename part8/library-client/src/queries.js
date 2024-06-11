@@ -32,3 +32,17 @@ export const GENRES = gql(`
     allGenres
   }
 `)
+
+export const RECOMMENDED = gql(`
+  query getRecommended {
+    recommended {
+      title
+      published
+      author {
+        id
+        name
+      }
+      genres
+    }
+  }
+`)

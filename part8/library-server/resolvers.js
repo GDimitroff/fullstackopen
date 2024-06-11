@@ -29,6 +29,19 @@ export const resolvers = {
       const genres = await Book.find({}, 'genres')
       return ['all', ...new Set(genres.flatMap((book) => book.genres))]
     },
+    recommended: async (_, __, { currentUser }) => {
+      if (!currentUser) {
+        throw new GraphQLError('not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          },
+        })
+      }
+
+      return Book.find({
+        genres: { $in: [currentUser.favoriteGenre] },
+      }).populate('author')
+    },
   },
 
   Mutation: {
