@@ -2,11 +2,11 @@ import gql from 'graphql-tag'
 
 export const typeDefs = gql`
   type Query {
+    me: User
     bookCount: Int!
     authorCount: Int!
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
-    me: User
   }
 
   type Mutation {

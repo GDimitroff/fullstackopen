@@ -62,7 +62,15 @@ export const resolvers = {
 
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) }
     },
-    addBook: async (_, args) => {
+    addBook: async (_, args, { currentUser }) => {
+      if (!currentUser) {
+        throw new GraphQLError('not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          },
+        })
+      }
+
       let foundAuthor = await Author.findOne({ name: args.author })
 
       if (!foundAuthor) {
@@ -95,7 +103,15 @@ export const resolvers = {
         })
       }
     },
-    editAuthor: async (_, { name, setBornTo }) => {
+    editAuthor: async (_, { name, setBornTo }, { currentUser }) => {
+      if (!currentUser) {
+        throw new GraphQLError('not authenticated', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+          },
+        })
+      }
+
       const author = await Author.findOneAndUpdate(
         { name },
         { born: setBornTo },
