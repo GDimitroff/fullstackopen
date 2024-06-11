@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { AUTHORS } from '../queries'
 import { EDIT_AUTHOR } from '../mutations'
 
-const Authors = () => {
+const Authors = ({ token }) => {
   const { data, loading, error } = useQuery(AUTHORS)
   const [editAuthor] = useMutation(EDIT_AUTHOR)
 
@@ -52,32 +52,36 @@ const Authors = () => {
         </tbody>
       </table>
 
-      <h3>set birth year</h3>
-      <form
-        onSubmit={handleSubmit}
-        ref={formRef}
-      >
+      {token && (
         <div>
-          <select name='author'>
-            {data.allAuthors.map((a) => (
-              <option
-                key={a.name}
-                value={a.name}
-              >
-                {a.name}
-              </option>
-            ))}
-          </select>
+          <h3>set birth year</h3>
+          <form
+            onSubmit={handleSubmit}
+            ref={formRef}
+          >
+            <div>
+              <select name='author'>
+                {data.allAuthors.map((a) => (
+                  <option
+                    key={a.name}
+                    value={a.name}
+                  >
+                    {a.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <input
+                type='number'
+                name='birthyear'
+                placeholder='birth year'
+              />
+            </div>
+            <button type='submit'>update author</button>
+          </form>
         </div>
-        <div>
-          <input
-            type='number'
-            name='birthyear'
-            placeholder='birth year'
-          />
-        </div>
-        <button type='submit'>update author</button>
-      </form>
+      )}
     </div>
   )
 }
