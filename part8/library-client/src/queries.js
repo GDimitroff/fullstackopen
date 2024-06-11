@@ -44,8 +44,8 @@ export const GENRES = gql(`
 `)
 
 export const RECOMMENDED = gql(`
-  query getRecommended($genre: String!) {
-    recommended(genre: $genre) {
+  query getRecommended {
+    recommended {
       title
       published
       author {

@@ -29,7 +29,7 @@ export const resolvers = {
       const genres = await Book.find({}, 'genres')
       return ['all', ...new Set(genres.flatMap((book) => book.genres))]
     },
-    recommended: async (_, { genre }, { currentUser }) => {
+    recommended: async (_, __, { currentUser }) => {
       if (!currentUser) {
         throw new GraphQLError('not authenticated', {
           extensions: {
@@ -39,7 +39,7 @@ export const resolvers = {
       }
 
       return Book.find({
-        genres: { $in: [genre] },
+        genres: { $in: [currentUser.favoriteGenre] },
       }).populate('author')
     },
   },

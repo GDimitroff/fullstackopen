@@ -1,5 +1,5 @@
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client'
 import { useState } from 'react'
 
 import Authors from './components/Authors'
@@ -7,15 +7,21 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import Recommended from './components/Recommended'
+import { ME } from './queries'
 
 const App = () => {
   const client = useApolloClient()
   const navigate = useNavigate()
 
   const [token, setToken] = useState(() => {
-    const token = localStorage.getItem('library-fso-user-token')
-    return token || null
+    return localStorage.getItem('library-fso-user-token') || null
   })
+
+  const {
+    loading: userLoading,
+    data: userData,
+    error: userError,
+  } = useQuery(ME, { skip: !token })
 
   const handleLogout = () => {
     setToken(null)
@@ -23,6 +29,9 @@ const App = () => {
     client.resetStore()
     navigate('/')
   }
+
+  if (userLoading) return <div>loading...</div>
+  if (userError) return <p>error: {userError.message}</p>
 
   return (
     <div>
@@ -44,11 +53,36 @@ const App = () => {
           </button>
         )}
         {!token && (
-          <button>
-            <Link to='/login'>login</Link>
+          <button
+            style={{
+              marginLeft: '10px',
+              backgroundColor: 'GrayText',
+              color: 'white',
+            }}
+          >
+            <Link
+              to='/login'
+              style={{
+                backgroundColor: 'GrayText',
+                color: 'white',
+              }}
+            >
+              login
+            </Link>
           </button>
         )}
-        {token && <button onClick={handleLogout}>logout</button>}
+        {token && (
+          <button
+            onClick={handleLogout}
+            style={{
+              marginLeft: '10px',
+              backgroundColor: 'GrayText',
+              color: 'white',
+            }}
+          >
+            logout
+          </button>
+        )}
       </nav>
 
       <hr />
@@ -72,7 +106,7 @@ const App = () => {
         />
         <Route
           path='/recommended'
-          element={<Recommended />}
+          element={<Recommended user={userData} />}
         />
       </Routes>
     </div>

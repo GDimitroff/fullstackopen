@@ -1,21 +1,12 @@
 import { useQuery } from '@apollo/client'
 
-import { ME, RECOMMENDED } from '../queries'
+import { RECOMMENDED } from '../queries'
 
-const Recommended = () => {
-  const {
-    loading: userLoading,
-    data: userData,
-    error: userError,
-  } = useQuery(ME)
+const Recommended = ({ user }) => {
+  const { loading, data, error } = useQuery(RECOMMENDED)
 
-  const { loading, data, error } = useQuery(RECOMMENDED, {
-    variables: { genre: userData?.me.favoriteGenre },
-    skip: !userData,
-  })
-
-  if (userLoading || loading) return <div>loading...</div>
-  if (userError || error) return <p>Error: {error.message}</p>
+  if (loading) return <div>loading...</div>
+  if (error) return <p>error: {error.message}</p>
 
   if (data.recommended.length === 0) {
     return (
@@ -29,8 +20,7 @@ const Recommended = () => {
     <div>
       <h2>recommendations</h2>
       <p>
-        books in your favorite genre:{' '}
-        <strong>{userData.me.favoriteGenre}</strong>
+        books in your favorite genre: <strong>{user.me.favoriteGenre}</strong>
       </p>
 
       <table>

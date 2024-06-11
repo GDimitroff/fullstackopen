@@ -8,7 +8,7 @@ export const typeDefs = gql`
     allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
     allGenres: [String!]!
-    recommended(genre: String!): [Book!]!
+    recommended: [Book!]!
   }
 
   type Mutation {
