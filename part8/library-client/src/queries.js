@@ -16,7 +16,6 @@ export const BOOKS = gql(`
       title
       published
       author {
-        id
         name
         born
       }

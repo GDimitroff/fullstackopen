@@ -5,7 +5,25 @@ import { CREATE_BOOK } from '../mutations'
 import { AUTHORS, BOOKS, GENRES, RECOMMENDED } from '../queries'
 
 const NewBook = () => {
-  const [createBook] = useMutation(CREATE_BOOK)
+  const [createBook] = useMutation(CREATE_BOOK, {
+    update: (cache, response) => {
+      const booksCache = cache.readQuery({
+        query: BOOKS,
+        variables: { genre: 'all' },
+      })
+
+      if (booksCache) {
+        cache.updateQuery(
+          { query: BOOKS, variables: { genre: 'all' } },
+          ({ allBooks }) => {
+            return {
+              allBooks: [...allBooks, response.data.addBook],
+            }
+          }
+        )
+      }
+    },
+  })
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -24,7 +42,6 @@ const NewBook = () => {
         genres,
       },
       refetchQueries: [
-        { query: BOOKS, variables: { genre: 'all' } },
         ...genres.map((g) => ({ query: BOOKS, variables: { genre: g } })),
         { query: RECOMMENDED },
         { query: AUTHORS },
