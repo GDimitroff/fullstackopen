@@ -1,9 +1,12 @@
 import { GraphQLError } from 'graphql'
 import jwt from 'jsonwebtoken'
+import { PubSub } from 'graphql-subscriptions'
 
 import User from './models/user.js'
 import Book from './models/book.js'
 import Author from './models/author.js'
+
+const pubsub = new PubSub()
 
 export const resolvers = {
   Query: {
@@ -109,6 +112,7 @@ export const resolvers = {
 
       try {
         await book.save()
+        pubsub.publish('BOOK_ADDED', { bookAdded: book.populate('author') })
         return book.populate('author')
       } catch (error) {
         throw new GraphQLError('Creating book failed', {
@@ -142,6 +146,12 @@ export const resolvers = {
   Author: {
     bookCount: async ({ _id }) => {
       return await Book.countDocuments({ author: _id })
+    },
+  },
+
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED']),
     },
   },
 }

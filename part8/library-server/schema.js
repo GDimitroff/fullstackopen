@@ -25,6 +25,10 @@ export const typeDefs = gql`
     editAuthor(name: String!, setBornTo: Int!): Author
   }
 
+  type Subscription {
+    bookAdded: Book!
+  }
+
   type User {
     id: ID!
     username: String!
