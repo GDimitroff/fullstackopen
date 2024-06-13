@@ -3,25 +3,16 @@ import { useState } from 'react'
 
 import { CREATE_BOOK } from '../mutations'
 import { AUTHORS, BOOKS, GENRES, RECOMMENDED } from '../queries'
+import { updateAllBooksCache } from '../utils/cache-helpers'
 
 const NewBook = () => {
   const [createBook] = useMutation(CREATE_BOOK, {
     update: (cache, response) => {
-      const booksCache = cache.readQuery({
-        query: BOOKS,
-        variables: { genre: 'all' },
-      })
-
-      if (booksCache) {
-        cache.updateQuery(
-          { query: BOOKS, variables: { genre: 'all' } },
-          ({ allBooks }) => {
-            return {
-              allBooks: [...allBooks, response.data.addBook],
-            }
-          }
-        )
-      }
+      updateAllBooksCache(
+        cache,
+        { query: BOOKS, variables: { genre: 'all' } },
+        response.data.addBook
+      )
     },
   })
 
