@@ -16,6 +16,8 @@ import User from './models/user.js'
 import { typeDefs } from './schema.js'
 import { resolvers } from './resolvers.js'
 
+import loaders from './dataLoaders.js'
+
 mongoose.set('strictQuery', false)
 
 const MONGODB_URI = process.env.MONGODB_URI
@@ -30,6 +32,8 @@ mongoose
   .catch((error) => {
     console.log('error connection to MongoDB:', error.message)
   })
+
+mongoose.set('debug', true)
 
 const start = async () => {
   // Create the schema, which will be used separately by ApolloServer and
@@ -86,7 +90,18 @@ const start = async () => {
             process.env.JWT_SECRET
           )
           const currentUser = await User.findById(decodedToken.id)
-          return { currentUser }
+          return {
+            currentUser,
+            loaders: {
+              bookCount: loaders.bookCountLoader,
+            },
+          }
+        }
+
+        return {
+          loaders: {
+            bookCount: loaders.bookCountLoader,
+          },
         }
       },
     })
@@ -96,7 +111,7 @@ const start = async () => {
 
   // Now that our HTTP server is fully set up, we can listen to it.
   httpServer.listen(PORT, () => {
-    console.log(`Server is now running on http://localhost:${PORT}`)
+    console.log(`Server is now running on http://localhost:${PORT}/graphql`)
   })
 }
 

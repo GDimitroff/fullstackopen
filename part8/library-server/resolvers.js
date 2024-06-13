@@ -144,8 +144,8 @@ export const resolvers = {
   },
 
   Author: {
-    bookCount: async ({ _id }) => {
-      return await Book.countDocuments({ author: _id })
+    bookCount: async ({ _id }, _, { loaders }) => {
+      return await loaders.bookCount.load(_id)
     },
   },
 
