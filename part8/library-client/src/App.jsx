@@ -7,6 +7,7 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import Recommended from './components/Recommended'
+import Notify from './components/Notify'
 import { BOOKS, BOOK_ADDED, ME } from './queries'
 import { updateAllBooksCache } from './utils/cache-helpers'
 
@@ -17,6 +18,8 @@ const App = () => {
   const [token, setToken] = useState(() => {
     return localStorage.getItem('library-fso-user-token') || null
   })
+
+  const [notify, setNotify] = useState(null)
 
   const {
     loading: userLoading,
@@ -35,13 +38,16 @@ const App = () => {
     onData: ({ data, client }) => {
       const addedBook = data.data.bookAdded
 
-      // TODO: notification here
-
       updateAllBooksCache(
         client.cache,
         { query: BOOKS, variables: { genre: 'all' } },
         addedBook
       )
+
+      setNotify('New book added: ' + addedBook.title)
+      setTimeout(() => {
+        setNotify(null)
+      }, 3000)
     },
   })
 
@@ -50,6 +56,7 @@ const App = () => {
 
   return (
     <div>
+      <Notify message={notify} />
       <nav>
         <button>
           <Link to='/'>authors</Link>
