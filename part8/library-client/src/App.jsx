@@ -1,5 +1,5 @@
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client'
 import { useState } from 'react'
 
 import Authors from './components/Authors'
@@ -7,7 +7,7 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import LoginForm from './components/LoginForm'
 import Recommended from './components/Recommended'
-import { ME } from './queries'
+import { BOOK_ADDED, ME } from './queries'
 
 const App = () => {
   const client = useApolloClient()
@@ -29,6 +29,12 @@ const App = () => {
     client.resetStore()
     navigate('/')
   }
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data, client }) => {
+      console.log(data)
+    },
+  })
 
   if (userLoading) return <div>loading...</div>
   if (userError) return <p>error: {userError.message}</p>
