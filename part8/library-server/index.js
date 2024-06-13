@@ -16,7 +16,7 @@ import User from './models/user.js'
 import { typeDefs } from './schema.js'
 import { resolvers } from './resolvers.js'
 
-import loaders from './dataLoaders.js'
+import loaders from './loaders.js'
 
 mongoose.set('strictQuery', false)
 
