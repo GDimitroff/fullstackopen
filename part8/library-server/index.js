@@ -27,13 +27,11 @@ console.log('connecting to', MONGODB_URI)
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
-    console.log('connected to MongoDB')
+    console.log('🟢 connected to MongoDB')
   })
   .catch((error) => {
     console.log('error connection to MongoDB:', error.message)
   })
-
-mongoose.set('debug', true)
 
 const start = async () => {
   // Create the schema, which will be used separately by ApolloServer and
@@ -83,7 +81,7 @@ const start = async () => {
     expressMiddleware(server, {
       context: async ({ req }) => {
         const loaders = {
-          bookCountByAuthorId: bookCountLoader,
+          bookCountLoader,
         }
 
         const auth = req ? req.headers.authorization : null
@@ -110,7 +108,7 @@ const start = async () => {
 
   // Now that our HTTP server is fully set up, we can listen to it.
   httpServer.listen(PORT, () => {
-    console.log(`Server is now running on http://localhost:${PORT}/graphql`)
+    console.log(`🚀 Server is now running on http://localhost:${PORT}/graphql`)
   })
 }
 
