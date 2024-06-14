@@ -145,7 +145,7 @@ export const resolvers = {
 
   Author: {
     bookCount: async ({ _id }, _, { loaders }) => {
-      return await loaders.bookCount.load(_id)
+      return await loaders.bookCountByAuthorId.load(_id)
     },
   },
 

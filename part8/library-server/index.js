@@ -16,7 +16,7 @@ import User from './models/user.js'
 import { typeDefs } from './schema.js'
 import { resolvers } from './resolvers.js'
 
-import loaders from './loaders.js'
+import { bookCountLoader } from './loaders.js'
 
 mongoose.set('strictQuery', false)
 
@@ -82,6 +82,10 @@ const start = async () => {
     express.json(),
     expressMiddleware(server, {
       context: async ({ req }) => {
+        const loaders = {
+          bookCountByAuthorId: bookCountLoader,
+        }
+
         const auth = req ? req.headers.authorization : null
 
         if (auth && auth.startsWith('Bearer ')) {
@@ -90,19 +94,14 @@ const start = async () => {
             process.env.JWT_SECRET
           )
           const currentUser = await User.findById(decodedToken.id)
+
           return {
             currentUser,
-            loaders: {
-              bookCount: loaders.bookCountLoader,
-            },
+            loaders,
           }
         }
 
-        return {
-          loaders: {
-            bookCount: loaders.bookCountLoader,
-          },
-        }
+        return { loaders }
       },
     })
   )
