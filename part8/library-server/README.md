@@ -19,4 +19,4 @@ $ USER_PASSWORD=<YOUR-USER-PASSWORD>
 $ npm run dev
 ```
 
-You can then access the Apollo Studio Explorer on: http://localhost:4000/graphql. This is very useful for a developer, and can be used to make queries to the server.
+You can then access the Apollo Studio Explorer on: [http://localhost:4000/graphql](http://localhost:4000/graphql). This is very useful for a developer, and can be used to make queries to the server.
