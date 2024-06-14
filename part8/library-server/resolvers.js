@@ -8,6 +8,8 @@ import Author from './models/author.js'
 
 const pubsub = new PubSub()
 
+const USER_PASSWORD = process.env.USER_PASSWORD
+
 export const resolvers = {
   Query: {
     me: (_, __, { currentUser }) => currentUser,
@@ -67,7 +69,7 @@ export const resolvers = {
     login: async (_, { username, password }) => {
       const user = await User.findOne({ username })
 
-      if (!user || password !== 'secret') {
+      if (!user || password !== USER_PASSWORD) {
         throw new GraphQLError('wrong credentials', {
           extensions: {
             code: 'BAD_USER_INPUT',

@@ -21,6 +21,7 @@ import { bookCountLoader } from './loaders.js'
 mongoose.set('strictQuery', false)
 
 const MONGODB_URI = process.env.MONGODB_URI
+const JWT_SECRET = process.env.JWT_SECRET
 
 console.log('connecting to', MONGODB_URI)
 
@@ -87,10 +88,7 @@ const start = async () => {
         const auth = req ? req.headers.authorization : null
 
         if (auth && auth.startsWith('Bearer ')) {
-          const decodedToken = jwt.verify(
-            auth.substring(7),
-            process.env.JWT_SECRET
-          )
+          const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET)
           const currentUser = await User.findById(decodedToken.id)
 
           return {
