@@ -1,6 +1,19 @@
 import { gql } from '@apollo/client'
 
-export const ME = gql(`
+const BOOK_DETAILS = gql`
+  fragment BookDetails on Book {
+    title
+    published
+    genres
+    author {
+      id
+      name
+      born
+    }
+  }
+`
+
+export const ME = gql`
   query getMe {
     me {
       id
@@ -8,25 +21,19 @@ export const ME = gql(`
       favoriteGenre
     }
   }
-`)
+`
 
-export const BOOKS = gql(`
+export const BOOKS = gql`
+  ${BOOK_DETAILS}
+
   query getAllBooks($author: String, $genre: String) {
     allBooks(author: $author, genre: $genre) {
-      id
-      title
-      published
-      author {
-        id
-        name
-        born
-      }
-      genres
+      ...BookDetails
     }
   }
-`)
+`
 
-export const AUTHORS = gql(`
+export const AUTHORS = gql`
   query getAllAuthors {
     allAuthors {
       id
@@ -35,42 +42,30 @@ export const AUTHORS = gql(`
       bookCount
     }
   }
-`)
+`
 
-export const GENRES = gql(`
+export const GENRES = gql`
   query getAllGenres {
     allGenres
   }
-`)
+`
 
-export const RECOMMENDED = gql(`
+export const RECOMMENDED = gql`
+  ${BOOK_DETAILS}
+
   query getRecommended {
     recommended {
-      id
-      title
-      published
-      author {
-        id
-        name
-        born
-      }
-      genres
+      ...BookDetails
     }
   }
-`)
+`
 
 export const BOOK_ADDED = gql`
+  ${BOOK_DETAILS}
+
   subscription {
     bookAdded {
-      id
-      title
-      published
-      author {
-        id
-        name
-        born
-      }
-      genres
+      ...BookDetails
     }
   }
 `
