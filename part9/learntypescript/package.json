@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "ts-node": "ts-node"
+    "ts-node": "ts-node",
+    "bmiCalculator": "ts-node bmiCalculator.ts"
   },
   "keywords": [],
   "author": "",
