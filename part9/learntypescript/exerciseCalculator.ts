@@ -1,3 +1,5 @@
+import { parseArguments } from './utils'
+
 interface Result {
   periodLength: number
   trainingDays: number
@@ -8,10 +10,12 @@ interface Result {
   average: number
 }
 
-const calculateRating = (
-  average: number,
-  target: number
-): { rating: number; ratingDescription: string } => {
+interface Rating {
+  rating: number
+  ratingDescription: string
+}
+
+const calculateRating = (average: number, target: number): Rating => {
   if (average >= target) {
     return { rating: 3, ratingDescription: 'great job! you rock!' }
   } else if (average < target && average >= target / 2) {
@@ -22,8 +26,8 @@ const calculateRating = (
 }
 
 const calculateExercises = (
-  dailyExercises: Array<number>,
-  target: number
+  target: number,
+  dailyExercises: Array<number>
 ): Result => {
   const periodLength = dailyExercises.length
   const average = dailyExercises.reduce((a, b) => a + b, 0) / periodLength
@@ -42,4 +46,17 @@ const calculateExercises = (
   }
 }
 
-console.log(calculateExercises([2.5, 2, 2, 4.5, 0, 1, 1], 2))
+try {
+  if (process.argv.length < 4) throw new Error('Not enough arguments')
+
+  const [target, ...dailyExercises] = parseArguments(process.argv.slice(2))
+
+  console.log(calculateExercises(target, dailyExercises))
+} catch (error: unknown) {
+  let errorMessage = 'Something bad happened.'
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message
+  }
+
+  console.log(errorMessage)
+}
