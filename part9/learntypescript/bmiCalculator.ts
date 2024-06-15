@@ -1,6 +1,4 @@
-import { parseArguments } from './utils'
-
-const calculateBmi = (height: number, weight: number): string => {
+export const calculateBmi = (height: number, weight: number): string => {
   const bmi = weight / Math.pow(height / 100, 2)
 
   switch (true) {
@@ -21,20 +19,4 @@ const calculateBmi = (height: number, weight: number): string => {
     default:
       return 'Obese Class III (Very severely obese)'
   }
-}
-
-try {
-  if (process.argv.length < 4) throw new Error('Not enough arguments')
-  if (process.argv.length > 4) throw new Error('Too many arguments')
-
-  const [height, weight] = parseArguments(process.argv.slice(2))
-
-  console.log(calculateBmi(height, weight))
-} catch (error: unknown) {
-  let errorMessage = 'Something bad happened.'
-  if (error instanceof Error) {
-    errorMessage += ' Error: ' + error.message
-  }
-
-  console.log(errorMessage)
 }
