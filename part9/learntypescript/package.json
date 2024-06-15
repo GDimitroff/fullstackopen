@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "ts-node": "ts-node",
-    "bmiCalculator": "ts-node bmiCalculator.ts"
+    "calculateBmi": "ts-node bmiCalculator.ts"
   },
   "keywords": [],
   "author": "",
