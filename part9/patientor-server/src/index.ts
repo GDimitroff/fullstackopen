@@ -10,6 +10,7 @@ const ENV = process.env.NODE_ENV
 const app = express()
 
 app.use(cors())
+app.use(express.json())
 
 app.get('/api/ping', (_req, res) => {
   console.log('someone pinged here')
