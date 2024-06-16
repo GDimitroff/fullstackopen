@@ -1,11 +1,8 @@
 {
-	"arrowParens": "always",
-	"bracketSameLine": false,
-	"bracketSpacing": true,
-	"embeddedLanguageFormatting": "auto",
-	"semi": false,
-	"singleQuote": true,
-	"tabWidth": 2,
-	"trailingComma": "none",
-	"useTabs": true
+  "arrowParens": "always",
+  "bracketSameLine": false,
+  "embeddedLanguageFormatting": "auto",
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "none"
 }
