@@ -1,13 +1,21 @@
 import express from 'express'
+import cors from 'cors'
+
+import diagnosisRouter from './routes/diagnoses'
+
+const PORT = 3001
+const ENV = process.env.NODE_ENV
 
 const app = express()
 
+app.use(cors())
+
 app.get('/api/ping', (_req, res) => {
+  console.log('someone pinged here')
   res.send('pong')
 })
 
-const PORT = 3003
-const ENV = process.env.NODE_ENV
+app.use('/api/diagnoses', diagnosisRouter)
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT} on ${ENV}`)
