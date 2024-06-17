@@ -5,11 +5,11 @@ const getEntries = (): Array<DiagnosisEntry> => {
   return diagnoses
 }
 
-const addDiary = () => {
+const addDiagnosis = () => {
   return null
 }
 
 export default {
   getEntries,
-  addDiary
+  addDiagnosis
 }
