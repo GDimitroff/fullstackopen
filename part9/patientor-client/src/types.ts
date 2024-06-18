@@ -2,11 +2,18 @@ type UnionOmit<T, K extends string | number | symbol> = T extends unknown
   ? Omit<T, K>
   : never
 
+export enum EntryType {
+  HealthCheck = 'HealthCheck',
+  OccupationalHealthcare = 'OccupationalHealthcare',
+  Hospital = 'Hospital',
+}
+
 interface BaseEntry {
   id: string
   description: string
   date: string
   specialist: string
+  type: EntryType
   diagnosisCodes?: Array<Diagnosis['code']>
 }
 
@@ -18,12 +25,10 @@ export enum HealthCheckRating {
 }
 
 interface HealthCheckEntry extends BaseEntry {
-  type: 'HealthCheck'
   healthCheckRating: HealthCheckRating
 }
 
 interface OccupationalHealthcareEntry extends BaseEntry {
-  type: 'OccupationalHealthcare'
   employerName: string
   sickLeave?: {
     startDate: string
@@ -32,7 +37,6 @@ interface OccupationalHealthcareEntry extends BaseEntry {
 }
 
 interface HospitalEntry extends BaseEntry {
-  type: 'Hospital'
   discharge: {
     date: string
     criteria: string
@@ -64,8 +68,8 @@ export interface Patient {
   occupation: string
   gender: Gender
   dateOfBirth: string
-  ssn?: string
   entries?: Entry[]
+  ssn?: string
 }
 
 export type PatientFormValues = Omit<Patient, 'id' | 'entries'>

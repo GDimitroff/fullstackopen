@@ -5,6 +5,7 @@ import { Male, Female, Transgender } from '@mui/icons-material'
 import patientService from '../../services/patients'
 import { Gender, Patient } from '../../types'
 import { assertNever } from '../../utils'
+import EntryList from './EntryList'
 
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -46,6 +47,7 @@ const PatientPage = () => {
       </h2>
       <div>ssn: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
+      <EntryList entries={patient.entries} />
     </div>
   )
 }
