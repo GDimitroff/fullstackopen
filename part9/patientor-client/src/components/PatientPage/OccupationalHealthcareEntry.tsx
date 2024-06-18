@@ -1,26 +1,11 @@
-import { Entry } from '../../types'
+import { IOccupationalHealthcareEntry } from '../../types'
 
-interface OccupationalHealthcareEntryProps {
-  entry: Entry
+interface Props {
+  entry: IOccupationalHealthcareEntry
 }
 
-const OccupationalHealthcareEntry = ({
-  entry,
-}: OccupationalHealthcareEntryProps) => {
-  return (
-    <div>
-      <p>
-        {entry.date} {entry.description}
-      </p>
-      {entry.diagnosisCodes && entry.diagnosisCodes.length > 0 && (
-        <ul>
-          {entry.diagnosisCodes.map((code) => (
-            <li key={code}>{code}</li>
-          ))}
-        </ul>
-      )}
-    </div>
-  )
+const OccupationalHealthcareEntry = ({ entry }: Props) => {
+  return <div>{entry.type}</div>
 }
 
 export default OccupationalHealthcareEntry

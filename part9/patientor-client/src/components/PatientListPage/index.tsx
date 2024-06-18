@@ -12,7 +12,7 @@ import {
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 
-import { PatientFormValues, Patient } from '../../types'
+import { IPatientFormValues, IPatient } from '../../types'
 import AddPatientModal from '../AddPatientModal'
 
 import HealthRatingBar from '../HealthRatingBar'
@@ -20,8 +20,8 @@ import HealthRatingBar from '../HealthRatingBar'
 import patientService from '../../services/patients'
 
 interface Props {
-  patients: Patient[]
-  setPatients: React.Dispatch<React.SetStateAction<Patient[]>>
+  patients: IPatient[]
+  setPatients: React.Dispatch<React.SetStateAction<IPatient[]>>
 }
 
 const PatientListPage = ({ patients, setPatients }: Props) => {
@@ -35,7 +35,7 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
     setError(undefined)
   }
 
-  const submitNewPatient = async (values: PatientFormValues) => {
+  const submitNewPatient = async (values: IPatientFormValues) => {
     try {
       const patient = await patientService.create(values)
       setPatients(patients.concat(patient))
@@ -79,7 +79,7 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.values(patients).map((patient: Patient) => (
+          {Object.values(patients).map((patient: IPatient) => (
             <TableRow key={patient.id}>
               <TableCell>
                 <Link to={`/patients/${patient.id}`}>{patient.name}</Link>

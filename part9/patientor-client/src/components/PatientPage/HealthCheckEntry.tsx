@@ -1,24 +1,11 @@
-import { Entry } from '../../types'
+import { IHealthCheckEntry } from '../../types'
 
-interface HealthCheckEntryProps {
-  entry: Entry
+interface Props {
+  entry: IHealthCheckEntry
 }
 
-const HealthCheckEntry = ({ entry }: HealthCheckEntryProps) => {
-  return (
-    <div>
-      <p>
-        {entry.date} {entry.description}
-      </p>
-      {entry.diagnosisCodes && entry.diagnosisCodes.length > 0 && (
-        <ul>
-          {entry.diagnosisCodes.map((code) => (
-            <li key={code}>{code}</li>
-          ))}
-        </ul>
-      )}
-    </div>
-  )
+const HealthCheckEntry = ({ entry }: Props) => {
+  return <div>{entry.type}</div>
 }
 
 export default HealthCheckEntry

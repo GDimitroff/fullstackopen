@@ -1,11 +1,11 @@
-import { Entry } from '../../types'
-import EntryDetails from './EntryDetails'
+import { IEntry } from '../../types'
+import EntryItem from './EntryItem'
 
-interface EntryListProps {
-  entries: Array<Entry> | undefined
+interface Props {
+  entries: Array<IEntry> | undefined
 }
 
-const EntryList = ({ entries }: EntryListProps) => {
+const EntryList = ({ entries }: Props) => {
   if (!entries || entries.length === 0) return null
 
   return (
@@ -13,7 +13,7 @@ const EntryList = ({ entries }: EntryListProps) => {
       <h3>entries</h3>
       {entries.map((entry) => {
         return (
-          <EntryDetails
+          <EntryItem
             key={entry.id}
             entry={entry}
           />

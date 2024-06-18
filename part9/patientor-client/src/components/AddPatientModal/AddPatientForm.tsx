@@ -10,19 +10,19 @@ import {
   SelectChangeEvent,
 } from '@mui/material'
 
-import { PatientFormValues, Gender } from '../../types'
+import { IPatientFormValues, IGender } from '../../types'
 
 interface Props {
   onCancel: () => void
-  onSubmit: (values: PatientFormValues) => void
+  onSubmit: (values: IPatientFormValues) => void
 }
 
 interface GenderOption {
-  value: Gender
+  value: IGender
   label: string
 }
 
-const genderOptions: GenderOption[] = Object.values(Gender).map((v) => ({
+const genderOptions: GenderOption[] = Object.values(IGender).map((v) => ({
   value: v,
   label: v.toString(),
 }))
@@ -32,13 +32,13 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
   const [occupation, setOccupation] = useState('')
   const [ssn, setSsn] = useState('')
   const [dateOfBirth, setDateOfBirth] = useState('')
-  const [gender, setGender] = useState(Gender.Other)
+  const [gender, setGender] = useState(IGender.Other)
 
   const onGenderChange = (event: SelectChangeEvent<string>) => {
     event.preventDefault()
     if (typeof event.target.value === 'string') {
       const value = event.target.value
-      const gender = Object.values(Gender).find((g) => g.toString() === value)
+      const gender = Object.values(IGender).find((g) => g.toString() === value)
       if (gender) {
         setGender(gender)
       }

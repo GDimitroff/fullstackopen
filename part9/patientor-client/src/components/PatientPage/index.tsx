@@ -3,23 +3,23 @@ import { useParams } from 'react-router-dom'
 import { Male, Female, Transgender } from '@mui/icons-material'
 
 import patientService from '../../services/patients'
-import { Gender, Patient } from '../../types'
+import { IGender, IPatient } from '../../types'
 import { assertNever } from '../../utils'
 import EntryList from './EntryList'
 
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>()
-  const [patient, setPatient] = useState<Patient | null>(null)
+  const [patient, setPatient] = useState<IPatient | null>(null)
 
-  const getIcon = (input: Gender) => {
+  const getIcon = (input: IGender) => {
     switch (input) {
-      case Gender.Male: {
+      case IGender.Male: {
         return <Male />
       }
-      case Gender.Female: {
+      case IGender.Female: {
         return <Female />
       }
-      case Gender.Other: {
+      case IGender.Other: {
         return <Transgender />
       }
       default: {

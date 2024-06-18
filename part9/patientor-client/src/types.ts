@@ -2,33 +2,28 @@ type UnionOmit<T, K extends string | number | symbol> = T extends unknown
   ? Omit<T, K>
   : never
 
-export enum EntryType {
-  HealthCheck = 'HealthCheck',
-  OccupationalHealthcare = 'OccupationalHealthcare',
-  Hospital = 'Hospital',
-}
-
-interface BaseEntry {
+interface IBaseEntry {
   id: string
   description: string
   date: string
   specialist: string
-  type: EntryType
-  diagnosisCodes?: Array<Diagnosis['code']>
+  diagnosisCodes?: Array<IDiagnosis['code']>
 }
 
-export enum HealthCheckRating {
+export enum IHealthCheckRating {
   'Healthy' = 0,
   'LowRisk' = 1,
   'HighRisk' = 2,
   'CriticalRisk' = 3,
 }
 
-interface HealthCheckEntry extends BaseEntry {
-  healthCheckRating: HealthCheckRating
+export interface IHealthCheckEntry extends IBaseEntry {
+  type: 'HealthCheck'
+  healthCheckRating: IHealthCheckRating
 }
 
-interface OccupationalHealthcareEntry extends BaseEntry {
+export interface IOccupationalHealthcareEntry extends IBaseEntry {
+  type: 'OccupationalHealthcare'
   employerName: string
   sickLeave?: {
     startDate: string
@@ -36,40 +31,41 @@ interface OccupationalHealthcareEntry extends BaseEntry {
   }
 }
 
-interface HospitalEntry extends BaseEntry {
+export interface IHospitalEntry extends IBaseEntry {
+  type: 'Hospital'
   discharge: {
     date: string
     criteria: string
   }
 }
 
-export type Entry =
-  | HospitalEntry
-  | OccupationalHealthcareEntry
-  | HealthCheckEntry
+export type IEntry =
+  | IHospitalEntry
+  | IOccupationalHealthcareEntry
+  | IHealthCheckEntry
 
-export type EntryWithoutId = UnionOmit<Entry, 'id'>
+export type IEntryWithoutId = UnionOmit<IEntry, 'id'>
 
-export interface Diagnosis {
+export interface IDiagnosis {
   code: string
   name: string
   latin?: string
 }
 
-export enum Gender {
+export enum IGender {
   Male = 'male',
   Female = 'female',
   Other = 'other',
 }
 
-export interface Patient {
+export interface IPatient {
   id: string
   name: string
   occupation: string
-  gender: Gender
+  gender: IGender
   dateOfBirth: string
-  entries?: Entry[]
+  entries?: IEntry[]
   ssn?: string
 }
 
-export type PatientFormValues = Omit<Patient, 'id' | 'entries'>
+export type IPatientFormValues = Omit<IPatient, 'id' | 'entries'>

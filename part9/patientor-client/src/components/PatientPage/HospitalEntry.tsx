@@ -1,24 +1,11 @@
-import { Entry } from '../../types'
+import { IHospitalEntry } from '../../types'
 
-interface HospitalEntryProps {
-  entry: Entry
+interface Props {
+  entry: IHospitalEntry
 }
 
-const HospitalEntry = ({ entry }: HospitalEntryProps) => {
-  return (
-    <div>
-      <p>
-        {entry.date} {entry.description}
-      </p>
-      {entry.diagnosisCodes && entry.diagnosisCodes.length > 0 && (
-        <ul>
-          {entry.diagnosisCodes.map((code) => (
-            <li key={code}>{code}</li>
-          ))}
-        </ul>
-      )}
-    </div>
-  )
+const HospitalEntry = ({ entry }: Props) => {
+  return <div>{entry.type}</div>
 }
 
 export default HospitalEntry

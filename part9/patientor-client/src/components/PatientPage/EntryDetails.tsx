@@ -1,26 +1,26 @@
-import { Entry, EntryType } from '../../types'
+import { IEntry } from '../../types'
 import { assertNever } from '../../utils'
 import HealthCheckEntry from './HealthCheckEntry'
 import HospitalEntry from './HospitalEntry'
 import OccupationalHealthcareEntry from './OccupationalHealthcareEntry'
 
-interface EntryProps {
-  entry: Entry
+interface Props {
+  entry: IEntry
 }
 
-const EntryDetails = ({ entry }: EntryProps) => {
+const EntryDetails = ({ entry }: Props) => {
   switch (entry.type) {
-    case EntryType.HealthCheck: {
+    case 'HealthCheck': {
       return <HealthCheckEntry entry={entry} />
     }
-    case EntryType.Hospital: {
+    case 'Hospital': {
       return <HospitalEntry entry={entry} />
     }
-    case EntryType.OccupationalHealthcare: {
+    case 'OccupationalHealthcare': {
       return <OccupationalHealthcareEntry entry={entry} />
     }
     default: {
-      return assertNever(entry.type)
+      return assertNever(entry)
     }
   }
 }
