@@ -1,22 +1,43 @@
-import { IEntry } from '../../types'
+import { IDiagnosis, IEntry } from '../../types'
 import EntryDetails from './EntryDetails'
+import EntryDiagnoses from './EntryDiagnoses'
 
 interface Props {
   entry: IEntry
+  diagnoses: Array<IDiagnosis>
 }
 
-const EntryItem = ({ entry }: Props) => {
+const EntryItem = ({ entry, diagnoses }: Props) => {
+  const style = {
+    border: '1px solid',
+    padding: '10px',
+    margin: '10px 0',
+  }
+
+  const getEntryTypeIcon = () => {
+    switch (entry.type) {
+      case 'HealthCheck':
+        return '❤️'
+      case 'OccupationalHealthcare':
+        return '🏥'
+      case 'Hospital':
+        return '🚑'
+      default:
+        return '🤷'
+    }
+  }
+
   return (
-    <div>
+    <div style={style}>
       <p>
-        {entry.date} {entry.description}
+        {entry.date} {getEntryTypeIcon()}
       </p>
-      {entry.diagnosisCodes && entry.diagnosisCodes.length > 0 && (
-        <ul>
-          {entry.diagnosisCodes.map((code) => (
-            <li key={code}>{code}</li>
-          ))}
-        </ul>
+      <p>{entry.description}</p>
+      {entry.diagnosisCodes && (
+        <EntryDiagnoses
+          diagnosisCodes={entry.diagnosisCodes}
+          diagnoses={diagnoses}
+        />
       )}
       <EntryDetails entry={entry} />
     </div>

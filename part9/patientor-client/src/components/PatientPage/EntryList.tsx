@@ -1,12 +1,13 @@
-import { IEntry } from '../../types'
+import { IDiagnosis, IEntry } from '../../types'
 import EntryItem from './EntryItem'
 
 interface Props {
   entries: Array<IEntry> | undefined
+  diagnoses: Array<IDiagnosis>
 }
 
-const EntryList = ({ entries }: Props) => {
-  if (!entries || entries.length === 0) return null
+const EntryList = ({ entries, diagnoses }: Props) => {
+  if (!entries || entries.length === 0 || !diagnoses) return null
 
   return (
     <div>
@@ -16,6 +17,7 @@ const EntryList = ({ entries }: Props) => {
           <EntryItem
             key={entry.id}
             entry={entry}
+            diagnoses={diagnoses}
           />
         )
       })}

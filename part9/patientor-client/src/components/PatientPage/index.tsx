@@ -3,13 +3,15 @@ import { useParams } from 'react-router-dom'
 import { Male, Female, Transgender } from '@mui/icons-material'
 
 import patientService from '../../services/patients'
-import { IGender, IPatient } from '../../types'
+import diagnoseService from '../../services/diagnoses'
+import { IDiagnosis, IGender, IPatient } from '../../types'
 import { assertNever } from '../../utils'
 import EntryList from './EntryList'
 
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>()
   const [patient, setPatient] = useState<IPatient | null>(null)
+  const [diagnoses, setDiagnoses] = useState<Array<IDiagnosis> | null>(null)
 
   const getIcon = (input: IGender) => {
     switch (input) {
@@ -38,7 +40,16 @@ const PatientPage = () => {
     void fetchPatient()
   }, [id])
 
-  if (!patient) return null
+  useEffect(() => {
+    const fetchDiagnoses = async () => {
+      const diagnoses = await diagnoseService.getAll()
+      setDiagnoses(diagnoses)
+    }
+
+    void fetchDiagnoses()
+  }, [])
+
+  if (!patient || !diagnoses) return null
 
   return (
     <div>
@@ -47,7 +58,10 @@ const PatientPage = () => {
       </h2>
       <div>ssn: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
-      <EntryList entries={patient.entries} />
+      <EntryList
+        entries={patient.entries}
+        diagnoses={diagnoses}
+      />
     </div>
   )
 }
