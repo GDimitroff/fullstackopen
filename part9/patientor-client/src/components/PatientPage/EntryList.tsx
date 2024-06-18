@@ -1,5 +1,5 @@
 import { Entry } from '../../types'
-import EntryItem from './EntryItem'
+import EntryDetails from './EntryDetails'
 
 interface EntryListProps {
   entries: Array<Entry> | undefined
@@ -13,7 +13,7 @@ const EntryList = ({ entries }: EntryListProps) => {
       <h3>entries</h3>
       {entries.map((entry) => {
         return (
-          <EntryItem
+          <EntryDetails
             key={entry.id}
             entry={entry}
           />
