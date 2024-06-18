@@ -1,3 +1,5 @@
+interface Entry {}
+
 export interface Diagnosis {
   code: string
   name: string
@@ -17,6 +19,7 @@ export interface Patient {
   gender: Gender
   ssn?: string
   dateOfBirth?: string
+  entries?: Entry[]
 }
 
 export type PatientFormValues = Omit<Patient, 'id' | 'entries'>
