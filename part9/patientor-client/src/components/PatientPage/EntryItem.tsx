@@ -1,3 +1,5 @@
+import { MedicalServices, Favorite, HealthAndSafety } from '@mui/icons-material'
+
 import { IDiagnosis, IEntry } from '../../types'
 import EntryDetails from './EntryDetails'
 import EntryDiagnoses from './EntryDiagnoses'
@@ -17,11 +19,11 @@ const EntryItem = ({ entry, diagnoses }: Props) => {
   const getEntryTypeIcon = () => {
     switch (entry.type) {
       case 'HealthCheck':
-        return '❤️'
+        return <MedicalServices />
       case 'OccupationalHealthcare':
-        return '🏥'
+        return <HealthAndSafety />
       case 'Hospital':
-        return '🚑'
+        return <Favorite />
       default:
         return '🤷'
     }
