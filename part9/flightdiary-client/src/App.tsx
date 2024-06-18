@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 import diaryService from './services/diaryService'
 import { DiaryEntry, NewDiaryEntry, Visibility, Weather } from './types'
@@ -27,6 +28,7 @@ const weatherOptions: WeatherOption[] = Object.values(Weather).map((v) => ({
 
 const App = () => {
   const [diaries, setDiaries] = useState<DiaryEntry[] | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const [date, setDate] = useState('')
   const [comment, setComment] = useState('')
@@ -73,21 +75,41 @@ const App = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const newDiaryEntry: NewDiaryEntry = {
-      date,
-      comment,
-      visibility,
-      weather,
-    }
+    try {
+      const newDiaryEntry: NewDiaryEntry = {
+        date,
+        comment,
+        visibility,
+        weather,
+      }
 
-    const diary = await diaryService.create(newDiaryEntry)
-    setDiaries((prev) => (prev ? prev.concat(diary) : [diary]))
+      const diary = await diaryService.create(newDiaryEntry)
+      setDiaries((prev) => (prev ? prev.concat(diary) : [diary]))
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        if (err?.response?.data && typeof err?.response?.data === 'string') {
+          const message = err.response.data.replace(
+            'Something went wrong. Error: ',
+            ''
+          )
+
+          console.error(message)
+          setError(message)
+        } else {
+          setError('Unrecognized axios error')
+        }
+      } else {
+        console.error('Unknown error', err)
+        setError('Unknown error')
+      }
+    }
   }
 
   if (!diaries) return null
 
   return (
     <div>
+      {error && <div>{error}</div>}
       <h2>add new entry</h2>
       <form onSubmit={handleSubmit}>
         <div>
