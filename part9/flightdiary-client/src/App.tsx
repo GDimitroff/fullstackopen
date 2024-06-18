@@ -44,9 +44,7 @@ const App = () => {
     void fetchDiaries()
   }, [])
 
-  const handleVisibilityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    e.preventDefault()
-
+  const handleVisibilityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (typeof e.target.value === 'string') {
       const value = e.target.value
       const visibility = Object.values(Visibility).find(
@@ -59,9 +57,7 @@ const App = () => {
     }
   }
 
-  const handleWeatherChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    e.preventDefault()
-
+  const handleWeatherChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (typeof e.target.value === 'string') {
       const value = e.target.value
       const weather = Object.values(Weather).find((g) => g.toString() === value)
@@ -115,10 +111,42 @@ const App = () => {
         <div>
           date:
           <input
-            type='text'
+            type='date'
             value={date}
             onChange={({ target }) => setDate(target.value)}
           />
+        </div>
+        <div>
+          visibility:{'  '}
+          {visibilityOptions.map((v) => (
+            <label key={v.label}>
+              {v.label}
+              <input
+                type='radio'
+                id={v.label}
+                name='visibility'
+                value={v.value}
+                checked={v.value === visibility}
+                onChange={handleVisibilityChange}
+              />
+            </label>
+          ))}
+        </div>
+        <div>
+          weather:{'  '}
+          {weatherOptions.map((w) => (
+            <label key={w.label}>
+              {w.label}
+              <input
+                type='radio'
+                id={w.label}
+                name='weather'
+                value={w.value}
+                checked={w.value === weather}
+                onChange={handleWeatherChange}
+              />
+            </label>
+          ))}
         </div>
         <div>
           comment:
@@ -127,40 +155,6 @@ const App = () => {
             value={comment}
             onChange={({ target }) => setComment(target.value)}
           />
-        </div>
-        <div>
-          visibility:
-          <select
-            name='visibility'
-            value={visibility}
-            onChange={handleVisibilityChange}
-          >
-            {visibilityOptions.map((visibility) => (
-              <option
-                key={visibility.label}
-                value={visibility.value}
-              >
-                {visibility.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          weather:
-          <select
-            name='weather'
-            value={weather}
-            onChange={handleWeatherChange}
-          >
-            {weatherOptions.map((weather) => (
-              <option
-                key={weather.label}
-                value={weather.value}
-              >
-                {weather.label}
-              </option>
-            ))}
-          </select>
         </div>
 
         <br />
