@@ -7,8 +7,15 @@ import {
   HealthCheckRating,
   Discharge,
   SickLeave,
-  OccupationalHealthcareEntry
+  OccupationalHealthcareEntry,
+  Type
 } from './types'
+
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  )
+}
 
 const isString = (param: unknown): param is string => {
   return typeof param === 'string' || param instanceof String
@@ -21,6 +28,12 @@ const isDate = (param: string): boolean => {
 const isGender = (param: string): param is Gender => {
   return Object.values(Gender)
     .map((g) => g.toString())
+    .includes(param)
+}
+
+const isType = (param: string): param is Type => {
+  return Object.values(Type)
+    .map((e) => e.toString())
     .includes(param)
 }
 
@@ -59,6 +72,14 @@ const parseDiagnosisCodes = (object: unknown): Array<Diagnosis['code']> => {
   }
 
   return object.diagnosisCodes as Array<Diagnosis['code']>
+}
+
+const parseType = (type: unknown): Type => {
+  if (!isString(type) || !isType(type)) {
+    throw new Error('Incorrect or missing entry type')
+  }
+
+  return type
 }
 
 const parseRating = (rating: unknown): HealthCheckRating => {
@@ -145,30 +166,26 @@ export const toNewEntry = (object: unknown): NewEntry => {
   const baseEntry: Omit<BaseEntry, 'id'> = {
     description: parseString(object.description),
     date: parseDate(object.date),
-    specialist: parseString(object.specialist)
+    specialist: parseString(object.specialist),
+    type: parseType(object.type)
   }
 
   if ('diagnosisCodes' in object) {
     baseEntry.diagnosisCodes = parseDiagnosisCodes(object)
   }
 
-  if (!isString(object.type)) {
-    throw new Error(`Missing or invalid entry type`)
-  }
-
-  switch (object.type) {
-    case 'HealthCheck': {
+  switch (baseEntry.type) {
+    case Type.HealthCheck: {
       if (!('healthCheckRating' in object)) {
         throw new Error(`Missing or invalid health check rating`)
       }
 
       return {
         ...baseEntry,
-        type: 'HealthCheck',
         healthCheckRating: parseRating(object.healthCheckRating)
       }
     }
-    case 'Hospital': {
+    case Type.Hospital: {
       if (
         !('discharge' in object) ||
         !object.discharge ||
@@ -179,18 +196,16 @@ export const toNewEntry = (object: unknown): NewEntry => {
 
       return {
         ...baseEntry,
-        type: 'Hospital',
         discharge: parseDischarge(object.discharge)
       }
     }
-    case 'OccupationalHealthcare': {
+    case Type.OccupationalHealthcare: {
       if (!('employerName' in object)) {
         throw new Error(`Missing or invalid employer name`)
       }
 
       const newOccupationalEntry: Omit<OccupationalHealthcareEntry, 'id'> = {
         ...baseEntry,
-        type: 'OccupationalHealthcare',
         employerName: parseString(object.employerName)
       }
 
@@ -201,7 +216,7 @@ export const toNewEntry = (object: unknown): NewEntry => {
       return newOccupationalEntry
     }
     default: {
-      throw new Error(`Incorrect entry type`)
+      return assertNever(baseEntry.type)
     }
   }
 }
