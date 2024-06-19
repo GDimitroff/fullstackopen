@@ -2,7 +2,7 @@ type UnionOmit<T, K extends string | number | symbol> = T extends unknown
   ? Omit<T, K>
   : never
 
-interface BaseEntry {
+export interface BaseEntry {
   id: string
   description: string
   date: string
@@ -44,7 +44,7 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HealthCheckEntry
 
-export type EntryWithoutId = UnionOmit<Entry, 'id'>
+export type NewEntry = UnionOmit<Entry, 'id'>
 
 export interface Diagnosis {
   code: string
@@ -68,6 +68,5 @@ export interface Patient {
   ssn: string
 }
 
-export type NonSensitivePatientEntry = Omit<Patient, 'ssn' | 'entries'>
-
-export type NewPatientEntry = Omit<Patient, 'id'>
+export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>
+export type NewPatient = Omit<Patient, 'id'>
