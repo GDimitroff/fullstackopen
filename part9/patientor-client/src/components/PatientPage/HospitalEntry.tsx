@@ -5,7 +5,15 @@ interface Props {
 }
 
 const HospitalEntry = ({ entry }: Props) => {
-  return <div>{entry.type}</div>
+  return (
+    <div>
+      <strong>discharge</strong>
+      <ul>
+        <li>date: {entry.discharge.date}</li>
+        <li>criteria: {entry.discharge.criteria}</li>
+      </ul>
+    </div>
+  )
 }
 
 export default HospitalEntry

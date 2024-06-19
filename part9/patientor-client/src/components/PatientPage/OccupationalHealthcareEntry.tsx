@@ -5,7 +5,16 @@ interface Props {
 }
 
 const OccupationalHealthcareEntry = ({ entry }: Props) => {
-  return <div>{entry.type}</div>
+  return (
+    <div>
+      <p>employer name: {entry.employerName}</p>
+      {entry.sickLeave && (
+        <p>
+          sick leave: {entry.sickLeave?.startDate} - {entry.sickLeave?.endDate}
+        </p>
+      )}
+    </div>
+  )
 }
 
 export default OccupationalHealthcareEntry
