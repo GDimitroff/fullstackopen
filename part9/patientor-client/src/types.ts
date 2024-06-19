@@ -2,6 +2,12 @@ type UnionOmit<T, K extends string | number | symbol> = T extends unknown
   ? Omit<T, K>
   : never
 
+export enum IType {
+  HealthCheck = 'HealthCheck',
+  OccupationalHealthcare = 'OccupationalHealthcare',
+  Hospital = 'Hospital',
+}
+
 interface IBaseEntry {
   id: string
   description: string

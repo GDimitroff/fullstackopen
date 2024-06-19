@@ -7,6 +7,7 @@ import diagnoseService from '../../services/diagnoses'
 import { IDiagnosis, IGender, IPatient } from '../../types'
 import { assertNever } from '../../utils'
 import EntryList from './EntryList'
+import EntryFormDefiner from './EntryFormDefiner'
 
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -37,17 +38,15 @@ const PatientPage = () => {
       const patient = await patientService.getById(id)
       setPatient(patient)
     }
-    void fetchPatient()
-  }, [id])
 
-  useEffect(() => {
     const fetchDiagnoses = async () => {
       const diagnoses = await diagnoseService.getAll()
       setDiagnoses(diagnoses)
     }
 
+    void fetchPatient()
     void fetchDiagnoses()
-  }, [])
+  }, [id])
 
   if (!patient || !diagnoses) return null
 
@@ -58,6 +57,10 @@ const PatientPage = () => {
       </h2>
       <div>ssn: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
+      <EntryFormDefiner
+        patientId={patient.id}
+        diagnoses={diagnoses}
+      />
       <EntryList
         entries={patient.entries}
         diagnoses={diagnoses}
