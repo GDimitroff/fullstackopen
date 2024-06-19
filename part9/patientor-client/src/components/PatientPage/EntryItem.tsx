@@ -13,7 +13,6 @@ const EntryItem = ({ entry, diagnoses }: Props) => {
   const style = {
     border: '1px solid',
     padding: '10px',
-    margin: '10px 0',
   }
 
   const getEntryTypeIcon = () => {
@@ -42,6 +41,7 @@ const EntryItem = ({ entry, diagnoses }: Props) => {
         />
       )}
       <EntryDetails entry={entry} />
+      <p>diagnose by {entry.specialist}</p>
     </div>
   )
 }

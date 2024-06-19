@@ -5,7 +5,22 @@ interface Props {
 }
 
 const HealthCheckEntry = ({ entry }: Props) => {
-  return <div>{entry.type}</div>
+  const getHealthCheckIcon = () => {
+    switch (entry.healthCheckRating) {
+      case 0:
+        return '💚'
+      case 1:
+        return '💛'
+      case 2:
+        return '🧡'
+      case 3:
+        return '❤️'
+      default:
+        return '🤷'
+    }
+  }
+
+  return <div>{getHealthCheckIcon()}</div>
 }
 
 export default HealthCheckEntry
