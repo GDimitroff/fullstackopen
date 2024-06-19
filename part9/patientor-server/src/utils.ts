@@ -4,7 +4,10 @@ import {
   NewEntry,
   Diagnosis,
   BaseEntry,
-  HealthCheckRating
+  HealthCheckRating,
+  Discharge,
+  SickLeave,
+  OccupationalHealthcareEntry
 } from './types'
 
 const isString = (param: unknown): param is string => {
@@ -66,6 +69,36 @@ const parseRating = (rating: unknown): HealthCheckRating => {
   }
 
   return parseInt(rating)
+}
+
+const parseDischarge = (object: unknown): Discharge => {
+  if (!object || typeof object !== 'object') {
+    throw new Error('Incorrect or missing discharge data')
+  }
+
+  if (!('date' in object) || !('criteria' in object)) {
+    throw new Error('Incorrect or missing discharge data')
+  }
+
+  return {
+    date: parseDate(object.date),
+    criteria: parseString(object.criteria)
+  }
+}
+
+const parseSickLeave = (object: unknown): SickLeave => {
+  if (!object || typeof object !== 'object') {
+    throw new Error('Incorrect or missing sick leave data')
+  }
+
+  if (!('startDate' in object) || !('endDate' in object)) {
+    throw new Error('Incorrect or missing sick leave data')
+  }
+
+  return {
+    startDate: parseDate(object.startDate),
+    endDate: parseDate(object.endDate)
+  }
 }
 
 export const toNewPatient = (object: unknown): NewPatient => {
@@ -144,17 +177,10 @@ export const toNewEntry = (object: unknown): NewEntry => {
         throw new Error(`Missing or invalid discharge data`)
       }
 
-      if (!('date' in object.discharge) || !('criteria' in object.discharge)) {
-        throw new Error(`Missing or invalid discharge data`)
-      }
-
       return {
         ...baseEntry,
         type: 'Hospital',
-        discharge: {
-          date: parseDate(object.discharge.date),
-          criteria: parseString(object.discharge.criteria)
-        }
+        discharge: parseDischarge(object.discharge)
       }
     }
     case 'OccupationalHealthcare': {
@@ -162,27 +188,17 @@ export const toNewEntry = (object: unknown): NewEntry => {
         throw new Error(`Missing or invalid employer name`)
       }
 
-      let sickLeave
-
-      if (
-        'sickLeave' in object &&
-        object.sickLeave &&
-        typeof object.sickLeave === 'object' &&
-        'startDate' in object.sickLeave &&
-        'endDate' in object.sickLeave
-      ) {
-        sickLeave = {
-          startDate: parseDate(object.sickLeave.startDate),
-          endDate: parseDate(object.sickLeave.endDate)
-        }
-      }
-
-      return {
+      const newOccupationalEntry: Omit<OccupationalHealthcareEntry, 'id'> = {
         ...baseEntry,
         type: 'OccupationalHealthcare',
-        employerName: parseString(object.employerName),
-        sickLeave
+        employerName: parseString(object.employerName)
       }
+
+      if ('sickLeave' in object) {
+        newOccupationalEntry.sickLeave = parseSickLeave(object)
+      }
+
+      return newOccupationalEntry
     }
     default: {
       throw new Error(`Incorrect entry type`)
