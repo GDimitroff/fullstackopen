@@ -40,18 +40,18 @@ const addPatient = (entry: NewPatient): Patient => {
   return newPatientEntry
 }
 
-const addEntry = (patientId: string, entry: NewEntry): Patient | undefined => {
-  const patientNewEntry: Entry = {
+const addEntry = (patientId: string, entry: NewEntry): Entry | undefined => {
+  const newEntry: Entry = {
     id: uuid(),
     ...entry
   }
 
   const patient = patients.find((p) => p.id === patientId)
   if (patient) {
-    patient.entries.push(patientNewEntry)
+    patient.entries.push(newEntry)
   }
 
-  return patient
+  return newEntry
 }
 
 export default {

@@ -60,6 +60,7 @@ const PatientPage = () => {
       <NewEntryForm
         patientId={patient.id}
         diagnoses={diagnoses}
+        addEntryToPatient={setPatient}
       />
       <Entries
         entries={patient.entries}
