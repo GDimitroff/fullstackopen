@@ -17,10 +17,10 @@ interface IBaseEntry {
 }
 
 export enum IHealthCheckRating {
-  'Healthy' = 0,
-  'LowRisk' = 1,
-  'HighRisk' = 2,
-  'CriticalRisk' = 3,
+  'Healthy' = 'Healthy',
+  'LowRisk' = 'LowRisk',
+  'HighRisk' = 'HighRisk',
+  'CriticalRisk' = 'CriticalRisk',
 }
 
 export interface IHealthCheckEntry extends IBaseEntry {
