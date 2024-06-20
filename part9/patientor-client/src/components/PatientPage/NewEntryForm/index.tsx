@@ -47,6 +47,8 @@ const NewEntryForm = ({ patientId, diagnoses, addEntryToPatient }: Props) => {
             : [addedEntry],
         }
       })
+
+      setShowForm(false)
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         if (err?.response?.data && typeof err?.response?.data === 'string') {
@@ -64,6 +66,10 @@ const NewEntryForm = ({ patientId, diagnoses, addEntryToPatient }: Props) => {
         console.error('Unknown error', err)
         setError('Unknown error')
       }
+
+      setTimeout(() => {
+        setError(null)
+      }, 3000)
     }
   }
 

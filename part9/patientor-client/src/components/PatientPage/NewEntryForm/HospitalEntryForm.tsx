@@ -167,7 +167,7 @@ const HospitalEntryForm = ({ onSubmit, onCancel, diagnoses }: Props) => {
           <Button
             variant='outlined'
             color='primary'
-            type='submit'
+            type='button'
             onClick={onCancel}
           >
             Cancel
