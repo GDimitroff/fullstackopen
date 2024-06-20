@@ -12,15 +12,22 @@ const Entries = ({ entries, diagnoses }: Props) => {
   return (
     <div>
       <h3>entries</h3>
-      {entries.map((entry) => {
-        return (
-          <EntryItem
-            key={entry.id}
-            entry={entry}
-            diagnoses={diagnoses}
-          />
-        )
-      })}
+      <div
+        style={{
+          display: 'grid',
+          gap: '10px',
+        }}
+      >
+        {entries.map((entry) => {
+          return (
+            <EntryItem
+              key={entry.id}
+              entry={entry}
+              diagnoses={diagnoses}
+            />
+          )
+        })}
+      </div>
     </div>
   )
 }
