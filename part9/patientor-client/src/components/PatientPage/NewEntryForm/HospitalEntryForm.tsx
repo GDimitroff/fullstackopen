@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 
-import { IDiagnosis, IEntryWithoutId } from '../../types'
+import { IDiagnosis, IEntryWithoutId } from '../../../types'
 
 interface Props {
   onSubmit: (values: IEntryWithoutId) => void

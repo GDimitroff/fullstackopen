@@ -1,4 +1,4 @@
-import { IDiagnosis, IEntry } from '../../types'
+import { IDiagnosis, IEntry } from '../../../types'
 import EntryItem from './EntryItem'
 
 interface Props {
@@ -6,7 +6,7 @@ interface Props {
   diagnoses: Array<IDiagnosis>
 }
 
-const EntryList = ({ entries, diagnoses }: Props) => {
+const Entries = ({ entries, diagnoses }: Props) => {
   if (!entries || entries.length === 0 || !diagnoses) return null
 
   return (
@@ -25,4 +25,4 @@ const EntryList = ({ entries, diagnoses }: Props) => {
   )
 }
 
-export default EntryList
+export default Entries

@@ -1,4 +1,4 @@
-import { IOccupationalHealthcareEntry } from '../../types'
+import { IOccupationalHealthcareEntry } from '../../../types'
 
 interface Props {
   entry: IOccupationalHealthcareEntry

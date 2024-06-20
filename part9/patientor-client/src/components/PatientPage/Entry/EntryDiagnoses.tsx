@@ -1,4 +1,4 @@
-import { IDiagnosis } from '../../types'
+import { IDiagnosis } from '../../../types'
 
 interface Props {
   diagnosisCodes: Array<string>

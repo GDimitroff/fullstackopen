@@ -7,7 +7,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { Typography } from '@mui/material'
 
 import HospitalEntryForm from './HospitalEntryForm'
-import { IDiagnosis, IEntryWithoutId, IType } from '../../types'
+import { IDiagnosis, IEntryWithoutId, IType } from '../../../types'
 
 interface Props {
   patientId: string

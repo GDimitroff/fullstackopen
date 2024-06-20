@@ -1,4 +1,4 @@
-import { IHealthCheckEntry } from '../../types'
+import { IHealthCheckEntry } from '../../../types'
 
 interface Props {
   entry: IHealthCheckEntry

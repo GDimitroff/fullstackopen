@@ -5,7 +5,7 @@ import { Male, Female, Transgender } from '@mui/icons-material'
 import patientService from '../../services/patients'
 import diagnoseService from '../../services/diagnoses'
 import NewEntryForm from './NewEntryForm'
-import EntryList from './EntryList'
+import Entries from './Entry'
 import { IDiagnosis, IGender, IPatient } from '../../types'
 import { assertNever } from '../../utils'
 
@@ -61,7 +61,7 @@ const PatientPage = () => {
         patientId={patient.id}
         diagnoses={diagnoses}
       />
-      <EntryList
+      <Entries
         entries={patient.entries}
         diagnoses={diagnoses}
       />

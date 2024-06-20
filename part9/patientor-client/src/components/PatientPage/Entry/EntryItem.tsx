@@ -1,6 +1,6 @@
 import { MedicalServices, Favorite, HealthAndSafety } from '@mui/icons-material'
 
-import { IDiagnosis, IEntry } from '../../types'
+import { IDiagnosis, IEntry } from '../../../types'
 import EntryDetails from './EntryDetails'
 import EntryDiagnoses from './EntryDiagnoses'
 

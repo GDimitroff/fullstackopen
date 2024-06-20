@@ -1,5 +1,5 @@
-import { IEntry } from '../../types'
-import { assertNever } from '../../utils'
+import { IEntry } from '../../../types'
+import { assertNever } from '../../../utils'
 import HealthCheckEntry from './HealthCheckEntry'
 import HospitalEntry from './HospitalEntry'
 import OccupationalHealthcareEntry from './OccupationalHealthcareEntry'
