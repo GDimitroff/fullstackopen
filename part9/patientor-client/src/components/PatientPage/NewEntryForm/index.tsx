@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import axios from 'axios'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -20,6 +21,7 @@ interface Props {
 const NewEntryForm = ({ patientId, diagnoses, addEntryToPatient }: Props) => {
   const [showForm, setShowForm] = useState(false)
   const [type, setType] = useState(IType.Hospital)
+  const [error, setError] = useState<string | null>(null)
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     if (typeof event.target.value === 'string') {
@@ -33,15 +35,36 @@ const NewEntryForm = ({ patientId, diagnoses, addEntryToPatient }: Props) => {
   }
 
   const handleAddNewEntry = async (values: IEntryWithoutId) => {
-    const addedEntry = await entryService.create(patientId, values)
-    addEntryToPatient((prev) => {
-      if (!prev) return null
+    try {
+      const addedEntry = await entryService.create(patientId, values)
+      addEntryToPatient((prev) => {
+        if (!prev) return null
 
-      return {
-        ...prev,
-        entries: prev.entries ? prev.entries.concat(addedEntry) : [addedEntry],
+        return {
+          ...prev,
+          entries: prev.entries
+            ? prev.entries.concat(addedEntry)
+            : [addedEntry],
+        }
+      })
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        if (err?.response?.data && typeof err?.response?.data === 'string') {
+          const message = err.response.data.replace(
+            'Something went wrong. Error: ',
+            ''
+          )
+
+          console.error(message)
+          setError(message)
+        } else {
+          setError('Unrecognized axios error')
+        }
+      } else {
+        console.error('Unknown error', err)
+        setError('Unknown error')
       }
-    })
+    }
   }
 
   return (
@@ -56,6 +79,11 @@ const NewEntryForm = ({ patientId, diagnoses, addEntryToPatient }: Props) => {
       </Button>
       {showForm && (
         <Box sx={{ p: 2, border: '1px dashed grey', marginTop: '10px' }}>
+          {error && (
+            <Box sx={{ p: 2, background: 'lightcoral', mb: '20px' }}>
+              {error}
+            </Box>
+          )}
           <Box
             sx={{
               display: 'flex',
