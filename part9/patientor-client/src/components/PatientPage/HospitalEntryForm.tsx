@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react'
-import { Box, InputAdornment, TextField, Typography } from '@mui/material'
+import { Button, InputAdornment, TextField, Typography } from '@mui/material'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
@@ -12,7 +12,7 @@ interface Props {
   diagnoses: Array<IDiagnosis>
 }
 
-const EntryFormHospital = ({ onSubmit, diagnoses }: Props) => {
+const HospitalEntryForm = ({ onSubmit, diagnoses }: Props) => {
   const [codes, setCodes] = useState<string[]>([])
 
   const handleChange = (event: SelectChangeEvent<typeof codes>) => {
@@ -23,83 +23,86 @@ const EntryFormHospital = ({ onSubmit, diagnoses }: Props) => {
     setCodes(typeof value === 'string' ? value.split(',') : value)
   }
 
-  const onSubmitHandler = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    // FIXME: fix typings
+    const formData = {} as IEntryWithoutId
+    onSubmit(formData)
   }
 
   return (
-    <Box
-      component='form'
-      sx={{ p: 2, border: '1px dashed grey', marginTop: '10px' }}
-      onSubmit={onSubmitHandler}
-    >
-      <Typography
-        variant='h5'
-        sx={{ m: 1 }}
+    <FormControl fullWidth>
+      <form
+        onSubmit={handleSubmit}
+        autoComplete='off'
       >
-        Add new entry
-      </Typography>
-      <Box>
         <TextField
           label='Description'
           id='description'
-          sx={{ m: 1 }}
+          name='description'
+          margin='dense'
           fullWidth
           InputProps={{
             startAdornment: <InputAdornment position='start' />,
           }}
         />
-      </Box>
-      <Box>
+
         <TextField
           id='date'
           fullWidth
-          sx={{ m: 1 }}
           type='date'
           label='Date'
+          name='date'
+          margin='dense'
           InputProps={{
             startAdornment: <InputAdornment position='start' />,
           }}
         />
-      </Box>
-      <Box>
+
         <TextField
           label='Specialist'
           id='specialist'
-          sx={{ m: 1 }}
+          name='specialist'
+          margin='dense'
           fullWidth
           InputProps={{
             startAdornment: <InputAdornment position='start' />,
           }}
         />
-      </Box>
-      <FormControl fullWidth>
-        <InputLabel id='diagnosis'>Diagnosis codes</InputLabel>
-        <Select
-          labelId='diagnosis'
-          id='diagnosis-info'
-          multiple
-          value={codes}
-          onChange={handleChange}
-          sx={{ m: 1 }}
+
+        <FormControl
           fullWidth
+          sx={{ marginTop: 1 }}
         >
-          {diagnoses.map((diagnosis) => (
-            <MenuItem
-              key={diagnosis.code}
-              value={diagnosis.code}
-            >
-              {diagnosis.code}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <Box>
-        <Typography sx={{ m: 1 }}>Discharge: </Typography>
+          <InputLabel id='diagnosis'>Diagnosis codes</InputLabel>
+          <Select
+            label='Diagnosis codes'
+            labelId='diagnosis'
+            id='diagnosis-info'
+            name='diagnosisCodes'
+            multiple
+            value={codes}
+            onChange={handleChange}
+            fullWidth
+          >
+            {diagnoses.map((diagnosis) => (
+              <MenuItem
+                key={diagnosis.code}
+                value={diagnosis.code}
+              >
+                {diagnosis.code}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        <Typography sx={{ marginTop: 1 }}>Discharge: </Typography>
         <TextField
           label='Date'
           id='discharge-date'
-          sx={{ m: 1 }}
+          name='dischargeDate'
+          margin='dense'
           type='date'
           fullWidth
           InputProps={{
@@ -109,15 +112,25 @@ const EntryFormHospital = ({ onSubmit, diagnoses }: Props) => {
         <TextField
           label='Criteria'
           id='criteria'
-          sx={{ m: 1 }}
+          name='criteria'
+          margin='dense'
           fullWidth
           InputProps={{
             startAdornment: <InputAdornment position='start' />,
           }}
         />
-      </Box>
-    </Box>
+
+        <Button
+          variant='outlined'
+          color='secondary'
+          sx={{ marginTop: 1 }}
+          type='submit'
+        >
+          Add
+        </Button>
+      </form>
+    </FormControl>
   )
 }
 
-export default EntryFormHospital
+export default HospitalEntryForm

@@ -4,10 +4,10 @@ import { Male, Female, Transgender } from '@mui/icons-material'
 
 import patientService from '../../services/patients'
 import diagnoseService from '../../services/diagnoses'
+import NewEntryForm from './NewEntryForm'
+import EntryList from './EntryList'
 import { IDiagnosis, IGender, IPatient } from '../../types'
 import { assertNever } from '../../utils'
-import EntryList from './EntryList'
-import EntryFormDefiner from './EntryFormDefiner'
 
 const PatientPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -57,7 +57,7 @@ const PatientPage = () => {
       </h2>
       <div>ssn: {patient.ssn}</div>
       <div>occupation: {patient.occupation}</div>
-      <EntryFormDefiner
+      <NewEntryForm
         patientId={patient.id}
         diagnoses={diagnoses}
       />

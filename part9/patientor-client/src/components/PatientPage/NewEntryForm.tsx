@@ -4,16 +4,17 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
+import { Typography } from '@mui/material'
 
-import { IDiagnosis, IType } from '../../types'
-import TypeForm from './TypeForm'
+import HospitalEntryForm from './HospitalEntryForm'
+import { IDiagnosis, IEntryWithoutId, IType } from '../../types'
 
 interface Props {
   patientId: string
   diagnoses: Array<IDiagnosis>
 }
 
-const EntryFormDefiner = ({ patientId, diagnoses }: Props) => {
+const NewEntryForm = ({ patientId, diagnoses }: Props) => {
   const [type, setType] = useState(IType.Hospital)
 
   const handleChange = (event: SelectChangeEvent<string>) => {
@@ -26,10 +27,20 @@ const EntryFormDefiner = ({ patientId, diagnoses }: Props) => {
     }
   }
 
+  const handleAddNewEntry = async (values: IEntryWithoutId) => {
+    console.log(values, patientId)
+  }
+
   return (
-    <div>
-      <Box sx={{ minWidth: 120, marginTop: '20px' }}>
-        <FormControl fullWidth>
+    <Box sx={{ p: 2, border: '1px dashed grey', marginTop: '10px' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          marginBottom: '10px',
+        }}
+      >
+        <FormControl>
           <InputLabel id='entry-type'>Entry type</InputLabel>
           <Select
             labelId='entry-type'
@@ -45,14 +56,25 @@ const EntryFormDefiner = ({ patientId, diagnoses }: Props) => {
             </MenuItem>
           </Select>
         </FormControl>
+        <Typography
+          variant='h5'
+          sx={{ m: 1 }}
+        >
+          Add new entry
+        </Typography>
       </Box>
-      <TypeForm
-        type={type}
-        patientId={patientId}
-        diagnoses={diagnoses}
-      />
-    </div>
+      {type === IType.Hospital && (
+        <HospitalEntryForm
+          onSubmit={handleAddNewEntry}
+          diagnoses={diagnoses}
+        />
+      )}
+      {type === IType.HealthCheck && <div>health check</div>}
+      {type === IType.OccupationalHealthcare && (
+        <div>occupational healthcare</div>
+      )}
+    </Box>
   )
 }
 
-export default EntryFormDefiner
+export default NewEntryForm
