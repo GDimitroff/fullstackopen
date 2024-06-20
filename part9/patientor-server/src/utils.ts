@@ -21,6 +21,10 @@ const isString = (param: unknown): param is string => {
   return typeof param === 'string' || param instanceof String
 }
 
+const isNumber = (param: unknown): param is number => {
+  return typeof param === 'number' || param instanceof Number
+}
+
 const isDate = (param: string): boolean => {
   return Boolean(Date.parse(param))
 }
@@ -83,13 +87,15 @@ const parseType = (type: unknown): Type => {
 }
 
 const parseRating = (rating: unknown): HealthCheckRating => {
-  if (!isString(rating) || isNaN(Number(rating)) || !isRating(Number(rating))) {
+  if (!isNumber(rating) || isNaN(Number(rating)) || !isRating(Number(rating))) {
     throw new Error(
-      `Incorrect rating number: ${Object.values(HealthCheckRating).join(' | ')}`
+      `Incorrect rating number: ${Object.values(HealthCheckRating)
+        .filter((v) => !isNaN(Number(v)))
+        .join(' | ')}`
     )
   }
 
-  return parseInt(rating)
+  return rating
 }
 
 const parseDischarge = (object: unknown): Discharge => {

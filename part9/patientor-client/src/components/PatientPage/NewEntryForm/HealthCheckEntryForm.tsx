@@ -12,17 +12,9 @@ import {
   IType,
 } from '../../../types'
 
-interface RatingOption {
-  value: IHealthCheckRating
-  label: string
-}
-
-const ratingOptions: RatingOption[] = Object.values(IHealthCheckRating).map(
-  (v) => ({
-    value: v,
-    label: v.toString(),
-  })
-)
+const ratingOptions = Object.keys(IHealthCheckRating)
+  .filter((key) => Number(key) || key === '0')
+  .map(Number)
 
 interface Props {
   onSubmit: (values: IEntryWithoutId) => void
@@ -35,7 +27,7 @@ const HealthCheckEntryForm = ({ onSubmit, onCancel, diagnoses }: Props) => {
   const [description, setDescription] = useState('')
   const [specialist, setSpecialist] = useState('')
   const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>([])
-  const [healthRating, sethHealthRating] = useState(IHealthCheckRating.Healthy)
+  const [healthRating, sethHealthRating] = useState(ratingOptions[0])
 
   const handleDiagnosisCodesChange = (
     event: SelectChangeEvent<typeof diagnosisCodes>
@@ -47,17 +39,16 @@ const HealthCheckEntryForm = ({ onSubmit, onCancel, diagnoses }: Props) => {
     setDiagnosisCodes(typeof value === 'string' ? value.split(',') : value)
   }
 
-  const handleHealthRatingChange = (
-    e: SelectChangeEvent<IHealthCheckRating>
-  ) => {
-    if (typeof e.target.value === 'string') {
-      const value = e.target.value
-      const rating = Object.values(IHealthCheckRating).find(
-        (r) => r.toString() === value
+  const handleHealthRatingChange = (e: SelectChangeEvent<number>) => {
+    const value = e.target.value
+
+    if (typeof value === 'number') {
+      const rating = Object.keys(IHealthCheckRating).find(
+        (r) => Number(r) === value
       )
 
       if (rating) {
-        sethHealthRating(rating)
+        sethHealthRating(Number(rating))
       }
     }
   }
@@ -65,13 +56,17 @@ const HealthCheckEntryForm = ({ onSubmit, onCancel, diagnoses }: Props) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    const key = IHealthCheckRating[healthRating]
+    const healthCheckRating =
+      IHealthCheckRating[key as keyof typeof IHealthCheckRating]
+
     onSubmit({
       description,
       date,
       specialist,
       diagnosisCodes,
       type: IType.HealthCheck,
-      healthCheckRating: healthRating,
+      healthCheckRating,
     })
   }
 
@@ -163,10 +158,10 @@ const HealthCheckEntryForm = ({ onSubmit, onCancel, diagnoses }: Props) => {
           >
             {ratingOptions.map((rating) => (
               <MenuItem
-                key={rating.label}
-                value={rating.value}
+                key={rating}
+                value={rating}
               >
-                {rating.label}
+                {rating}
               </MenuItem>
             ))}
           </Select>
