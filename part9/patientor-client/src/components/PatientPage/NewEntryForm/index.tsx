@@ -76,14 +76,16 @@ const NewEntryForm = ({ patientId, diagnoses, addEntryToPatient }: Props) => {
 
   return (
     <div>
-      <Button
-        onClick={() => setShowForm(true)}
-        variant='contained'
-        color='secondary'
-        sx={{ my: 1 }}
-      >
-        Add new entry
-      </Button>
+      {!showForm && (
+        <Button
+          onClick={() => setShowForm(true)}
+          variant='contained'
+          color='secondary'
+          sx={{ my: 1 }}
+        >
+          Add new entry
+        </Button>
+      )}
       {showForm && (
         <Box sx={{ p: 2, border: '1px dashed grey', marginTop: '10px' }}>
           {error && (
