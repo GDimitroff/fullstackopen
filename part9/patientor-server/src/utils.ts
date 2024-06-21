@@ -45,17 +45,17 @@ const isRating = (param: number): param is HealthCheckRating => {
   return Object.values(HealthCheckRating).includes(param)
 }
 
-const parseString = (string: unknown): string => {
-  if (!isString(string)) {
-    throw new Error('Incorrect or missing name: ' + string)
+const parseString = (string: unknown, fieldName: string): string => {
+  if (!string || !isString(string)) {
+    throw new Error('Incorrect or missing name: ' + fieldName)
   }
 
   return string
 }
 
-const parseDate = (date: unknown): string => {
+const parseDate = (date: unknown, fieldName: string): string => {
   if (!isString(date) || !isDate(date)) {
-    throw new Error('Incorrect or missing date: ' + date)
+    throw new Error('Incorrect or missing date: ' + fieldName)
   }
 
   return date
@@ -108,8 +108,8 @@ const parseDischarge = (object: unknown): Discharge => {
   }
 
   return {
-    date: parseDate(object.date),
-    criteria: parseString(object.criteria)
+    date: parseDate(object.date, 'discharge date'),
+    criteria: parseString(object.criteria, 'criteria')
   }
 }
 
@@ -123,8 +123,8 @@ const parseSickLeave = (object: unknown): SickLeave => {
   }
 
   return {
-    startDate: parseDate(object.startDate),
-    endDate: parseDate(object.endDate)
+    startDate: parseDate(object.startDate, 'sick leave: start date'),
+    endDate: parseDate(object.endDate, 'sick leave: end date')
   }
 }
 
@@ -141,11 +141,11 @@ export const toNewPatient = (object: unknown): NewPatient => {
     'occupation' in object
   ) {
     const newPatient: NewPatient = {
-      name: parseString(object.name),
-      dateOfBirth: parseDate(object.dateOfBirth),
-      ssn: parseString(object.ssn),
+      name: parseString(object.name, 'name'),
+      dateOfBirth: parseDate(object.dateOfBirth, 'date of birth'),
+      ssn: parseString(object.ssn, 'ssn'),
       gender: parseGender(object.gender),
-      occupation: parseString(object.occupation),
+      occupation: parseString(object.occupation, 'occupation'),
       entries: []
     }
 
@@ -170,9 +170,9 @@ export const toNewEntry = (object: unknown): NewEntry => {
   }
 
   const baseEntry: Omit<BaseEntry, 'id'> = {
-    description: parseString(object.description),
-    date: parseDate(object.date),
-    specialist: parseString(object.specialist),
+    description: parseString(object.description, 'description'),
+    date: parseDate(object.date, 'date'),
+    specialist: parseString(object.specialist, 'specialist'),
     type: parseType(object.type)
   }
 
@@ -212,7 +212,7 @@ export const toNewEntry = (object: unknown): NewEntry => {
 
       const newOccupationalEntry: Omit<OccupationalHealthcareEntry, 'id'> = {
         ...baseEntry,
-        employerName: parseString(object.employerName)
+        employerName: parseString(object.employerName, 'empleyer name')
       }
 
       if ('sickLeave' in object) {
