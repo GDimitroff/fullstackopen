@@ -30,7 +30,7 @@ The course also contains additional sections for the following:
 - [ ] Part 12: Containers
 - [ ] Part 13: Using Relational Databases
 
-## Course Certificates
+## Certificates
 
 <p align="center"><img height="60%" width="100%" src="./certificates/certificate-fullstack.png" alt="FullStack Certificate"></p>
 <p align="center"><img height="60%" width="100%" src="./certificates/certificate-graphql.png" alt="GraphQL Certificate"></p>
