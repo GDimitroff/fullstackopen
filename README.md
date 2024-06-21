@@ -21,7 +21,7 @@ The course also contains additional sections for the following:
 - [x] [Part 3: Programming a server with NodeJS and Express](./part3)
 - [x] [Part 4: Testing Express servers, user administration](./part4)
 - [x] [Part 5: Testing React apps](./part5)
-- [x] [Part 6: State management with Redux](./part6)
+- [x] [Part 6: Advanced state management](./part6)
 - [x] [Part 7: React router, custom hooks, styling app with CSS and webpack](./part7)
 - [x] [Part 8: GraphQL](./part8)
 - [x] [Part 9: TypeScript](./part9)
