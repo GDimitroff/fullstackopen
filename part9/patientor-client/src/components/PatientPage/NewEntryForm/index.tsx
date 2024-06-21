@@ -12,6 +12,7 @@ import entryService from '../../../services/entries'
 import HospitalEntryForm from './HospitalEntryForm'
 import { IDiagnosis, IEntryWithoutId, IPatient, IType } from '../../../types'
 import HealthCheckEntryForm from './HealthCheckEntryForm'
+import OccupationalHealthcareEntryForm from './OccupationalHealthcareEntryForm'
 
 interface Props {
   patientId: string
@@ -132,7 +133,11 @@ const NewEntryForm = ({ patientId, diagnoses, addEntryToPatient }: Props) => {
             />
           )}
           {type === IType.OccupationalHealthcare && (
-            <div>occupational healthcare</div>
+            <OccupationalHealthcareEntryForm
+              onSubmit={handleAddNewEntry}
+              diagnoses={diagnoses}
+              onCancel={() => setShowForm(false)}
+            />
           )}
         </Box>
       )}

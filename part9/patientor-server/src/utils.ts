@@ -212,7 +212,7 @@ export const toNewEntry = (object: unknown): NewEntry => {
 
       const newOccupationalEntry: Omit<OccupationalHealthcareEntry, 'id'> = {
         ...baseEntry,
-        employerName: parseString(object.employerName, 'empleyer name')
+        employerName: parseString(object.employerName, 'employer name')
       }
 
       if ('sickLeave' in object) {

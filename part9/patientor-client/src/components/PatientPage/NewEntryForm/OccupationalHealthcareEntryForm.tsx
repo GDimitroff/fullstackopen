@@ -1,20 +1,18 @@
 import { FormEvent, useState } from 'react'
-import { Button, ButtonGroup, InputAdornment, TextField } from '@mui/material'
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  InputAdornment,
+  TextField,
+  Typography,
+} from '@mui/material'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 
-import {
-  IDiagnosis,
-  IEntryWithoutId,
-  IHealthCheckRating,
-  IType,
-} from '../../../types'
-
-const ratingOptions = Object.keys(IHealthCheckRating)
-  .filter((key) => Number(key) || key === '0')
-  .map(Number)
+import { IDiagnosis, IEntryWithoutId, IType } from '../../../types'
 
 interface Props {
   onSubmit: (values: IEntryWithoutId) => void
@@ -22,12 +20,20 @@ interface Props {
   diagnoses: Array<IDiagnosis>
 }
 
-const HealthCheckEntryForm = ({ onSubmit, onCancel, diagnoses }: Props) => {
+const OccupationalHealthcareEntryForm = ({
+  onSubmit,
+  onCancel,
+  diagnoses,
+}: Props) => {
   const [date, setDate] = useState('')
   const [description, setDescription] = useState('')
   const [specialist, setSpecialist] = useState('')
   const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>([])
-  const [healthRating, sethHealthRating] = useState(ratingOptions[0])
+  const [employerName, setEmployerName] = useState('')
+  const [sickLeave, setSickLeaveDate] = useState({
+    startDate: '',
+    endDate: '',
+  })
 
   const handleDiagnosisCodesChange = (
     event: SelectChangeEvent<typeof diagnosisCodes>
@@ -39,34 +45,18 @@ const HealthCheckEntryForm = ({ onSubmit, onCancel, diagnoses }: Props) => {
     setDiagnosisCodes(typeof value === 'string' ? value.split(',') : value)
   }
 
-  const handleHealthRatingChange = (e: SelectChangeEvent<number>) => {
-    const value = e.target.value
-
-    if (typeof value === 'number') {
-      const rating = Object.keys(IHealthCheckRating).find(
-        (r) => Number(r) === value
-      )
-
-      if (rating) {
-        sethHealthRating(Number(rating))
-      }
-    }
-  }
-
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    const key = IHealthCheckRating[healthRating]
-    const healthCheckRating =
-      IHealthCheckRating[key as keyof typeof IHealthCheckRating]
 
     onSubmit({
       description,
       date,
       specialist,
       diagnosisCodes,
-      type: IType.HealthCheck,
-      healthCheckRating,
+      type: IType.OccupationalHealthcare,
+      employerName,
+      sickLeave:
+        sickLeave.startDate || sickLeave.endDate ? sickLeave : undefined,
     })
   }
 
@@ -118,7 +108,7 @@ const HealthCheckEntryForm = ({ onSubmit, onCancel, diagnoses }: Props) => {
 
         <FormControl
           fullWidth
-          sx={{ marginTop: 1 }}
+          sx={{ my: 1 }}
         >
           <InputLabel id='diagnosis'>Diagnosis codes</InputLabel>
           <Select
@@ -142,30 +132,61 @@ const HealthCheckEntryForm = ({ onSubmit, onCancel, diagnoses }: Props) => {
           </Select>
         </FormControl>
 
-        <FormControl
+        <TextField
+          label='Employer name'
+          id='employer-name'
+          name='employer-name'
+          margin='dense'
+          value={employerName}
+          onChange={(e) => setEmployerName(e.target.value)}
           fullWidth
-          sx={{ my: 2 }}
-        >
-          <InputLabel id='health-check-rating'>Health check rating</InputLabel>
-          <Select
-            label='Health check rating'
-            labelId='health-check-rating'
-            id='health-check-rating'
-            name='health-check-rating'
-            value={healthRating}
-            onChange={handleHealthRatingChange}
-            fullWidth
-          >
-            {ratingOptions.map((rating) => (
-              <MenuItem
-                key={rating}
-                value={rating}
-              >
-                {rating}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+          InputProps={{
+            startAdornment: <InputAdornment position='start' />,
+          }}
+        />
+
+        <Typography sx={{ marginTop: 1 }}>Sick leave</Typography>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <TextField
+            label='Start Date'
+            id='sick-leave-start-date'
+            name='sick-leave-start-date'
+            margin='dense'
+            type='date'
+            value={sickLeave.startDate}
+            onChange={(e) =>
+              setSickLeaveDate((prev) => {
+                return {
+                  ...prev,
+                  startDate: e.target.value,
+                }
+              })
+            }
+            InputProps={{
+              startAdornment: <InputAdornment position='start' />,
+            }}
+          />
+          <TextField
+            label='End Date'
+            id='sick-leave-end-date'
+            name='sick-leave-end-date'
+            margin='dense'
+            type='date'
+            value={sickLeave.endDate}
+            onChange={(e) =>
+              setSickLeaveDate((prev) => {
+                return {
+                  ...prev,
+                  endDate: e.target.value,
+                }
+              })
+            }
+            sx={{ flex: 1 }}
+            InputProps={{
+              startAdornment: <InputAdornment position='start' />,
+            }}
+          />
+        </Box>
 
         <ButtonGroup sx={{ my: 1, display: 'flex', justifyContent: 'end' }}>
           <Button
@@ -189,4 +210,4 @@ const HealthCheckEntryForm = ({ onSubmit, onCancel, diagnoses }: Props) => {
   )
 }
 
-export default HealthCheckEntryForm
+export default OccupationalHealthcareEntryForm

@@ -154,16 +154,7 @@ const HospitalEntryForm = ({ onSubmit, onCancel, diagnoses }: Props) => {
           />
         </Box>
 
-        <ButtonGroup
-          sx={{ my: 1, display: 'flex', justifyContent: 'space-between' }}
-        >
-          <Button
-            variant='contained'
-            color='success'
-            type='submit'
-          >
-            Add
-          </Button>
+        <ButtonGroup sx={{ my: 1, display: 'flex', justifyContent: 'end' }}>
           <Button
             variant='outlined'
             color='primary'
@@ -171,6 +162,13 @@ const HospitalEntryForm = ({ onSubmit, onCancel, diagnoses }: Props) => {
             onClick={onCancel}
           >
             Cancel
+          </Button>
+          <Button
+            variant='contained'
+            color='success'
+            type='submit'
+          >
+            Add
           </Button>
         </ButtonGroup>
       </form>
