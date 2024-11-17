@@ -1,16 +1,21 @@
 # University of Helsinki - Full Stack Open 2024
 
-This repository contains my assignment submissions for Helsinki University Full Stack Open 2024 ([https://fullstackopen.com/en/](https://fullstackopen.com/en/)).
+This repository contains my assignment submissions for Helsinki University Full Stack Open 2024
+([https://fullstackopen.com/en/](https://fullstackopen.com/en/)).
 
-The course is on modern JavaScript-based Web Development. The main focus is on building single page applications with ReactJS that use REST APIs built with Node.js.
+The course is on modern JavaScript-based Web Development. The main focus is on building single page
+applications with ReactJS that use REST APIs built with Node.js.
 
 The course also contains additional sections for the following:
 
 - GraphQL, a modern alternative to REST APIs.
 - TypeScript, an open-source typed superset of JavaScript that compiles to plain JavaScript.
-- React Native, an open-source UI software framework to create native mobile applications using JavaScript. (not completed yet)
+- React Native, an open-source UI software framework to create native mobile applications using
+  JavaScript. (not completed yet)
 - CI/CD, Continuous integration (CI) and continuous delivery (CD) (not completed yet)
-- Docker Containers, an open platform for developing, shipping, and running applications by virtualizing the operating system of the computer on which it is installed and running. (not completed yet)
+- Docker Containers, an open platform for developing, shipping, and running applications by
+  virtualizing the operating system of the computer on which it is installed and running. (not
+  completed yet)
 - Relational databases. (not completed yet)
 
 ## Parts
