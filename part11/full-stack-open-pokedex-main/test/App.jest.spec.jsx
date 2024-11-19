@@ -10,15 +10,17 @@ jest.mock('axios')
 
 describe('<App />', () => {
   it('fetches data', async () => {
-    axiosMock.get.mockResolvedValueOnce(
-      {
-        data: {
-          results: [{ url: 'https://pokeapi.co/api/v2/pokemon/1/', name: 'bulbasaur', id: 1 }]
-        }
-      }
-    )
+    axiosMock.get.mockResolvedValueOnce({
+      data: {
+        results: [{ url: 'https://pokeapi.co/api/v2/pokemon/1/', name: 'bulbasaur', id: 1 }],
+      },
+    })
     await act(async () => {
-      render(<Router><App/></Router>)
+      render(
+        <Router>
+          <App />
+        </Router>,
+      )
     })
     expect(axiosMock.get).toHaveBeenCalledTimes(1)
     expect(axiosMock.get).toHaveBeenCalledWith('https://pokeapi.co/api/v2/pokemon/?limit=50')
@@ -27,9 +29,12 @@ describe('<App />', () => {
   it('shows error', async () => {
     axiosMock.get.mockRejectedValueOnce(new Error())
     await act(async () => {
-      render(<Router><App/></Router>)
+      render(
+        <Router>
+          <App />
+        </Router>,
+      )
     })
     expect(screen.getByTestId('error')).toBeVisible()
   })
-
 })
