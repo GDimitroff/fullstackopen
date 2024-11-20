@@ -11,38 +11,27 @@ jobs:
   deploy:
     name: Deployment
     runs-on: ubuntu-20.04
+    defaults:
+      run:
+        working-directory: part11/full-stack-open-pokedex-main
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
       - name: Install dependencies
-        run: |
-          cd part11/full-stack-open-pokedex-main
-          npm install
+        run: npm install
       - name: Check style
-        run: |
-          cd part11/full-stack-open-pokedex-main
-          npm run eslint
+        run: npm run eslint
       - name: Build
-        run: |
-          cd part11/full-stack-open-pokedex-main
-          npm run build
+        run: npm run build
       - name: Test
-        run: |
-          cd part11/full-stack-open-pokedex-main
-          npm run test
+        run: npm run test
       - name: Install Playwright Browsers
-        run: |
-          cd part11/full-stack-open-pokedex-main
-          npx playwright install --with-deps
+        run: npx playwright install --with-deps
       - name: Run Playwright tests
-        run: |
-          cd part11/full-stack-open-pokedex-main
-          npx playwright test
+        run: npx playwright test
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: |
-          cd part11/full-stack-open-pokedex-main 
-          flyctl deploy --remote-only
+      - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
