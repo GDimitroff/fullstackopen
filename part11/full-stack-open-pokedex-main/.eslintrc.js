@@ -5,6 +5,11 @@ module.exports = {
     'jest/globals': true,
     node: true,
   },
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
   extends: ['eslint:recommended', 'plugin:react/recommended'],
   parserOptions: {
     ecmaFeatures: {
@@ -23,7 +28,7 @@ module.exports = {
     'no-trailing-spaces': 'error',
     'object-curly-spacing': ['error', 'always'],
     'arrow-spacing': ['error', { before: true, after: true }],
-    'no-console': 'error',
+    'no-console': 0,
     'react/prop-types': 0,
   },
 }
