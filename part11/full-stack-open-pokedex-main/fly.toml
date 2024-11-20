@@ -23,8 +23,8 @@ primary_region = 'otp'
   processes = ['app']
 
   [[http_service.checks]]
-    grace_period = "5s"
-    interval = "10s"
+    grace_period = "10s"
+    interval = "30s"
     method = "GET"
     timeout = "5s"
     path = "/health"
@@ -37,8 +37,3 @@ primary_region = 'otp'
 
 [deploy]
   strategy = "canary"
-
-[[restart]]
-  policy = "on-failure"
-  retries = 2
-  processes = ["app"]
