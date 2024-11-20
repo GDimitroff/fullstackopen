@@ -21,3 +21,11 @@ jobs:
         run: |
           cd part11/full-stack-open-pokedex-main
           npm run eslint
+      - name: Build
+        run: |
+          cd part11/full-stack-open-pokedex-main
+          npm run build
+      - name: Test
+        run: |
+          cd part11/full-stack-open-pokedex-main
+          npm run test
