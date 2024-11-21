@@ -7,14 +7,15 @@ on:
     paths:
       - 'part11/**'
   pull_request:
-    branches: [main]
+    branches:
+      - main
     types: [opened, synchronize]
     paths:
       - 'part11/**'
 
 jobs:
-  deploy:
-    name: Deployment
+  build_and_test:
+    name: Build and Test
     runs-on: ubuntu-20.04
     defaults:
       run:
@@ -36,7 +37,20 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: npx playwright test
-        if: ${{ github.event_name == 'push' }}
+
+  deploy:
+    name: Deployment
+    runs-on: ubuntu-20.04
+    needs: build_and_test
+    if: ${{ github.event.pull_request.merged == true }}
+    defaults:
+      run:
+        working-directory: part11/full-stack-open-pokedex-main
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - name: Setup Fly.io CLI
         uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy to Fly
