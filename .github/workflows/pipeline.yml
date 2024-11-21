@@ -6,6 +6,11 @@ on:
       - main
     paths:
       - 'part11/**'
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
+    paths:
+      - 'part11/**'
 
 jobs:
   deploy:
