@@ -9,7 +9,7 @@ on:
   pull_request:
     branches:
       - main
-    types: [opened, synchronize]
+    types: [opened, reopened, synchronize]
     paths:
       - 'part11/**'
 
@@ -37,29 +37,17 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: npx playwright test
-
-  deploy:
-    name: Deployment
-    runs-on: ubuntu-20.04
-    needs: build_and_test
-    if:
-      ${{ github.event.pull_request.merged == true || (github.event_name == 'push' && github.ref ==
-      'refs/heads/main') }}
-    defaults:
-      run:
-        working-directory: part11/full-stack-open-pokedex-main
-    steps:
       - name: Print GitHub context
         run: |
+          echo "Github": ${{ github }}
           echo "Event name: ${{ github.event_name }}"
           echo "Event action: ${{ github.event.action }}"
           echo "Pull request merged: ${{ github.event.pull_request.merged }}"
           echo "Ref: ${{ github.ref }}"
           exit 1  # Abort the job after printing the debug information
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+        if: >
+          ${{ github.event.pull_request.merged == true || (github.event_name == 'push' && github.ref
+          == 'refs/heads/main') }}
       - name: Setup Fly.io CLI
         uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy to Fly
