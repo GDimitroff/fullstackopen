@@ -57,13 +57,22 @@ jobs:
   deploy:
     name: Deploy to Fly
     runs-on: ubuntu-20.04
+
     needs: build_and_test
+
     if: >
       github.event_name == 'push' && github.ref == 'refs/heads/main' ||  (github.event_name ==
       'pull_request' && github.event.pull_request.merged == true)
+
+    defaults:
+      run:
+        working-directory: part11/full-stack-open-pokedex-main
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: superfly/flyctl-actions/setup-flyctl@master
+
       - name: Deploy to Fly
         run: flyctl deploy --remote-only
         env:
