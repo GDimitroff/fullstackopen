@@ -44,12 +44,12 @@ jobs:
           echo "Event action: ${{ github.event.action }}"
           echo "Pull request merged: ${{ github.event.pull_request.merged }}"
           echo "Ref: ${{ github.ref }}"
-        if: >
-          github.event_name == 'push' && github.ref == 'refs/heads/main' || (github.event_name ==
-          'pull_request' && github.event.pull_request.merged == true)
       - name: Setup Fly.io CLI
         uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy to Fly
+        if: >
+          github.event_name == 'push' && github.ref == 'refs/heads/main' || (github.event_name ==
+          'pull_request' && github.event.pull_request.merged == true)
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
