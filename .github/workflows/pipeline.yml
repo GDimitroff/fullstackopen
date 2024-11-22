@@ -49,7 +49,6 @@ jobs:
 
       - name: Print GitHub context
         run: |
-          echo "Github: ${{ toJson(github) }}"
           echo "Event name: ${{ github.event_name }}"
           echo "Event action: ${{ github.event.action }}"
           echo "Pull request merged: ${{ github.event.pull_request.merged }}"
