@@ -39,14 +39,14 @@ jobs:
         run: npx playwright test
       - name: Print GitHub context
         run: |
-          echo "Github": ${{ github }}
+          echo "Github: ${{ toJson(github) }}"
           echo "Event name: ${{ github.event_name }}"
           echo "Event action: ${{ github.event.action }}"
           echo "Pull request merged: ${{ github.event.pull_request.merged }}"
           echo "Ref: ${{ github.ref }}"
         if: >
-          ${{ github.event.pull_request.merged == true || (github.event_name == 'push' && github.ref
-          == 'refs/heads/main') }}
+          github.event_name == 'push' && github.ref == 'refs/heads/main' || (github.event_name ==
+          'pull_request' && github.event.pull_request.merged == true)
       - name: Setup Fly.io CLI
         uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy to Fly
