@@ -17,26 +17,36 @@ jobs:
   build_and_test:
     name: Build and Test
     runs-on: ubuntu-20.04
+
     defaults:
       run:
         working-directory: part11/full-stack-open-pokedex-main
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+
       - name: Install dependencies
         run: npm install
+
       - name: Check style
         run: npm run eslint
+
       - name: Build
         run: npm run build
+
       - name: Test
         run: npm run test
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+
       - name: Run Playwright tests
         run: npx playwright test
+
       - name: Print GitHub context
         run: |
           echo "Github: ${{ toJson(github) }}"
@@ -44,12 +54,18 @@ jobs:
           echo "Event action: ${{ github.event.action }}"
           echo "Pull request merged: ${{ github.event.pull_request.merged }}"
           echo "Ref: ${{ github.ref }}"
-      - name: Setup Fly.io CLI
-        uses: superfly/flyctl-actions/setup-flyctl@master
+
+  deploy:
+    name: Deploy to Fly
+    runs-on: ubuntu-20.04
+    needs: build_and_test
+    if: >
+      github.event_name == 'push' && github.ref == 'refs/heads/main' ||  (github.event_name ==
+      'pull_request' && github.event.pull_request.merged == true)
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Deploy to Fly
-        if: >
-          github.event_name == 'push' && github.ref == 'refs/heads/main' || (github.event_name ==
-          'pull_request' && github.event.pull_request.merged == true)
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
