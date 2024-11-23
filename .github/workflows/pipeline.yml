@@ -53,7 +53,9 @@ jobs:
           echo "Event action: ${{ github.event.action }}"
           echo "Pull request merged: ${{ github.event.pull_request.merged }}"
           echo "Ref: ${{ github.ref }}"
-          echo "Commits:" ${{ toJson(github.event.commits) }}
+
+          COMMITS="${{ toJson(github.event.commits) }}"
+          echo "Commits:" $COMMITS
 
   deploy:
     name: deploy to fly.io
