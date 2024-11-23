@@ -67,8 +67,8 @@ jobs:
     name: deploy to fly.io
     needs: build_test_lint
     if: >
-      ${{ github.event_name == 'push' &&  !contains(join(github.event.commits.*.message, '
-      '),'#skip') }}
+      ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '),
+      '#skip') }}
 
     runs-on: ubuntu-20.04
 
