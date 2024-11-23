@@ -1,4 +1,4 @@
-name: Pipeline
+name: 🚀 deployment pipeline
 
 on:
   push:
@@ -14,8 +14,8 @@ on:
       - 'part11/**'
 
 jobs:
-  build_and_test:
-    name: Build and Test
+  build_test_lint:
+    name: build, test and lint the code
     runs-on: ubuntu-20.04
 
     defaults:
@@ -29,25 +29,25 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: install dependencies
         run: npm install
 
-      - name: Check style
+      - name: check style
         run: npm run eslint
 
-      - name: Build
+      - name: build
         run: npm run build
 
-      - name: Test
+      - name: test
         run: npm run test
 
-      - name: Install Playwright Browsers
+      - name: install playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Run Playwright tests
+      - name: run playwright tests
         run: npx playwright test
 
-      - name: Print GitHub context
+      - name: print github context
         run: |
           echo "Event name: ${{ github.event_name }}"
           echo "Event action: ${{ github.event.action }}"
@@ -55,12 +55,10 @@ jobs:
           echo "Ref: ${{ github.ref }}"
 
   deploy:
-    name: Deploy to Fly
-    runs-on: ubuntu-20.04
-
-    needs: build_and_test
-
+    name: deploy to fly.io
+    needs: build_test_lint
     if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-20.04
 
     defaults:
       run:
@@ -69,9 +67,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: setup fly.io cli
+        uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - name: Deploy to Fly
+      - name: deploy to fly.io
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+  tag_release:
+    name: tag and release the code
+    needs: deploy
+    if: success() && ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: bump version and push tag
+        uses: anothrNick/github-tag-action@1.71.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
