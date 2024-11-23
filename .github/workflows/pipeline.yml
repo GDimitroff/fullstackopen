@@ -53,6 +53,8 @@ jobs:
           echo "Event action: ${{ github.event.action }}"
           echo "Pull request merged: ${{ github.event.pull_request.merged }}"
           echo "Ref: ${{ github.ref }}"
+          echo "Commits:" ${{ github.event.commits }}
+          echo "Commit Messages:" ${{ github.event.commits.*.message }}
 
   deploy:
     name: deploy to fly.io
@@ -78,7 +80,7 @@ jobs:
   tag_release:
     name: tag and release the code
     needs: deploy
-    if: success() && ${{ github.event_name == 'push' }}
+    if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-20.04
 
     steps:
