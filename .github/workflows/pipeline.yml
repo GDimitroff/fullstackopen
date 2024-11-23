@@ -47,30 +47,21 @@ jobs:
       - name: run playwright tests
         run: npx playwright test
 
-      - name: github event name
+      - name: print github context and commits
         env:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
-        run: echo "$GITHUB_EVENT_NAME"
-
-      - name: github ref
-        env:
+          GITHUB_EVENT_ACTION: ${{ github.event.action }}
+          GITHUB_PULL_REQUEST_MERGED: ${{ github.event.pull_request.merged }}
           GITHUB_REF: ${{ github.ref }}
-        run: echo "$GITHUB_REF"
-
-      - name: github context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      - name: commits
-        env:
-          COMMITS: ${{ toJson(github.event.commits) }}
-        run: echo "$COMMITS"
-
-      - name: commit messages
-        env:
-          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
-        run: echo "$COMMIT_MESSAGES"
+          GITHUB_COMMITS: ${{ toJson(github.event.commits) }}
+          GITHUB_COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+        run: |
+          echo "Event name: $GITHUB_EVENT_NAME"
+          echo "Event action: $GITHUB_EVENT_ACTION"
+          echo "Pull request merged: $GITHUB_PULL_REQUEST_MERGED"
+          echo "Ref: $GITHUB_REF"
+          echo "Commits: $GITHUB_COMMITS"
+          echo "Commit Messages: $GITHUB_COMMIT_MESSAGES"
 
   deploy:
     name: deploy to fly.io
