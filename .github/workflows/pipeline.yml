@@ -47,15 +47,30 @@ jobs:
       - name: run playwright tests
         run: npx playwright test
 
-      - name: print github context
-        run: |
-          echo "Event name: ${{ github.event_name }}"
-          echo "Event action: ${{ github.event.action }}"
-          echo "Pull request merged: ${{ github.event.pull_request.merged }}"
-          echo "Ref: ${{ github.ref }}"
+      - name: github event name
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+        run: echo "$GITHUB_EVENT_NAME"
 
-          COMMITS="${{ toJson(github.event.commits) }}"
-          echo "Commits:" $COMMITS
+      - name: github ref
+        env:
+          GITHUB_REF: ${{ github.ref }}
+        run: echo "$GITHUB_REF"
+
+      - name: github context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+      - name: commits
+        env:
+          COMMITS: ${{ toJson(github.event.commits) }}
+        run: echo "$COMMITS"
+
+      - name: commit messages
+        env:
+          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+        run: echo "$COMMIT_MESSAGES"
 
   deploy:
     name: deploy to fly.io
