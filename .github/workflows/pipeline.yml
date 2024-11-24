@@ -63,25 +63,30 @@ jobs:
           echo "Commits: $GITHUB_COMMITS"
           echo "Commit Messages: $GITHUB_COMMIT_MESSAGES"
 
+      - name: Set timestamp
+        id: set_timestamp
+        run: echo "TIMESTAMP=$(TZ='Europe/Sofia' date +'%Y-%m-%d %T')" >> $GITHUB_ENV
+
       # Notify Discord on failure
       - name: Notify Discord on failure
         if: failure()
         env:
-          TIMESTAMP: $(TZ='Europe/Sofia' date +'%Y-%m-%d %T')
+          PROJECT_NAME: full-stack-open-pokedex-main
+          TIMESTAMP: ${{ env.TIMESTAMP }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           DISCORD_USERNAME: GitHub Actions
           DISCORD_EMBEDS: |
             [{
               "title": "Build failed!",
               "color": 16711680,
-              "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) by ${{ github.actor }} caused the build to fail.",
+              "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) caused the build to fail.",
               "footer": {
                 "text": "Severity: Error | ${{ env.TIMESTAMP}}"
               }
             }]
         uses: 'Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9'
         with:
-          args:
+          args: 'The project $PROJECT_NAME failed to build.'
 
   deploy:
     name: deploy to fly.io
