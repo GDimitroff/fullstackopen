@@ -63,6 +63,16 @@ jobs:
           echo "Commits: $GITHUB_COMMITS"
           echo "Commit Messages: $GITHUB_COMMIT_MESSAGES"
 
+      # Notify Discord on failure
+      - name: Notify Discord on failure
+        if: failure()
+        uses: rjstone/discord-webhook-notify@v1
+        with:
+          username: Part11 Pipeline Webhook
+          severity: error
+          details: Build failed!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
   deploy:
     name: deploy to fly.io
     needs: build_test_lint
