@@ -63,25 +63,32 @@ jobs:
           echo "Commits: $GITHUB_COMMITS"
           echo "Commit Messages: $GITHUB_COMMIT_MESSAGES"
 
-      # Notify Discord on failure 0c4b27844ba47cb1c7bee539c8eead5284ce9fa9
+      # Notify Discord on failure
       - name: Notify Discord on failure
         if: failure()
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           DISCORD_USERNAME: GitHub Actions
-          DISCORD_EMBEDS:
-            '[{"title": "Build, test or lint failed", "color": 16711680, "fields": [{"name":
-            "Repository", "value": "${{ github.repository }}", "inline": true}, {"name": "Ref",
-            "value": "${{ github.ref }}", "inline": true}, {"name": "Commit", "value": "${{
-            github.sha }}", "inline": true}, {"name": "Event", "value": "${{ github.event_name }}",
-            "inline": true}, {"name": "Workflow", "value": "${{ github.workflow }}", "inline":
-            true}, {"name": "Job", "value": "${{ github.job }}", "inline": true}, {"name": "Run
-            Number", "value": "${{ github.run_number }}", "inline": true}, {"name": "Run ID",
-            "value": "${{ github.run_id }}", "inline": true}, {"name": "Run URL", "value": "${{
-            github.run_url }}", "inline": true}]}]'
+          DISCORD_EMBEDS: |
+            [{
+              "title": "Build failed!",
+              "color": 16711680,
+              "fields": [
+                {
+                  "name": "Repository",
+                  "value": "${{ github.repository }}",
+                  "inline": true
+                },
+                {
+                  "name": "Workflow",
+                  "value": "${{ github.workflow }}",
+                  "inline": true
+                }
+              ]
+            }]
         uses: 'Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9'
         with:
-          args: 'build, test or lint failed'
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} failed to build successfully.'
 
   deploy:
     name: deploy to fly.io
