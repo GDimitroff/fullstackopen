@@ -5,13 +5,13 @@ on:
     branches:
       - main
     paths:
-      - 'part11/**'
+      - 'part11/full-stack-open-pokedex-main/**'
   pull_request:
     branches:
       - main
     types: [opened, reopened, synchronize]
     paths:
-      - 'part11/**'
+      - 'part11/full-stack-open-pokedex-main/**'
 
 jobs:
   build_test_lint:
