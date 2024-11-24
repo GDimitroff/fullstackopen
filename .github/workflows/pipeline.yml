@@ -73,7 +73,7 @@ jobs:
             [{
               "title": "Build failed!",
               "color": 16711680,
-              "description": "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) caused the build to fail.",
+              "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) caused the build to fail.",
               "footer": {
                 "text": "Severity: Error | Check logs for more information."
               }
