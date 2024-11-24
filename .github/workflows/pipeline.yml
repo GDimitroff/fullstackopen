@@ -63,24 +63,19 @@ jobs:
           echo "Commits: $GITHUB_COMMITS"
           echo "Commit Messages: $GITHUB_COMMIT_MESSAGES"
 
-      - name: Set timestamp
-        id: set_timestamp
-        run: echo "TIMESTAMP=$(TZ='Europe/Sofia' date +'%Y-%m-%d %T')" >> $GITHUB_ENV
-
       # Notify Discord on failure
       - name: Notify Discord on failure
         if: failure()
         env:
-          TIMESTAMP: ${{ steps.set_timestamp.outputs.TIMESTAMP }}
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           DISCORD_USERNAME: GitHub Actions
           DISCORD_EMBEDS: |
             [{
               "title": "Build failed!",
               "color": 16711680,
-              "description": "Commit ${{ github.event.head_commit.url }} by ${{ github.event.pusher.name }} caused the build to fail.",
+              "description": "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) caused the build to fail.",
               "footer": {
-                "text": "Severity: Error | ${{ env.TIMESTAMP}}"
+                "text": "Severity: Error | Check logs for more information."
               }
             }]
         uses: 'Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9'
