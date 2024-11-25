@@ -73,9 +73,9 @@ jobs:
             [{
               "title": "Build failed!",
               "color": 16711680,
-              "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) caused the build to fail.",
+              "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) caused the build to fail. Check [logs](https://github.com/${{ github.repository }}/fullstackopen/actions/runs/${{ github.run_id }}) for more information.",
               "footer": {
-                "text": "Severity: Error | Check [logs](https://github.com/GDimitroff/fullstackopen/actions/runs/${{ github.run_id }}) for more information."
+                "text": "Severity: Error"
               }
             }]
         uses: 'Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9'
