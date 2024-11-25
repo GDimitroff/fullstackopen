@@ -12,6 +12,6 @@ describe('Pokedex', () => {
   test('navigate to pokedex detail', async ({ page }) => {
     await page.goto('')
     await page.click('text=Ivysaur')
-    await expect(page.getByText('will-throw-for-sure')).toBeVisible()
+    await expect(page.getByText('chlorophyll')).toBeVisible()
   })
 })
