@@ -73,7 +73,7 @@ jobs:
             [{
               "title": "Build failed!",
               "color": 16711680,
-              "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) caused the build to fail. Check [logs](https://github.com/${{ github.repository }}/fullstackopen/actions/runs/${{ github.run_id }}) for more information.",
+              "description": "Commit [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }}) caused the build to fail. Check the [logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for more information.",
               "footer": {
                 "text": "Severity: Error"
               }
