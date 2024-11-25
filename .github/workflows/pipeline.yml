@@ -1,4 +1,4 @@
-name: 🚀 deployment pipeline
+name: 🚀 Deployment pipeline
 
 on:
   push:
@@ -15,7 +15,7 @@ on:
 
 jobs:
   build_test_lint:
-    name: build, test and lint the code
+    name: Build, test and lint the code
     runs-on: ubuntu-20.04
 
     defaults:
@@ -29,25 +29,25 @@ jobs:
         with:
           node-version: '20'
 
-      - name: install dependencies
+      - name: Install dependencies
         run: npm install
 
-      - name: check style
+      - name: Check style
         run: npm run eslint
 
-      - name: build
+      - name: Build
         run: npm run build
 
-      - name: test
+      - name: Test
         run: npm run test
 
-      - name: install playwright browsers
+      - name: Install playwright browsers
         run: npx playwright install --with-deps
 
-      - name: run playwright tests
+      - name: Run playwright tests
         run: npx playwright test
 
-      - name: print github context and commits
+      - name: Print GitHub context and commits
         env:
           GITHUB_EVENT_NAME: ${{ github.event_name }}
           GITHUB_EVENT_ACTION: ${{ github.event.action }}
@@ -63,7 +63,6 @@ jobs:
           echo "Commits: $GITHUB_COMMITS"
           echo "Commit Messages: $GITHUB_COMMIT_MESSAGES"
 
-      # Notify Discord on failure
       - name: Notify Discord on failure
         if: failure()
         env:
@@ -83,7 +82,7 @@ jobs:
           args: 'The project full-stack-open-pokedex-main failed to build.'
 
   deploy:
-    name: deploy to fly.io
+    name: Deploy to Fly.io
     needs: build_test_lint
     if: github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip')
 
@@ -96,24 +95,42 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: setup fly.io cli
+      - name: Setup Fly.io cli
         uses: superfly/flyctl-actions/setup-flyctl@master
 
-      - name: deploy to fly.io
+      - name: Deploy to Fly.io
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
   tag_release:
-    name: tag and release the code
+    name: Tag and Release the code
     needs: deploy
     runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: bump version and push tag
+      - name: Bump version and push tag
         uses: anothrNick/github-tag-action@f278d49d30cdd8775cc3e7dd00b5ee11686ee297
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
+
+      - name: Notify Discord on success
+        if: success()
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_USERNAME: GitHub Actions
+          DISCORD_EMBEDS: |
+            [{
+              "title": "New version deployed!",
+              "color": 65280,
+              "description": "A new version of Pokédex deployed successfully. Check it out [here](https://full-stack-open-pokedex-main.fly.dev/).",
+              "footer": {
+                "text": "Severity: Info"
+              }
+            }]
+        uses: 'Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9'
+        with:
+          args: 'The project full-stack-open-pokedex-main failed to build.'
