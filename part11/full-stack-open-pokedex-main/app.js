@@ -10,9 +10,6 @@ app.get('/version', (req, res) => {
 })
 
 app.get('/health', (req, res) => {
-  // eslint-disable-next-line no-undef
-  throw new Error('oh no')
-  // eslint-disable-next-line
   res.send('ok')
 })
 
