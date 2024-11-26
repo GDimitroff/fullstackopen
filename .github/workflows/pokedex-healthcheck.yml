@@ -51,9 +51,8 @@ jobs:
         if: success()
         with:
           username: Health Check
-          content: Periodic Health Check to ${{github.repository}}
           embed-color: 65280
-          embed-title: Health check passed! Application is up and running!
+          embed-title: Health check passed!
           embed-description:
             "**Repository:** [${{github.repository}}](${{github.event.repository.html_url}})
             \n**URL:** [Pokédex](${{ env.PROJECT_URL }})"
@@ -64,9 +63,8 @@ jobs:
         if: failure()
         with:
           username: Health Check
-          content: Periodic Health Check to ${{github.repository}}
           embed-color: 16711680
-          embed-title: Health check failed! Application is down!
+          embed-title: Health check failed!
           embed-description:
             "**Repository:** [${{github.repository}}](${{github.event.repository.html_url}})
             \n**URL:** [Pokédex](${{ env.PROJECT_URL }})"
