@@ -1,0 +1,73 @@
+name: 🟢 Health check pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'part11/full-stack-open-pokedex-main/**'
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened, synchronize]
+    paths:
+      - 'part11/full-stack-open-pokedex-main/**'
+
+env:
+  PROJECT_URL: https://full-stack-open-pokedex-main.fly.dev/health
+
+jobs:
+  health_check:
+    name: Health check
+    runs-on: ubuntu-20.04
+
+    defaults:
+      run:
+        working-directory: part11/full-stack-open-pokedex-main
+
+    steps:
+      - name: Check the deployed service URL
+        uses: jtalk/url-health-check-action@v4
+        with:
+          # Check the following URLs one by one sequentially
+          url: ${{env.PROJECT_URL}}
+          # Follow redirects, or just report success on 3xx status codes
+          follow-redirect: false # Optional, defaults to "false"
+          # Fail this action after this many failed attempts
+          max-attempts: 1 # Optional, defaults to 1
+          # Delay between retries
+          retry-delay: 5s # Optional, only applicable to max-attempts > 1
+          # Retry all errors, including 404. This option might trigger curl upgrade.
+          retry-all: false # Optional, defaults to "false"
+          # String representation of cookie attached to health check request.
+          # Format: `Name=Value`
+          # cookie: 'token=asdf1234' # Optional, default is empty
+          # Basic auth login password pair.
+          # Format: `login:password`
+          # basic-auth: 'login:password' # Optional, default is empty
+
+      - name: Discord notification on success
+        uses: tsickert/discord-webhook@v5.3.0
+        if: success()
+        with:
+          username: Health Check
+          content: Periodic Health Check to ${{github.repository}}
+          embed-color: 65280
+          embed-title: Health check passed! Application is up and running!
+          embed-description:
+            "**Repository:** [${{github.repository}}](${{github.event.repository.html_url}})
+            \n**URL:** [Pokédex](${{ env.PROJECT_URL }})"
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Discord notification on fail
+        uses: tsickert/discord-webhook@v5.3.0
+        if: failure()
+        with:
+          username: Health Check
+          content: Periodic Health Check to ${{github.repository}}
+          embed-color: 16711680
+          embed-title: Health check failed! Application is down!
+          embed-description:
+            "**Repository:** [${{github.repository}}](${{github.event.repository.html_url}})
+            \n**URL:** [Pokédex](${{ env.PROJECT_URL }})"
+          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
