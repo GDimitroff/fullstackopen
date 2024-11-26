@@ -13,6 +13,7 @@ app.get('/health', (req, res) => {
   res.send('ok')
 })
 
-app.listen(PORT, () => {
+// TODO: + 1 simulates health check error
+app.listen(PORT + 1, () => {
   console.log(`server started on port ${PORT}`)
 })

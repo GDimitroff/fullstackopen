@@ -1,17 +1,8 @@
 name: 🟢 Health check pipeline
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'part11/full-stack-open-pokedex-main/**'
-  pull_request:
-    branches:
-      - main
-    types: [opened, reopened, synchronize]
-    paths:
-      - 'part11/full-stack-open-pokedex-main/**'
+  schedule:
+    - cron: '00 9 * * *'
 
 env:
   PROJECT_URL: https://full-stack-open-pokedex-main.fly.dev/health
