@@ -2,7 +2,7 @@
 
 # Adjust NODE_VERSION as desired
 ARG NODE_VERSION=20.17.0
-FROM node:${NODE_VERSION}-slim as base
+FROM node:${NODE_VERSION}-slim AS base
 
 LABEL fly_launch_runtime="Node.js"
 
@@ -14,7 +14,7 @@ ENV NODE_ENV="production"
 
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
@@ -22,11 +22,22 @@ RUN apt-get update -qq && \
 
 # Install node modules
 COPY package-lock.json package.json ./
-RUN npm ci
+RUN npm ci --include=dev
 
 # Copy application code
 COPY . .
 
+# Change dir to UI, install and build
+WORKDIR /app/ui
+RUN npm ci --include=dev
+RUN npm run build
+
+# Remove all files in /app/ui except the dist folder
+RUN find /app/ui -mindepth 1 -maxdepth 1 ! -name 'dist' -exec rm -rf {} +
+
+# Remove development dependencies
+WORKDIR /app
+RUN npm prune --omit=dev
 
 # Final stage for app image
 FROM base
