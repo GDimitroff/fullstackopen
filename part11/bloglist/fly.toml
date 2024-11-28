@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for bloglist-delicate-waterfall-9086 on 2024-11-28T09:34:01+02:00
+# fly.toml app configuration file generated for bloglist-winter-snowflake-5257 on 2024-11-28T17:13:47+02:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'bloglist-delicate-waterfall-9086'
+app = 'bloglist-winter-snowflake-5257'
 primary_region = 'otp'
 
 [build]

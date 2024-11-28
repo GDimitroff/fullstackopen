@@ -1,5 +1,6 @@
 const config = require('./utils/config')
 const express = require('express')
+const path = require('path')
 require('express-async-errors')
 const app = express()
 const cors = require('cors')
@@ -24,7 +25,7 @@ mongoose
   })
 
 app.use(cors())
-app.use(express.static('dist'))
+app.use(express.static(path.join(__dirname, 'ui', 'dist')))
 app.use(express.json())
 
 if (process.env.NODE_ENV === 'test') {
