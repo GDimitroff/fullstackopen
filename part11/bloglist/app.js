@@ -41,7 +41,15 @@ app.use('/api/login', loginRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/blogs', blogsRouter)
 
-app.use(middleware.unknownEndpoint)
+// Handle unknown API endpoints
+app.use('/api/*', middleware.unknownEndpoint)
+
+// Serve React app for non-API routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'ui', 'dist', 'index.html'))
+})
+
+// app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
 module.exports = app
