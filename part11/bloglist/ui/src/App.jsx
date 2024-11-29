@@ -8,6 +8,7 @@ import Blogs from './views/Blogs'
 import Blog from './views/Blog'
 import Users from './views/Users'
 import User from './views/User'
+import NotFound from './views/NotFound'
 
 import './index.css'
 
@@ -60,6 +61,10 @@ const App = () => {
               <User />
             </ProtectedComponent>
           }
+        />
+        <Route
+          path='*'
+          element={<NotFound />}
         />
       </Routes>
     </Container>
