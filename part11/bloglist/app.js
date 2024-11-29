@@ -41,6 +41,10 @@ app.use('/api/health', (req, res) => {
   res.send('ok')
 })
 
+app.use('/api/version', (req, res) => {
+  res.send('1')
+})
+
 app.use('/api/login', loginRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/blogs', blogsRouter)
