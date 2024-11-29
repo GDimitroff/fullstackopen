@@ -75,6 +75,12 @@ describe('when there is initially some blogs saved', () => {
 
   describe('addition of a new blog', () => {
     test('succeeds with valid data', async () => {
+      console.log(token)
+      const response = await api.post('/api/login').send({ username: 'King', password: 'king' })
+
+      const token2 = response.body.token
+      console.log(token2)
+
       const users = await helper.usersInDb()
       const kingUser = users.find((u) => u.username === 'King')
 
@@ -88,7 +94,7 @@ describe('when there is initially some blogs saved', () => {
 
       await api
         .post('/api/blogs')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Authorization', `Bearer ${token2}`)
         .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
