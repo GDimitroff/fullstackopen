@@ -31,12 +31,14 @@ jobs:
 
       - name: Set up environment variables
         env:
+          NODE_ENV: test
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
           SECRET: ${{ secrets.SECRET }}
         run: |
-          echo "MONGODB_URI=${MONGODB_URI}" >> $GITHUB_ENV
           echo "NODE_ENV=test" >> $GITHUB_ENV
+          echo "MONGODB_URI=${MONGODB_URI}" >> $GITHUB_ENV
+          echo "TEST_MONGODB_URI=${TEST_MONGODB_URI}" >> $GITHUB_ENV
           echo "SECRET_KEY=${SECRET_KEY}" >> $GITHUB_ENV
 
       - name: Install dependencies
