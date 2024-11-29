@@ -50,7 +50,7 @@ jobs:
       - name: Build
         run: |
           cd ui
-          npm run build:ui
+          npm run build
 
       - name: Print GitHub context and commits
         env:
