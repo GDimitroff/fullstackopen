@@ -42,7 +42,7 @@ app.use('/api/health', (req, res) => {
 })
 
 app.use('/api/version', (req, res) => {
-  res.send('3')
+  res.send('4')
 })
 
 app.use('/api/login', loginRouter)
