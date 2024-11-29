@@ -13,6 +13,10 @@ on:
     paths:
       - 'part11/bloglist/**'
 
+env:
+  TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+  SECRET: ${{ secrets.SECRET }}
+
 jobs:
   build_test_lint:
     name: Blog list - Build, test and lint the code
@@ -29,18 +33,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Set up environment variables
-        env:
-          # NODE_ENV: test
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
-          SECRET: ${{ secrets.SECRET }}
-        run: |
-          echo "NODE_ENV=test" >> $GITHUB_ENV
-          echo "MONGODB_URI=${MONGODB_URI}" >> $GITHUB_ENV
-          echo "TEST_MONGODB_URI=${TEST_MONGODB_URI}" >> $GITHUB_ENV
-          echo "SECRET=${SECRET}" >> $GITHUB_ENV
-
       - name: Install dependencies
         run: npm install
 
@@ -50,8 +42,15 @@ jobs:
       - name: Test
         run: npm run test
 
+      - name: Install dependencies for UI
+        run: |
+          cd ui
+          npm install
+
       - name: Build
-        run: npm run build
+        run: |
+          cd ui
+          npm run build:ui
 
       - name: Print GitHub context and commits
         env:
