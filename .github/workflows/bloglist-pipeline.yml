@@ -1,0 +1,104 @@
+name: 🚀 Blog list deployment pipeline
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'part11/bloglist/**'
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened, synchronize]
+    paths:
+      - 'part11/bloglist/**'
+
+jobs:
+  build_test_lint:
+    name: Blog list - Build, test and lint the code
+    runs-on: ubuntu-20.04
+
+    defaults:
+      run:
+        working-directory: part11/bloglist
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Set up environment variables
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+          SECRET: ${{ secrets.SECRET }}
+        run: |
+          echo "MONGODB_URI=${MONGODB_URI}" >> $GITHUB_ENV
+          echo "NODE_ENV=${NODE_ENV}" >> $GITHUB_ENV
+          echo "SECRET_KEY=${SECRET_KEY}" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Check style
+        run: npm run eslint
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+
+      - name: Print GitHub context and commits
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_EVENT_ACTION: ${{ github.event.action }}
+          GITHUB_PULL_REQUEST_MERGED: ${{ github.event.pull_request.merged }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_COMMITS: ${{ toJson(github.event.commits) }}
+          GITHUB_COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+        run: |
+          echo "Event name: $GITHUB_EVENT_NAME"
+          echo "Event action: $GITHUB_EVENT_ACTION"
+          echo "Pull request merged: $GITHUB_PULL_REQUEST_MERGED"
+          echo "Ref: $GITHUB_REF"
+          echo "Commits: $GITHUB_COMMITS"
+          echo "Commit Messages: $GITHUB_COMMIT_MESSAGES"
+
+  deploy:
+    name: Deploy to Fly.io
+    needs: build_test_lint
+    if: github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip')
+
+    runs-on: ubuntu-20.04
+
+    defaults:
+      run:
+        working-directory: part11/bloglist
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Fly.io cli
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy to Fly.io
+        run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_BLOGLIST }}
+
+  tag_release:
+    name: Tag and Release the code
+    needs: deploy
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@f278d49d30cdd8775cc3e7dd00b5ee11686ee297
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
