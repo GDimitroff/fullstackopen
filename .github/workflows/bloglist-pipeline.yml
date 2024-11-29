@@ -38,6 +38,7 @@ jobs:
           echo "MONGODB_URI=${MONGODB_URI}" >> $GITHUB_ENV
           echo "NODE_ENV=${NODE_ENV}" >> $GITHUB_ENV
           echo "SECRET_KEY=${SECRET_KEY}" >> $GITHUB_ENV
+          echo "NODE_ENV=test" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: npm install
