@@ -47,7 +47,12 @@ jobs:
           cd ui
           npm install
 
-      - name: Build
+      - name: Check style for UI
+        run: |
+          cd ui
+          npm run lint
+
+      - name: Build UI
         run: |
           cd ui
           npm run build
