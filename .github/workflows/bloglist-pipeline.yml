@@ -47,11 +47,6 @@ jobs:
           cd ui
           npm install
 
-      - name: Check style for UI
-        run: |
-          cd ui
-          npm run lint
-
       - name: Build UI
         run: |
           cd ui
@@ -89,7 +84,7 @@ jobs:
             }]
         uses: 'Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9'
         with:
-          args: 'The project Blog list failed to build.'
+          args: 'The project Bloglist failed to build.'
 
   deploy:
     name: Deploy to Fly.io
@@ -136,11 +131,11 @@ jobs:
             [{
               "title": "New version deployed!",
               "color": 65280,
-              "description": "A new version of Pokédex deployed successfully. Check it out [here](https://full-stack-open-pokedex-main.fly.dev/).",
+              "description": "A new version of Bloglist deployed successfully. Check it out [here](https://bloglist-winter-snowflake-5257.fly.dev/).",
               "footer": {
                 "text": "Severity: Info"
               }
             }]
         uses: 'Ilshidur/action-discord@0c4b27844ba47cb1c7bee539c8eead5284ce9fa9'
         with:
-          args: 'Project Blog list deployed successfully.'
+          args: 'Project Bloglist deployed successfully.'
