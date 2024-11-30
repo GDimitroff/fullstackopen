@@ -1,16 +1,10 @@
-# Bloglist Frontend
-
-This is a refactored version of the Bloglist application, originally developed in `Part4` and `Part5`. We've incorporated Tanstack Query for asynchronous state management. For authentication and notification state, we've utilized React Context in conjunction with the useReducer hook. React Router has been employed for conditional rendering of components based on the browser's URL. The application's styling was accomplished using the Material UI component library.
-
-It's assumed that a user already exists in the database with valid credentials. If not, please refer to `Part 4` for instructions on creating a new user via the API.
-
 ## Running the Application
 
-You must first start the backend server from the `part4/bloglist` directory:
+You must first start the backend server from the `part11/bloglist` directory:
 
 ```bash
 # Navigate to the backend server directory
-$ cd part4/bloglist
+$ cd part11/bloglist
 
 # Install the necessary dependencies
 $ npm install
@@ -25,11 +19,11 @@ $ PORT=3001
 $ npm run dev
 ```
 
-Then, in a new terminal window, navigate back to `part7/bloglist` directory and do the following:
+Then, in a new terminal window, navigate back to `part11/bloglist/ui` directory and do the following:
 
 ```bash
 # Navigate to the frontend directory
-$ cd part7/bloglist
+$ cd part11/bloglist/ui
 
 # Install the necessary dependencies
 $ npm install
