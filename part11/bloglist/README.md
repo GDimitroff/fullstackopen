@@ -1,13 +1,13 @@
-# Bloglist API
-
-This is a REST API for a blog list application. It allows users to register, login, and store
-details about interesting blogs they've discovered online. Each blog entry records the author's
-name, the title of the blog, its URL, and the number of likes it has received.
-
 ## Running the Application
 
 ```bash
+# Install the necessary dependencies and build the UI
+$ cd part11/bloglist/ui
+$ npm install
+$ npm run build
+
 # Install the necessary dependencies
+$ cd part1//bloglist
 $ npm install
 
 # Create a `.env` file in the root directory of your project and add the following environment variables
@@ -21,54 +21,4 @@ $ npm test
 
 # Start the server
 $ npm run dev
-```
-
-## API Endpoints
-
-Once successfully connected, the API allows you to perform the following operations:
-
-- Register and retrieve `Users` (POST, GET)
-- Login using username and password (POST)
-- Create, retrieve, update, and delete `Blogs` (POST, GET, PUT, DELETE)
-
-Those operations are possible using the following endpoints:
-
-- http://localhost:3001/api/login
-- http://localhost:3001/api/users
-- http://localhost:3001/api/blogs
-
-## Examples
-
-Create a new user  
-POST `/api/users`
-
-```json
-{
-  "username": "average joe",
-  "name": "joe",
-  "password": "weak-password"
-}
-```
-
-Login with the created user  
-POST `/api/login`
-
-```json
-{
-  "username": "average joe",
-  "password": "weak-password"
-}
-```
-
-POST, PUT and DELETE requests to `/api/blogs` or `/api/blogs/:id` require a valid JWT token in
-Authorization header `{"Authorization": "Bearer <YOUR_JWT_TOKEN>"}`  
-POST `/api/blogs`
-
-```json
-{
-  "title": "Go To Statement Considered Harmful",
-  "author": "Edsger W. Dijkstra",
-  "url": "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
-  "likes": 5
-}
 ```
