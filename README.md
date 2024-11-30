@@ -12,7 +12,7 @@ The course also contains additional sections for the following:
 - TypeScript, an open-source typed superset of JavaScript that compiles to plain JavaScript.
 - React Native, an open-source UI software framework to create native mobile applications using
   JavaScript. (not completed yet)
-- CI/CD, Continuous integration (CI) and continuous delivery (CD)
+- CI/CD - Continuous Integration (CI) and Continuous Delivery (CD)
 - Docker Containers, an open platform for developing, shipping, and running applications by
   virtualizing the operating system of the computer on which it is installed and running. (not
   completed yet)
