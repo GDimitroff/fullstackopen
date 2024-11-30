@@ -5,7 +5,7 @@ on:
     - cron: '00 9 * * *'
 
 env:
-  PROJECT_URL: https://full-stack-open-pokedex-main.fly.dev/health
+  PROJECT_URL: https://bloglist-winter-snowflake-5257.fly.dev/api/health
 
 jobs:
   health_check:
@@ -14,7 +14,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: part11/full-stack-open-pokedex-main
+        working-directory: part11/bloglist
 
     steps:
       - name: Check the deployed service URL
@@ -46,7 +46,7 @@ jobs:
           embed-title: Health check passed!
           embed-description:
             "**Repository:** [${{github.repository}}](${{github.event.repository.html_url}})
-            \n**URL:** [Pokédex](${{ env.PROJECT_URL }})"
+            \n**URL:** [Bloglist](${{ env.PROJECT_URL }})"
           webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Discord notification on fail
@@ -58,5 +58,5 @@ jobs:
           embed-title: Health check failed!
           embed-description:
             "**Repository:** [${{github.repository}}](${{github.event.repository.html_url}})
-            \n**URL:** [Pokédex](${{ env.PROJECT_URL }})"
+            \n**URL:** [Bloglist](${{ env.PROJECT_URL }})"
           webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
