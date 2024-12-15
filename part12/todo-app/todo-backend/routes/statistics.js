@@ -1,17 +1,11 @@
 const express = require('express')
 const router = express.Router()
+const { getAsync } = require('../redis')
 
-const configs = require('../util/config')
-
-let visits = 0
-
-/* GET index data. */
 router.get('/', async (req, res) => {
-  visits++
-
+  const count = Number(await getAsync('added_todos')) || 0
   res.send({
-    ...configs,
-    visits,
+    added_todos: count,
   })
 })
 
