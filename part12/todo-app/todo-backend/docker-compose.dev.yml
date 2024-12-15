@@ -14,3 +14,6 @@ services:
     image: redis
     ports:
       - 3457:6379
+    command: ['redis-server', '--appendonly', 'yes'] # Overwrite the CMD
+    volumes: # Declare the volume
+      - ./redis_data:/data
