@@ -1,8 +1,21 @@
 name: 🟢 Health check pipeline
 
+# on:
+#   schedule:
+# - cron: '00 9 * * *'
+
 on:
-  schedule:
-    - cron: '00 9 * * *'
+  push:
+    branches:
+      - main
+    paths:
+      - 'part11/bloglist/**'
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened, synchronize]
+    paths:
+      - 'part11/bloglist/**'
 
 env:
   PROJECT_URL: https://bloglist-winter-snowflake-5257.fly.dev/api/health
