@@ -1,0 +1,11 @@
+# redis-cli
+127.0.0.1:6379> KEYS *
+1) "added_todos"
+127.0.0.1:6379> GET added_todos
+"112"
+127.0.0.1:6379> SET added_todos 9001
+OK
+127.0.0.1:6379> DEL added_todos
+(integer) 1
+127.0.0.1:6379> exit
+Script started on 2024-12-15 16:20:41+00:00 [TERM="xterm" TTY="/dev/pts/0" COLUMNS="152" LINES="37"]
