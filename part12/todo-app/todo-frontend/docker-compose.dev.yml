@@ -8,6 +8,6 @@ services:
       - ./:/usr/src/app # The path can be relative, so ./ is enough to say "the same location as the docker-compose.yml"
     ports:
       - 5173:5173
-    container_name: todo-frontend-c # This will name the container todo-frontend-c
+    container_name: todo-frontend # This will name the container todo-frontend
     environment:
       - VITE_BACKEND_URL=http://localhost:3000
