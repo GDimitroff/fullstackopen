@@ -7,10 +7,10 @@ services:
     volumes:
       - ./todo-frontend:/usr/src/app
     ports:
-      - 5173:5173
-    container_name: todo-frontend # This will name the container todo-frontend
+      - 5173:5173 # not needed anymore but leaving it here for reference
+    container_name: todo-frontend
     environment:
-      - VITE_BACKEND_URL=http://localhost:3000
+      - VITE_BACKEND_URL=http://localhost:8080/api
 
   server:
     image: todo-backend
@@ -20,7 +20,7 @@ services:
     volumes:
       - ./todo-backend:/usr/src/app
     ports:
-      - 3000:3000
+      - 3000:3000 # not needed anymore but leaving it here for reference
     environment:
       - REDIS_URL=redis://redis:6379
       - MONGO_URL=mongodb://the_username:the_password@mongo:27017/the_database
@@ -55,6 +55,6 @@ services:
     image: redis
     ports:
       - 3457:6379
-    command: ['redis-server', '--appendonly', 'yes'] # Overwrite the CMD
-    volumes: # Declare the volume
+    command: ['redis-server', '--appendonly', 'yes']
+    volumes:
       - ./todo-backend/redis_data:/data
