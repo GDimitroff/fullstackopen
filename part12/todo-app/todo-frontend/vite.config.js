@@ -13,8 +13,5 @@ export default defineConfig({
     watch: {
       usePolling: true, // Ensures Vite watches file changes inside Docker
     },
-    host: '0.0.0.0', // Allows connections from outside the container
-    port: 5173,
-    strictPort: true,
   },
 })
