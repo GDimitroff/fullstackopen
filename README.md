@@ -14,8 +14,7 @@ The course also contains additional sections for the following:
   JavaScript. (not completed yet)
 - CI/CD - Continuous Integration (CI) and Continuous Delivery (CD)
 - Docker Containers, an open platform for developing, shipping, and running applications by
-  virtualizing the operating system of the computer on which it is installed and running. (not
-  completed yet)
+  virtualizing the operating system of the computer on which it is installed and running.
 - Relational databases. (not completed yet)
 
 ## Parts
@@ -31,8 +30,8 @@ The course also contains additional sections for the following:
 - [x] [Part 8: GraphQL](./part8)
 - [x] [Part 9: TypeScript](./part9)
 - [ ] Part 10: React Native
-- [x] [Part 11: CI/CD](./part11/)
-- [ ] Part 12: Containers
+- [x] [Part 11: CI/CD](./part11)
+- [x] [Part 12: Containers](./part12)
 - [ ] Part 13: Using Relational Databases
 
 ## Certificates
@@ -41,3 +40,4 @@ The course also contains additional sections for the following:
 <p align="center"><img height="60%" width="100%" src="./certificates/certificate-graphql.png" alt="GraphQL Certificate"></p>
 <p align="center"><img height="60%" width="100%" src="./certificates/certificate-typescript.png" alt="TypeScript Certificate"></p>
 <p align="center"><img height="60%" width="100%" src="./certificates/certificate-cicd.png" alt="CI/CD Certificate"></p>
+<p align="center"><img height="60%" width="100%" src="./certificates/certificate-containers.png" alt="Containers Certificate"></p>
