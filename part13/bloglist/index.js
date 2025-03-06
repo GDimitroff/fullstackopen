@@ -56,6 +56,23 @@ app.post('/api/blogs', async (req, res) => {
   }
 })
 
+app.put('/api/blogs/:id', async (req, res) => {
+  try {
+    const blog = await Blog.findByPk(req.params.id)
+
+    if (!blog) {
+      return res.status(404).json({ error: 'Blog not found' })
+    }
+
+    await blog.update(req.body)
+
+    res.json(blog)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+})
+
 app.delete('/api/blogs/:id', async (req, res) => {
   try {
     const blog = await Blog.findByPk(req.params.id)
