@@ -49,8 +49,8 @@ app.get('/api/blogs', async (req, res) => {
 
 app.post('/api/blogs', async (req, res) => {
   try {
-    const note = await Blog.create(req.body)
-    res.json(note)
+    const blog = await Blog.create(req.body)
+    res.json(blog)
   } catch (error) {
     return res.status(400).json(error)
   }
@@ -89,6 +89,20 @@ app.delete('/api/blogs/:id', async (req, res) => {
   }
 })
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Database connection established successfully.')
+
+    return sequelize.sync()
+  })
+  .then(() => {
+    console.log('Database synchronized successfully.')
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`)
+    })
+  })
+  .catch((error) => {
+    console.error('Unable to connect to the database or sync models:', error)
+  })
