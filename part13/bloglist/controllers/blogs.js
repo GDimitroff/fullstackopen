@@ -13,48 +13,34 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  try {
-    const blog = await Blog.create(req.body)
-    res.json(blog)
-  } catch (error) {
-    return res.status(400).json(error)
-  }
+  const blog = await Blog.create(req.body)
+  res.status(201).json(blog)
 })
 
 router.get('/:id', blogFinder, async (req, res) => {
+  console.log(req.blog)
   if (req.blog) {
     res.json(req.blog)
   } else {
-    res.status(404).json({ error: 'Blog not found' })
+    res.status(404).end()
   }
 })
 
 router.put('/:id', blogFinder, async (req, res) => {
-  try {
-    if (!req.blog) {
-      return res.status(404).json({ error: 'Blog not found' })
-    }
-
+  if (req.blog) {
     await req.blog.update(req.body)
-
     res.json(req.blog)
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: 'Internal server error' })
+  } else {
+    res.status(404).end()
   }
 })
 
 router.delete('/:id', blogFinder, async (req, res) => {
-  try {
-    if (!req.blog) {
-      return res.status(404).json({ error: 'Blog not found' })
-    }
-
+  if (req.blog) {
     await req.blog.destroy()
     res.status(204).end()
-  } catch (error) {
-    console.error(error)
-    res.status(500).json({ error: 'Internal server error' })
+  } else {
+    res.status(404).end()
   }
 })
 
