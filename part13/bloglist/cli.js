@@ -1,6 +1,9 @@
 require('dotenv').config()
 const { Sequelize, Model, DataTypes } = require('sequelize')
+const express = require('express')
+const app = express()
 
+const PORT = process.env.PORT || 3001
 const sequelize = new Sequelize(process.env.DATABASE_URL)
 
 class Blog extends Model {}
@@ -37,17 +40,11 @@ Blog.init(
   },
 )
 
-const main = async () => {
-  try {
-    await sequelize.authenticate()
-    const blogs = await Blog.findAll()
-    blogs.forEach((b) => {
-      console.log(b.author + ': ' + b.title + ', ' + b.likes + ' likes')
-    })
-    sequelize.close()
-  } catch (error) {
-    console.error('Unable to connect to the database:', error)
-  }
-}
+app.get('/api/blogs', async (req, res) => {
+  const blogs = await Blog.findAll()
+  res.json(blogs)
+})
 
-main()
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
