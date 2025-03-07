@@ -7,9 +7,8 @@ const sequelize = new Sequelize(DATABASE_URL)
 const connectToDatabase = async () => {
   try {
     await sequelize.authenticate()
-    await sequelize.sync()
 
-    console.log('🟢 Connected and synced to the database.')
+    console.log('🟢 Connected to the database.')
   } catch (err) {
     console.log('Failed to connect to the database')
     return process.exit(1)
