@@ -33,7 +33,7 @@ router.get('/:id', blogFinder, async (req, res) => {
   }
 })
 
-router.put('/:id', blogFinder, async (req, res) => {
+router.put('/:id', [blogFinder, userExtractor], async (req, res) => {
   if (req.blog) {
     await req.blog.update(req.body)
     res.json(req.blog)
@@ -42,7 +42,7 @@ router.put('/:id', blogFinder, async (req, res) => {
   }
 })
 
-router.delete('/:id', blogFinder, async (req, res) => {
+router.delete('/:id', [blogFinder, userExtractor], async (req, res) => {
   if (req.blog) {
     await req.blog.destroy()
     res.status(204).end()

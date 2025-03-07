@@ -16,6 +16,12 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { username, name, password } = req.body
 
+  if (!password) {
+    return res.status(400).json({
+      error: `User validation failed: password is required`,
+    })
+  }
+
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
 
