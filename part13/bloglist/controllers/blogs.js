@@ -18,7 +18,6 @@ router.post('/', async (req, res) => {
 })
 
 router.get('/:id', blogFinder, async (req, res) => {
-  console.log(req.blog)
   if (req.blog) {
     res.json(req.blog)
   } else {
