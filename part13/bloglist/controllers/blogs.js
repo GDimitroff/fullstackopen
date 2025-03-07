@@ -43,12 +43,18 @@ router.put('/:id', [blogFinder, userExtractor], async (req, res) => {
 })
 
 router.delete('/:id', [blogFinder, userExtractor], async (req, res) => {
-  if (req.blog) {
-    await req.blog.destroy()
-    res.status(204).end()
-  } else {
-    res.status(404).end()
+  const { blog, user } = req
+
+  if (!blog) {
+    return res.status(404).end()
   }
+
+  if (blog.userId !== user.id) {
+    return res.status(401).json({ error: 'unauthorized operation' })
+  }
+
+  await req.blog.destroy()
+  res.status(204).end()
 })
 
 module.exports = router
