@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { Op } = require('sequelize')
+const { Op, fn, col } = require('sequelize')
 
 const { Blog, User } = require('../models')
 const { userExtractor } = require('../util/middleware')
@@ -35,6 +35,16 @@ router.get('/', async (req, res) => {
 router.post('/', userExtractor, async (req, res) => {
   const blog = await Blog.create({ ...req.body, userId: req.user.id })
   res.status(201).json(blog)
+})
+
+router.get('/authors', async (req, res) => {
+  const authors = await Blog.findAll({
+    attributes: ['author', [fn('COUNT', col('*')), 'articles'], [fn('SUM', col('likes')), 'likes']],
+    group: ['author'],
+    order: [[fn('SUM', col('likes')), 'DESC']],
+  })
+
+  res.json(authors)
 })
 
 router.get('/:id', blogFinder, async (req, res) => {
