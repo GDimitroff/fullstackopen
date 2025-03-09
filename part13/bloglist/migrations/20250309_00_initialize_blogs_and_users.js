@@ -46,9 +46,19 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      passwordHash: {
+      password_hash: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
     })
 
@@ -56,6 +66,8 @@ module.exports = {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: { model: 'users', key: 'id' },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     })
   },
   down: async ({ context: queryInterface }) => {

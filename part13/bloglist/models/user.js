@@ -26,6 +26,7 @@ User.init(
       allowNull: false,
     },
     passwordHash: {
+      field: 'password_hash',
       type: DataTypes.STRING,
       allowNull: false,
     },
