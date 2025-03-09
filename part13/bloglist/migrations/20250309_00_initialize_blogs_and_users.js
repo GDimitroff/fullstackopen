@@ -36,11 +36,6 @@ module.exports = {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
-        validate: {
-          isEmail: {
-            msg: 'Invalid email',
-          },
-        },
       },
       name: {
         type: DataTypes.STRING,

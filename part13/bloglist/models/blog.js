@@ -27,6 +27,18 @@ Blog.init(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    yearWritten: {
+      field: 'year_written',
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      validate: {
+        isInValidRange(value) {
+          if (value != null && (value < 1991 || value > new Date().getFullYear())) {
+            throw new Error(`yearWritten must be between 1991 and ${new Date().getFullYear()}`)
+          }
+        },
+      },
+    },
   },
   {
     sequelize,
