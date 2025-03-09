@@ -2,7 +2,6 @@ const { DataTypes } = require('sequelize')
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
-    // Step 1: Add the columns allowing nulls
     await queryInterface.addColumn('blogs', 'created_at', {
       type: DataTypes.DATE,
       allowNull: true,
@@ -13,13 +12,18 @@ module.exports = {
       allowNull: true,
     })
 
-    // Step 2: Set values for existing rows
     await queryInterface.sequelize.query(`
       UPDATE blogs
-      SET created_at = NOW(), updated_at = NOW()
+      SET created_at = NOW()
+      WHERE created_at IS NULL;
     `)
 
-    // Step 3: Change the columns to NOT NULL
+    await queryInterface.sequelize.query(`
+      UPDATE blogs
+      SET updated_at = NOW()
+      WHERE updated_at IS NULL;
+    `)
+
     await queryInterface.changeColumn('blogs', 'created_at', {
       type: DataTypes.DATE,
       allowNull: false,
