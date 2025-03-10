@@ -9,7 +9,7 @@ const middleware = require('./util/middleware')
 const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
 const loginRouter = require('./controllers/login')
-const readingsRouter = require('./controllers/reading')
+const readingsRouter = require('./controllers/readings')
 
 app.use(express.json())
 
