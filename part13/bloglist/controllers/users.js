@@ -2,6 +2,17 @@ const bcrypt = require('bcrypt')
 const router = require('express').Router()
 
 const { User, Blog } = require('../models')
+const { userExtractor } = require('../util/middleware')
+
+const isAdmin = async (req, res, next) => {
+  const user = await User.findByPk(req.user.id)
+
+  if (!user.admin) {
+    return res.status(401).json({ error: 'operation not allowed' })
+  }
+
+  next()
+}
 
 router.get('/', async (req, res) => {
   const users = await User.findAll({
@@ -34,7 +45,7 @@ router.post('/', async (req, res) => {
   res.status(201).json(user)
 })
 
-router.put('/:username', async (req, res) => {
+router.put('/:username', userExtractor, isAdmin, async (req, res) => {
   const user = await User.findOne({
     where: {
       username: req.params.username,

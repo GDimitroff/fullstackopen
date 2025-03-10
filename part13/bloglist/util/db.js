@@ -14,6 +14,7 @@ const connectToDatabase = async () => {
   } catch (err) {
     console.log('Failed to connect to the database')
     console.log(err)
+
     return process.exit(1)
   }
 
@@ -40,7 +41,6 @@ const runMigrations = async () => {
 
 const rollbackMigration = async () => {
   await sequelize.authenticate()
-
   const migrator = new Umzug(migrationConf)
   await migrator.down()
 }
