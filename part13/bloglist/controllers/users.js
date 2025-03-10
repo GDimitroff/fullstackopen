@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  const { username, name, password } = req.body
+  const { username, password, ...rest } = req.body
 
   if (!password) {
     return res.status(400).json({
@@ -38,8 +38,8 @@ router.post('/', async (req, res) => {
 
   const user = await User.create({
     username,
-    name,
     passwordHash,
+    ...rest,
   })
 
   res.status(201).json(user)
