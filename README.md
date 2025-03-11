@@ -15,7 +15,7 @@ The course also contains additional sections for the following:
 - CI/CD - Continuous Integration (CI) and Continuous Delivery (CD)
 - Docker Containers, an open platform for developing, shipping, and running applications by
   virtualizing the operating system of the computer on which it is installed and running.
-- Relational databases. (not completed yet)
+- Relational databases.
 
 ## Parts
 
