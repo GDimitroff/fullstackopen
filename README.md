@@ -32,7 +32,7 @@ The course also contains additional sections for the following:
 - [ ] Part 10: React Native
 - [x] [Part 11: CI/CD](./part11)
 - [x] [Part 12: Containers](./part12)
-- [ ] Part 13: Using Relational Databases
+- [x] [Part 13: Using Relational Databases](./part13)
 
 ## Certificates
 
@@ -41,3 +41,4 @@ The course also contains additional sections for the following:
 <p align="center"><img height="60%" width="100%" src="./certificates/certificate-typescript.png" alt="TypeScript Certificate"></p>
 <p align="center"><img height="60%" width="100%" src="./certificates/certificate-cicd.png" alt="CI/CD Certificate"></p>
 <p align="center"><img height="60%" width="100%" src="./certificates/certificate-containers.png" alt="Containers Certificate"></p>
+<p align="center"><img height="60%" width="100%" src="./certificates/certificate-psql.png" alt="Relational Databases Certificate"></p>
