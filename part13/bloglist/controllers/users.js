@@ -14,13 +14,14 @@ const isAdmin = async (req, res, next) => {
   next()
 }
 
-router.get('/', async (req, res) => {
+router.get('/', userExtractor, async (req, res) => {
   const users = await User.findAll({
     include: {
       model: Blog,
       attributes: { exclude: ['userId'] },
     },
   })
+
   res.json(users)
 })
 
