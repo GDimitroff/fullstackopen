@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-const { User } = require('../models')
+const { User, Session } = require('../models')
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
@@ -37,6 +37,12 @@ const userExtractor = async (request, response, next) => {
   }
 
   const user = await User.findByPk(decodedToken.id)
+  const session = await Session.findOne({ where: { userId: user.id } })
+
+  if (!session) {
+    return response.status(401).json({ error: 'session invalid' })
+  }
+
   request.user = user
 
   next()
