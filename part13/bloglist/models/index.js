@@ -16,4 +16,5 @@ module.exports = {
   Blog,
   User,
   Reading,
+  Session,
 }
