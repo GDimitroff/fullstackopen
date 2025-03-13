@@ -10,7 +10,7 @@ const HomeScreen = () => {
       <Text style={styles.title}>Welcome To Notes App</Text>
       <Text style={styles.subtitle}>Capture your thoughts anytime, anywhere</Text>
 
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/notes')}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push('./notes')}>
         <Text style={styles.buttonText}>Get Started</Text>
       </TouchableOpacity>
     </View>
