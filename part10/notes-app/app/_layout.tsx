@@ -13,6 +13,8 @@ const RootLayout = () => {
           fontWeight: 'bold',
         },
         contentStyle: {
+          paddingTop: 10,
+          paddingHorizontal: 10,
           backgroundColor: '#fff',
         },
       }}
@@ -21,6 +23,12 @@ const RootLayout = () => {
         name='index'
         options={{
           title: 'Home',
+        }}
+      />
+      <Stack.Screen
+        name='notes'
+        options={{
+          headerTitle: 'Notes',
         }}
       />
     </Stack>
