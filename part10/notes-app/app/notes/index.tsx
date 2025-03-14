@@ -1,27 +1,39 @@
-import { useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { useEffect, useState } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 
+import noteService from '@/services/noteService'
 import NoteList from '@/components/NoteList'
 import AddNoteModal from '@/components/AddNoteModal'
+import { Note } from '@/interfaces/notes'
 
 const NoteScreen = () => {
-  const [notes, setNotes] = useState([
-    {
-      id: '1',
-      text: 'First Note',
-    },
-    {
-      id: '2',
-      text: 'Second Note',
-    },
-    {
-      id: '3',
-      text: 'Third Note',
-    },
-  ])
+  const [notes, setNotes] = useState<Array<Note>>([])
 
   const [modalVisible, setModalVisible] = useState(false)
   const [newNote, setNewNote] = useState('')
+
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<null | string>(null)
+
+  async function init() {
+    setLoading(true)
+
+    const response = await noteService.getNotes()
+
+    if (response.error) {
+      setError(response.error)
+      Alert.alert('Error', response.error)
+    } else {
+      setNotes(response.data as unknown as Array<Note>)
+      setError(null)
+    }
+
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    init()
+  }, [])
 
   const handleAddNote = () => {
     if (newNote.trim() === '') return
@@ -29,7 +41,7 @@ const NoteScreen = () => {
     setNotes([
       ...notes,
       {
-        id: Date.now().toString(),
+        $id: Date.now().toString(),
         text: newNote,
       },
     ])

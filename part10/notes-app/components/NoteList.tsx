@@ -1,12 +1,10 @@
 import { FlatList, View } from 'react-native'
 
 import NoteItem from '@/components/NoteItem'
+import { Note } from '@/interfaces/notes'
 
 interface Props {
-  notes: Array<{
-    id: string
-    text: string
-  }>
+  notes: Array<Note>
 }
 
 const NoteList = ({ notes }: Props) => {
@@ -15,7 +13,7 @@ const NoteList = ({ notes }: Props) => {
       <FlatList
         data={notes}
         renderItem={({ item }) => <NoteItem note={item} />}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.$id}
       />
     </View>
   )

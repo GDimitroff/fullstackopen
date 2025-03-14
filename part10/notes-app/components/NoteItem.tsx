@@ -1,10 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 
+import { Note } from '@/interfaces/notes'
+
 interface Props {
-  note: {
-    id: string
-    text: string
-  }
+  note: Note
 }
 
 const NoteItem = ({ note }: Props) => {
