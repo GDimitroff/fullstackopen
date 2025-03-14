@@ -19,7 +19,7 @@ const authService = {
       return { error: error.message || 'Login failed. Please check your credentials...' }
     }
   },
-  async gerUser() {
+  async getUser() {
     try {
       return await account.get()
     } catch (error) {
