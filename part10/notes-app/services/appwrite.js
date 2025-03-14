@@ -1,4 +1,4 @@
-import { Client, Databases } from 'react-native-appwrite'
+import { Client, Databases, Account } from 'react-native-appwrite'
 import { Platform } from 'react-native'
 
 const config = {
@@ -25,4 +25,6 @@ switch (Platform.OS) {
 
 const database = new Databases(client)
 
-export { config, client, database }
+const account = new Account(client)
+
+export { config, client, database, account }
