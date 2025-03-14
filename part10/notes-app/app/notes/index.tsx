@@ -50,6 +50,20 @@ const NoteScreen = () => {
     setModalVisible(false)
   }
 
+  const handleEditNote = async (id: string, newText: string) => {
+    if (!newText.trim()) {
+      Alert.alert('Error', 'Note cannot be empty')
+      return
+    }
+
+    const response = await noteService.updateNote(id, newText)
+    if (response.error) {
+      Alert.alert('Error', response.error)
+    } else {
+      setNotes((prev) => prev.map((note) => (note.$id === id ? { ...note, text: newText } : note)))
+    }
+  }
+
   const handleDeleteNote = async (id: string) => {
     Alert.alert('Delete note', 'Are you sure you want to delete this note?', [
       {
@@ -79,7 +93,7 @@ const NoteScreen = () => {
       ) : (
         <>
           {error && <Text style={styles.errorText}>{error}</Text>}
-          <NoteList notes={notes} onDelete={handleDeleteNote} />
+          <NoteList notes={notes} onDelete={handleDeleteNote} onEdit={handleEditNote} />
         </>
       )}
 
