@@ -1,19 +1,33 @@
-import { ID } from 'react-native-appwrite'
+import { ID, Query } from 'react-native-appwrite'
 
 import databaseService from './databaseService'
 import { config } from './appwrite'
 
 const noteService = {
-  async getNotes() {
-    const response = await databaseService.listDocuments(config.db, config.col.notes)
-
-    if (response.error) {
-      return { error: response.error }
+  async getNotes(userId) {
+    if (!userId) {
+      console.error('Error: Missing userId in getNotes()')
+      return {
+        data: [],
+        error: 'Missing userId',
+      }
     }
 
-    return { data: response }
+    try {
+      const response = await databaseService.listDocuments(config.db, config.col.notes, [
+        Query.equal('user_id', userId),
+      ])
+
+      return response
+    } catch (error) {
+      console.error('Error: getNotes()', error)
+      return {
+        data: [],
+        error: 'Error fetching notes',
+      }
+    }
   },
-  async addNote(text) {
+  async addNote(user_id, text) {
     if (!text) {
       return { error: 'Note text is required' }
     }
@@ -21,6 +35,7 @@ const noteService = {
     const data = {
       text,
       createdAt: new Date().toISOString(),
+      user_id,
     }
 
     const response = await databaseService.createDocument(
