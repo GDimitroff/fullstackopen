@@ -36,8 +36,7 @@ const NoteScreen = () => {
 
   useEffect(() => {
     if (!user && !authLoading) {
-      console.log('here')
-      router.replace('./auth')
+      router.replace('/auth')
     }
   }, [user, authLoading])
 

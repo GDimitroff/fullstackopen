@@ -1,12 +1,44 @@
 import { useState } from 'react'
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native'
+import { useRouter } from 'expo-router'
+
+import { useAuth } from '@/contexts/AuthContext'
 
 const AuthScreen = () => {
+  const router = useRouter()
+  const { login, register } = useAuth()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isRegistering, setIsRegistering] = useState(false)
   const [error, setError] = useState('')
+
+  const handleAuth = async () => {
+    if (!email.trim() || !password.trim()) {
+      setError('Email and password are required')
+      return
+    }
+
+    if (isRegistering && password !== confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
+
+    let response
+    if (isRegistering) {
+      response = await register(email, password)
+    } else {
+      response = await login(email, password)
+    }
+
+    if (response?.error) {
+      Alert.alert('Error', response.error)
+      return
+    }
+
+    router.replace('/notes')
+  }
 
   return (
     <View style={styles.container}>
@@ -44,7 +76,7 @@ const AuthScreen = () => {
         />
       )}
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={handleAuth}>
         <Text style={styles.buttonText}>{isRegistering ? 'Sign Up' : 'Login'}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => setIsRegistering(!isRegistering)}>
