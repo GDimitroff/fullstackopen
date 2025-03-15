@@ -1,8 +1,26 @@
-import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { useEffect } from 'react'
+import { Text, View, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { useRouter } from 'expo-router'
+
+import { useAuth } from '@/contexts/AuthContext'
 
 const HomeScreen = () => {
   const router = useRouter()
+  const { user, loading } = useAuth()
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.replace('/notes')
+    }
+  }, [user, loading])
+
+  if (loading) {
+    return (
+      <View style={styles.centeredContainer}>
+        <ActivityIndicator size='large' color='tomato' />
+      </View>
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -53,6 +71,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  centeredContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
   },
 })
 
