@@ -1,7 +1,6 @@
 {
   "name": "rate-repository-api",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node -r esm ./src/index.js",
@@ -23,16 +22,8 @@
       "pre-commit": "lint-staged"
     }
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Kaltsoon/rate-repository-api.git"
-  },
   "author": "Kalle Ilves",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Kaltsoon/rate-repository-api/issues"
-  },
-  "homepage": "https://github.com/Kaltsoon/rate-repository-api#readme",
   "dependencies": {
     "@koa/cors": "^3.0.0",
     "apollo-server": "^3.3.0",
