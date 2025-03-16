@@ -1,8 +1,10 @@
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 import Constants from 'expo-constants'
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { Link, useNavigate } from 'react-router-native'
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
     paddingTop: Constants.statusBarHeight,
     backgroundColor: '#24292e',
   },
@@ -15,11 +17,16 @@ const styles = StyleSheet.create({
 })
 
 const AppBar = () => {
+  const navigate = useNavigate()
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => console.log('Repositories')}>
+      <TouchableOpacity onPress={() => navigate('/', { replace: true })}>
         <Text style={styles.text}>Repositories</Text>
       </TouchableOpacity>
+      <Link to='/auth'>
+        <Text style={styles.text}>Sign In</Text>
+      </Link>
     </View>
   )
 }
