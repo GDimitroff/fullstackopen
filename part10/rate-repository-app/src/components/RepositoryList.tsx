@@ -53,6 +53,29 @@ const repositories: Array<Repository> = [
     reviewCount: 0,
     ownerAvatarUrl: 'https://avatars3.githubusercontent.com/u/13142323?v=4',
   },
+  {
+    id: 'facebook.react',
+    fullName: 'facebook/react',
+    description:
+      'A declarative, efficient, and flexible JavaScript library for building user interfaces.',
+    language: 'JavaScript',
+    forksCount: 23606,
+    stargazersCount: 153606,
+    ratingAverage: 0,
+    reviewCount: 0,
+    ownerAvatarUrl: 'https://avatars0.githubusercontent.com/u/69631?v=4',
+  },
+  {
+    id: 'angular.angular',
+    fullName: 'angular/angular',
+    description: 'One framework. Mobile & desktop.',
+    language: 'TypeScript',
+    forksCount: 3843,
+    stargazersCount: 31782,
+    ratingAverage: 0,
+    reviewCount: 0,
+    ownerAvatarUrl: 'https://avatars3.githubusercontent.com/u/139426?v=4',
+  },
 ]
 
 const ItemSeparator = () => <View style={styles.separator} />
