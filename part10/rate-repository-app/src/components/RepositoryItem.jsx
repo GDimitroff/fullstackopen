@@ -1,5 +1,7 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, StyleSheet, View } from 'react-native'
+
 import { Repository } from '../interfaces'
+import Text from './Text'
 
 const styles = StyleSheet.create({
   container: {
@@ -24,8 +26,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
   name: {
-    fontWeight: 'bold',
-    fontSize: 18,
     marginBottom: 5,
   },
   description: {
@@ -47,18 +47,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   statText: {
-    color: 'gray',
-    fontSize: 16,
     marginBottom: 5,
-  },
-  statValue: {
-    fontWeight: 'bold',
-    fontSize: 16,
   },
 })
 
-const RepositoryItem = ({ repository }: { repository: Repository }) => {
-  const formatNumber = (number: number) => {
+const RepositoryItem = ({ repository }) => {
+  const formatNumber = (number) => {
     if (number < 1000) {
       return number
     } else {
@@ -71,7 +65,9 @@ const RepositoryItem = ({ repository }: { repository: Repository }) => {
       <View style={styles.header}>
         <Image style={styles.avatar} src={repository.ownerAvatarUrl} />
         <View style={styles.info}>
-          <Text style={styles.name}>{repository.fullName}</Text>
+          <Text fontSize='heading' fontWeight='bold'>
+            {repository.fullName}
+          </Text>
           <Text style={styles.description}>{repository.description}</Text>
           <View style={styles.language}>
             <Text style={styles.languageText}>{repository.language}</Text>
@@ -80,20 +76,36 @@ const RepositoryItem = ({ repository }: { repository: Repository }) => {
       </View>
       <View style={styles.stats}>
         <View style={styles.stat}>
-          <Text style={styles.statText}>Stars</Text>
-          <Text style={styles.statValue}>{formatNumber(repository.stargazersCount)}</Text>
+          <Text fontSize='subheading' color='textSecondary' style={styles.statText}>
+            Stars
+          </Text>
+          <Text fontSize='subheading' fontWeight='bold'>
+            {formatNumber(repository.stargazersCount)}
+          </Text>
         </View>
         <View style={styles.stat}>
-          <Text style={styles.statText}>Forks</Text>
-          <Text style={styles.statValue}>{formatNumber(repository.forksCount)}</Text>
+          <Text fontSize='subheading' color='textSecondary' style={styles.statText}>
+            Forks
+          </Text>
+          <Text fontSize='subheading' fontWeight='bold'>
+            {formatNumber(repository.forksCount)}
+          </Text>
         </View>
         <View style={styles.stat}>
-          <Text style={styles.statText}>Reviews</Text>
-          <Text style={styles.statValue}>{formatNumber(repository.reviewCount)}</Text>
+          <Text fontSize='subheading' color='textSecondary' style={styles.statText}>
+            Reviews
+          </Text>
+          <Text fontSize='subheading' fontWeight='bold'>
+            {formatNumber(repository.reviewCount)}
+          </Text>
         </View>
         <View style={styles.stat}>
-          <Text style={styles.statText}>Rating</Text>
-          <Text style={styles.statValue}>{formatNumber(repository.ratingAverage)}</Text>
+          <Text fontSize='subheading' color='textSecondary' style={styles.statText}>
+            Rating
+          </Text>
+          <Text fontSize='subheading' fontWeight='bold'>
+            {formatNumber(repository.ratingAverage)}
+          </Text>
         </View>
       </View>
     </View>
