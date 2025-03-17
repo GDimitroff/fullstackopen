@@ -1,9 +1,8 @@
-import { useQuery } from '@apollo/client'
 import { FlatList, View, StyleSheet } from 'react-native'
 
 import RepositoryItem from './RepositoryItem'
-import { GET_REPOSITORIES } from '../graphql/queries'
 import Text from './Text'
+import useRepositories from '../hooks/useRepositories'
 
 const styles = StyleSheet.create({
   separator: {
@@ -14,7 +13,7 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />
 
 const RepositoryList = () => {
-  const { data, error, loading } = useQuery(GET_REPOSITORIES)
+  const { data, error, loading } = useRepositories()
 
   if (loading) {
     return <Text>Loading...</Text>
