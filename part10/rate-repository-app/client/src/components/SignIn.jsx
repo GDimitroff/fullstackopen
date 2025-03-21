@@ -1,5 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import { Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
+import { useNavigate } from 'react-router-native'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import useSignIn from '../hooks/useSignIn'
@@ -49,6 +50,7 @@ const initialValues = {
 }
 
 const SignIn = () => {
+  const navigate = useNavigate()
   const [signIn] = useSignIn()
 
   const formik = useFormik({
@@ -63,6 +65,7 @@ const SignIn = () => {
     try {
       const { data } = await signIn({ username, password })
       console.log(data)
+      navigate('/')
     } catch (e) {
       console.log(e)
     }
