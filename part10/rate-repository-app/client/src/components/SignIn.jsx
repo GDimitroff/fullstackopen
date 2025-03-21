@@ -1,12 +1,14 @@
+/* eslint-disable react-native/no-inline-styles */
 import { Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import useSignIn from '../hooks/useSignIn'
 
 const validationSchema = yup.object().shape({
-  email: yup
+  username: yup
     .string()
-    .min(3, 'Email must be at least 3 characters long')
-    .required('Email is required'),
+    .min(3, 'Username must be at least 3 characters long')
+    .required('Username is required'),
   password: yup
     .string()
     .min(4, 'Password must be at least 4 characters long')
@@ -42,22 +44,28 @@ const styles = StyleSheet.create({
 })
 
 const initialValues = {
-  email: '',
+  username: '',
   password: '',
 }
 
 const SignIn = () => {
+  const [signIn] = useSignIn()
+
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit,
   })
 
-  function onSubmit(values) {
-    const email = parseFloat(values.email)
-    const password = parseFloat(values.password)
+  async function onSubmit(values) {
+    const { username, password } = values
 
-    console.log(values)
+    try {
+      const { data } = await signIn({ username, password })
+      console.log(data)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return (
@@ -67,14 +75,14 @@ const SignIn = () => {
           <TextInput
             style={{
               ...styles.input,
-              borderColor: formik.touched.email && formik.errors.email ? '#d73a4a' : '#ccc',
+              borderColor: formik.touched.username && formik.errors.username ? '#d73a4a' : '#ccc',
             }}
-            placeholder='Email'
-            value={formik.values.email}
-            onChangeText={formik.handleChange('email')}
+            placeholder='Username'
+            value={formik.values.username}
+            onChangeText={formik.handleChange('username')}
           />
-          {formik.touched.email && formik.errors.email && (
-            <Text style={{ color: '#d73a4a', marginTop: 3 }}>{formik.errors.email}</Text>
+          {formik.touched.username && formik.errors.username && (
+            <Text style={{ color: '#d73a4a', marginTop: 3 }}>{formik.errors.username}</Text>
           )}
         </View>
 
