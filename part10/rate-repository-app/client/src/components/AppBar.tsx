@@ -1,6 +1,9 @@
 import Constants from 'expo-constants'
+import { useApolloClient } from '@apollo/client'
 import { View, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native'
-import { Link, useNavigate } from 'react-router-native'
+import { useNavigate } from 'react-router-native'
+import useMe from '../hooks/useMe'
+import useAuthStorage from '../hooks/useAuthStorage'
 
 const styles = StyleSheet.create({
   container: {
@@ -17,7 +20,16 @@ const styles = StyleSheet.create({
 })
 
 const AppBar = () => {
+  const authStorage = useAuthStorage()
+  const apolloClient = useApolloClient()
   const navigate = useNavigate()
+  const { data } = useMe()
+
+  const handleLogout = async () => {
+    await authStorage.removeAccessToken()
+    await apolloClient.resetStore()
+    navigate('/', { replace: true })
+  }
 
   return (
     <View style={styles.container}>
@@ -25,9 +37,15 @@ const AppBar = () => {
         <TouchableOpacity onPress={() => navigate('/', { replace: true })}>
           <Text style={styles.text}>Repositories</Text>
         </TouchableOpacity>
-        <Link to='/auth'>
-          <Text style={styles.text}>Sign In</Text>
-        </Link>
+        {data.me ? (
+          <TouchableOpacity onPress={handleLogout}>
+            <Text style={styles.text}>Logout</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={() => navigate('/auth')}>
+            <Text style={styles.text}>Sign In</Text>
+          </TouchableOpacity>
+        )}
       </ScrollView>
     </View>
   )
