@@ -8,6 +8,8 @@ const useSignIn = () => {
 
   const signIn = async ({ username, password }) => {
     const data = await mutate({ variables: { username, password } })
+    await authStorage.setAccessToken(data.data.authenticate.accessToken)
+
     return data
   }
 
