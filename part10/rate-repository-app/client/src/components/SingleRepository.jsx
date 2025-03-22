@@ -1,4 +1,4 @@
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useParams } from 'react-router-native'
 import * as Linking from 'expo-linking'
 
@@ -7,7 +7,7 @@ import useRepository from '../hooks/useRepository'
 import { formatNumber } from '../helpers/repository-helpers'
 
 const styles = StyleSheet.create({
-  container: {
+  repositoryContainer: {
     backgroundColor: 'white',
     padding: 15,
   },
@@ -66,24 +66,13 @@ const styles = StyleSheet.create({
   },
 })
 
-const Repository = () => {
-  const { id } = useParams()
-  const { data: repository, loading, error } = useRepository(id)
-
+const RepositoryInfo = ({ repository }) => {
   const handleOpenLink = () => {
     Linking.openURL(repository.url)
   }
 
-  if (loading) {
-    return <Text>Loading...</Text>
-  }
-
-  if (error) {
-    return <Text>Error: {error.message}</Text>
-  }
-
   return (
-    <View style={styles.container} testID='repositoryItem'>
+    <View style={styles.repositoryContainer} testID='repositoryItem'>
       <View style={styles.header}>
         <Image style={styles.avatar} src={repository.ownerAvatarUrl} />
         <View style={styles.info}>
@@ -139,4 +128,44 @@ const Repository = () => {
   )
 }
 
-export default Repository
+const ReviewItem = ({ review }) => {
+  return (
+    <View>
+      <Text>{review.user.username}</Text>
+      <Text>{review.rating}</Text>
+      <Text>{review.createdAt}</Text>
+      <Text>{review.text}</Text>
+    </View>
+  )
+}
+
+const SingleRepository = () => {
+  const { id } = useParams()
+  const { data: repository, loading, error } = useRepository(id)
+
+  if (loading) {
+    return <Text>Loading...</Text>
+  }
+
+  if (error) {
+    return <Text>Error: {error.message}</Text>
+  }
+
+  const reviews = repository.reviews.edges.map((edge) => edge.node) || []
+
+  return (
+    <FlatList
+      data={reviews}
+      renderItem={({ item }) => <ReviewItem review={item} />}
+      keyExtractor={({ id }) => id}
+      ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
+      ListEmptyComponent={() => (
+        <View>
+          <Text>No reviews</Text>
+        </View>
+      )}
+    />
+  )
+}
+
+export default SingleRepository
