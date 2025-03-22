@@ -1,6 +1,5 @@
 import { Image, StyleSheet, View } from 'react-native'
 
-import { Repository } from '../interfaces'
 import Text from './Text'
 
 const styles = StyleSheet.create({

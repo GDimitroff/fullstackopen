@@ -37,7 +37,7 @@ const AppBar = () => {
         <TouchableOpacity onPress={() => navigate('/', { replace: true })}>
           <Text style={styles.text}>Repositories</Text>
         </TouchableOpacity>
-        {data.me ? (
+        {data?.me ? (
           <TouchableOpacity onPress={handleLogout}>
             <Text style={styles.text}>Logout</Text>
           </TouchableOpacity>
