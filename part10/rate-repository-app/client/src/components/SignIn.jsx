@@ -49,26 +49,12 @@ const initialValues = {
   password: '',
 }
 
-const SignIn = () => {
-  const navigate = useNavigate()
-  const [signIn] = useSignIn()
-
+export const SignIn = ({ onSubmit }) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit,
   })
-
-  async function onSubmit(values) {
-    const { username, password } = values
-
-    try {
-      await signIn({ username, password })
-      navigate('/')
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   return (
     <View style={styles.container}>
@@ -116,4 +102,22 @@ const SignIn = () => {
   )
 }
 
-export default SignIn
+const SingInContainer = () => {
+  const navigate = useNavigate()
+  const [signIn] = useSignIn()
+
+  async function onSubmit(values) {
+    const { username, password } = values
+
+    try {
+      await signIn({ username, password })
+      navigate('/')
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  return <SignIn onSubmit={onSubmit} />
+}
+
+export default SingInContainer
