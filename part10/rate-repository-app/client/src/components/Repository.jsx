@@ -1,6 +1,8 @@
 import { Image, StyleSheet, View } from 'react-native'
+import { useParams } from 'react-router-native'
 
 import Text from './Text'
+import useRepository from '../hooks/useRepository'
 import { formatNumber } from '../helpers/repository-helpers'
 
 const styles = StyleSheet.create({
@@ -14,10 +16,11 @@ const styles = StyleSheet.create({
   },
   info: {
     flex: 1,
+    justifyContent: 'space-between',
   },
   avatar: {
-    width: 50,
-    height: 50,
+    width: 120,
+    height: 120,
     borderRadius: 5,
     marginRight: 15,
   },
@@ -29,7 +32,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   description: {
-    marginBottom: 5,
+    marginTop: 10,
     color: 'gray',
     fontSize: 16,
     flexShrink: 1,
@@ -51,16 +54,29 @@ const styles = StyleSheet.create({
   },
 })
 
-const RepositoryItem = ({ repository }) => {
+const Repository = () => {
+  const { id } = useParams()
+  const { data: repository, loading, error } = useRepository(id)
+
+  if (loading) {
+    return <Text>Loading...</Text>
+  }
+
+  if (error) {
+    return <Text>Error: {error.message}</Text>
+  }
+
   return (
     <View style={styles.container} testID='repositoryItem'>
       <View style={styles.header}>
         <Image style={styles.avatar} src={repository.ownerAvatarUrl} />
         <View style={styles.info}>
-          <Text fontSize='heading' fontWeight='bold'>
-            {repository.fullName}
-          </Text>
-          <Text style={styles.description}>{repository.description}</Text>
+          <View>
+            <Text fontSize='heading' fontWeight='bold'>
+              {repository.fullName}
+            </Text>
+            <Text style={styles.description}>{repository.description}</Text>
+          </View>
           <View style={styles.language}>
             <Text style={styles.languageText}>{repository.language}</Text>
           </View>
@@ -104,4 +120,4 @@ const RepositoryItem = ({ repository }) => {
   )
 }
 
-export default RepositoryItem
+export default Repository
