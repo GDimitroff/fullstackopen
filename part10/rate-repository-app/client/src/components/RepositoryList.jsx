@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
 
 const ItemSeparator = () => <View style={styles.separator} />
 
-const RepositoryList = () => {
-  const { data, error, loading } = useRepositories()
+export const RepositoryListContainer = ({ data, loading, error }) => {
+  const repositoryNodes = data ? data.repositories.edges.map((edge) => edge.node) : []
 
   if (loading) {
     return <Text>Loading...</Text>
@@ -23,8 +23,6 @@ const RepositoryList = () => {
     return <Text>Error: {error.message}</Text>
   }
 
-  const repositoryNodes = data ? data.repositories.edges.map((edge) => edge.node) : []
-
   return (
     <FlatList
       data={repositoryNodes}
@@ -33,6 +31,12 @@ const RepositoryList = () => {
       renderItem={({ item }) => <RepositoryItem repository={item} />}
     />
   )
+}
+
+const RepositoryList = () => {
+  const { data, error, loading } = useRepositories()
+
+  return <RepositoryListContainer data={data} loading={loading} error={error} />
 }
 
 export default RepositoryList
