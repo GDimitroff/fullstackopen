@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
   repositoryContainer: {
     backgroundColor: 'white',
     padding: 15,
+    marginBottom: 10,
   },
   header: {
     flexDirection: 'row',
@@ -62,6 +63,51 @@ const styles = StyleSheet.create({
   githubButtonText: {
     textAlign: 'center',
     color: 'white',
+    fontSize: 16,
+  },
+  noReviews: {
+    padding: 15,
+    alignItems: 'center',
+  },
+  separator: {
+    height: 5,
+  },
+  reviewContainer: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+  },
+  reviewRating: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    borderColor: '#0366d6',
+    borderWidth: 2,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 15,
+  },
+  reviewRatingText: {
+    color: '#0366d6',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  reviewContent: {
+    flex: 1,
+    paddingTop: 15,
+    paddingBottom: 15,
+    paddingRight: 15,
+  },
+  reviewUsername: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  reviewTimestamp: {
+    color: 'gray',
+    marginBottom: 5,
+  },
+  reviewText: {
     fontSize: 16,
   },
 })
@@ -129,12 +175,23 @@ const RepositoryInfo = ({ repository }) => {
 }
 
 const ReviewItem = ({ review }) => {
+  const {
+    text,
+    rating,
+    createdAt,
+    user: { username },
+  } = review
+
   return (
-    <View>
-      <Text>{review.user.username}</Text>
-      <Text>{review.rating}</Text>
-      <Text>{review.createdAt}</Text>
-      <Text>{review.text}</Text>
+    <View style={styles.reviewContainer}>
+      <View style={styles.reviewRating}>
+        <Text style={styles.reviewRatingText}>{rating}</Text>
+      </View>
+      <View style={styles.reviewContent}>
+        <Text style={styles.reviewUsername}>{username}</Text>
+        <Text style={styles.reviewTimestamp}>{createdAt}</Text>
+        <Text style={styles.reviewText}>{text}</Text>
+      </View>
     </View>
   )
 }
@@ -160,10 +217,11 @@ const SingleRepository = () => {
       keyExtractor={({ id }) => id}
       ListHeaderComponent={() => <RepositoryInfo repository={repository} />}
       ListEmptyComponent={() => (
-        <View>
-          <Text>No reviews</Text>
+        <View style={styles.noReviews}>
+          <Text>No reviews just yet...</Text>
         </View>
       )}
+      ItemSeparatorComponent={() => <View style={styles.separator} />}
     />
   )
 }
