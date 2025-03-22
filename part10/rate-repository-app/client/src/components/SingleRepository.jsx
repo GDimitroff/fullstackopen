@@ -1,6 +1,7 @@
 import { FlatList, Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useParams } from 'react-router-native'
 import * as Linking from 'expo-linking'
+import { format } from 'date-fns'
 
 import Text from './Text'
 import useRepository from '../hooks/useRepository'
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
   reviewRating: {
     width: 50,
     height: 50,
-    borderRadius: 25,
+    borderRadius: 50 / 2,
     borderColor: '#0366d6',
     borderWidth: 2,
     backgroundColor: 'white',
@@ -189,7 +190,7 @@ const ReviewItem = ({ review }) => {
       </View>
       <View style={styles.reviewContent}>
         <Text style={styles.reviewUsername}>{username}</Text>
-        <Text style={styles.reviewTimestamp}>{createdAt}</Text>
+        <Text style={styles.reviewTimestamp}>{format(createdAt, 'dd MMMM yyyy HH:mm')}</Text>
         <Text style={styles.reviewText}>{text}</Text>
       </View>
     </View>
