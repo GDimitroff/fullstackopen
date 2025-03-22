@@ -1,5 +1,6 @@
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { useParams } from 'react-router-native'
+import * as Linking from 'expo-linking'
 
 import Text from './Text'
 import useRepository from '../hooks/useRepository'
@@ -52,11 +53,26 @@ const styles = StyleSheet.create({
   statText: {
     marginBottom: 5,
   },
+  githubButton: {
+    backgroundColor: '#0366d6',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  githubButtonText: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 16,
+  },
 })
 
 const Repository = () => {
   const { id } = useParams()
   const { data: repository, loading, error } = useRepository(id)
+
+  const handleOpenLink = () => {
+    Linking.openURL(repository.url)
+  }
 
   if (loading) {
     return <Text>Loading...</Text>
@@ -116,6 +132,9 @@ const Repository = () => {
           </Text>
         </View>
       </View>
+      <TouchableOpacity onPress={handleOpenLink} style={styles.githubButton}>
+        <Text style={styles.githubButtonText}>GitHub</Text>
+      </TouchableOpacity>
     </View>
   )
 }
