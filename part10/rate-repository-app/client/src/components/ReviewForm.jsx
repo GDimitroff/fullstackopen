@@ -2,6 +2,8 @@
 import { Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-native'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import { useNavigate } from 'react-router-native'
+import useCreateReview from '../hooks/useCreateReview'
 
 const validationSchema = yup.object().shape({
   owner: yup.string().required('Repository owner name is required'),
@@ -84,7 +86,6 @@ export const ReviewFormContainer = ({ onSubmit }) => {
             placeholder='Repository name'
             value={formik.values.name}
             onChangeText={formik.handleChange('name')}
-            secureTextEntry={true}
           />
           {formik.touched.name && formik.errors.name && (
             <Text style={{ color: '#d73a4a', marginTop: 3 }}>{formik.errors.name}</Text>
@@ -116,6 +117,7 @@ export const ReviewFormContainer = ({ onSubmit }) => {
             placeholder='Review'
             value={formik.values.review}
             onChangeText={formik.handleChange('review')}
+            multiline={true}
           />
           {formik.touched.review && formik.errors.review && (
             <Text style={{ color: '#d73a4a', marginTop: 3 }}>{formik.errors.review}</Text>
@@ -135,8 +137,24 @@ export const ReviewFormContainer = ({ onSubmit }) => {
 }
 
 const ReviewForm = () => {
+  const navigate = useNavigate()
+  const [createReview] = useCreateReview()
+
   async function onSubmit(values) {
-    console.log(values)
+    const { owner, name, rating, review } = values
+
+    try {
+      const response = await createReview({
+        ownerName: owner,
+        repositoryName: name,
+        rating: Number(rating),
+        text: review,
+      })
+
+      navigate(`/${response.createReview.repositoryId}`)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   return <ReviewFormContainer onSubmit={onSubmit} />
