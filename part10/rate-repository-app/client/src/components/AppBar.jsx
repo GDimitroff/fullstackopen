@@ -42,6 +42,9 @@ const AppBar = () => {
             <TouchableOpacity onPress={() => navigate('/create-review')}>
               <Text style={styles.text}>Create a review</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigate('/my-reviews')}>
+              <Text style={styles.text}>My reviews</Text>
+            </TouchableOpacity>
             <TouchableOpacity onPress={handleLogout}>
               <Text style={styles.text}>Logout</Text>
             </TouchableOpacity>
