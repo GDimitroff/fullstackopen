@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { FlatList, View, StyleSheet, Pressable } from 'react-native'
 import { useNavigate } from 'react-router-native'
-import { Menu, Button, PaperProvider } from 'react-native-paper'
+import { Menu, Button, PaperProvider, Searchbar } from 'react-native-paper'
+import { useDebounce } from 'use-debounce'
 
 import RepositoryItem from './RepositoryItem'
 import Text from './Text'
@@ -15,6 +16,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     padding: 10,
+    paddingTop: 0,
+  },
+  searchQueryInput: {
+    margin: 10,
   },
 })
 
@@ -41,7 +46,15 @@ const sortItems = [
 
 const ItemSeparator = () => <View style={styles.separator} />
 
-export const RepositoryListContainer = ({ data, loading, error, sortItem, setSortItem }) => {
+export const RepositoryListContainer = ({
+  data,
+  loading,
+  error,
+  searchQuery,
+  setSearchQuery,
+  sortItem,
+  setSortItem,
+}) => {
   const navigate = useNavigate()
 
   const [visible, setVisible] = useState(false)
@@ -58,28 +71,36 @@ export const RepositoryListContainer = ({ data, loading, error, sortItem, setSor
 
   return (
     <PaperProvider>
-      <View style={styles.sortByMenu}>
-        <Menu
-          visible={visible}
-          onDismiss={() => setVisible(false)}
-          anchor={
-            <Button onPress={() => setVisible(true)}>
-              {visible ? '▼' : '▶'} {sortItem.label || 'Select language'}
-            </Button>
-          }
-        >
-          {sortItems.map((item) => (
-            <Menu.Item
-              key={item.value}
-              onPress={() => {
-                setSortItem(item)
-                setVisible(false)
-              }}
-              title={item.label}
-            />
-          ))}
-        </Menu>
-      </View>
+      <Searchbar
+        placeholder='Search'
+        onChangeText={setSearchQuery}
+        value={searchQuery}
+        style={styles.searchQueryInput}
+      />
+      {repositoryNodes.length > 0 && (
+        <View style={styles.sortByMenu}>
+          <Menu
+            visible={visible}
+            onDismiss={() => setVisible(false)}
+            anchor={
+              <Button onPress={() => setVisible(true)}>
+                {visible ? '▼' : '▶'} {sortItem.label || 'Select language'}
+              </Button>
+            }
+          >
+            {sortItems.map((item) => (
+              <Menu.Item
+                key={item.value}
+                onPress={() => {
+                  setSortItem(item)
+                  setVisible(false)
+                }}
+                title={item.label}
+              />
+            ))}
+          </Menu>
+        </View>
+      )}
       <FlatList
         data={repositoryNodes}
         ItemSeparatorComponent={ItemSeparator}
@@ -89,20 +110,34 @@ export const RepositoryListContainer = ({ data, loading, error, sortItem, setSor
             <RepositoryItem repository={item} />
           </Pressable>
         )}
+        ListEmptyComponent={
+          <Text
+            style={{
+              textAlign: 'center',
+              padding: 10,
+            }}
+          >
+            No repositories
+          </Text>
+        }
       />
     </PaperProvider>
   )
 }
 
 const RepositoryList = () => {
+  const [searchQuery, setSearchQuery] = useState('')
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 500)
   const [sortItem, setSortItem] = useState(sortItems[0])
-  const { data, error, loading } = useRepositories(sortItem)
+  const { data, error, loading } = useRepositories(debouncedSearchQuery, sortItem)
 
   return (
     <RepositoryListContainer
       data={data}
       loading={loading}
       error={error}
+      searchQuery={searchQuery}
+      setSearchQuery={setSearchQuery}
       sortItem={sortItem}
       setSortItem={setSortItem}
     />

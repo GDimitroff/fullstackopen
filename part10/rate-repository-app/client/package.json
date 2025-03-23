@@ -38,6 +38,7 @@
     "react-native": "0.76.7",
     "react-native-paper": "^5.13.1",
     "react-router-native": "^6.30.0",
+    "use-debounce": "^10.0.4",
     "yup": "^1.6.1"
   },
   "devDependencies": {
