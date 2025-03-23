@@ -1,4 +1,5 @@
 import { FlatList, StyleSheet, View } from 'react-native'
+import { Navigate } from 'react-router-native'
 import { format } from 'date-fns'
 
 import Text from './Text'
@@ -74,7 +75,11 @@ const MyReviewsList = () => {
     return <Text>Error: {error.message}</Text>
   }
 
-  const reviews = user.me.reviews.edges.map((edge) => edge.node) || []
+  if (!user.me) {
+    return <Navigate to='/' replace={true} />
+  }
+
+  const reviews = user.me.reviews?.edges?.map((edge) => edge.node) ?? []
 
   return (
     <FlatList
