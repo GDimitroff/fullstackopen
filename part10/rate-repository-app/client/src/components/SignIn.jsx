@@ -91,11 +91,7 @@ export const SignInContainer = ({ onSubmit }) => {
         </View>
       </View>
 
-      <TouchableOpacity
-        onPress={formik.handleSubmit}
-        style={styles.submitButton}
-        disabled={!formik.isValid}
-      >
+      <TouchableOpacity onPress={formik.handleSubmit} style={styles.submitButton}>
         <Text style={styles.submitButtonText}>Sign in</Text>
       </TouchableOpacity>
     </View>
