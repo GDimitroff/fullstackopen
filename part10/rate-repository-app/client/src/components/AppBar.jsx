@@ -47,9 +47,14 @@ const AppBar = () => {
             </TouchableOpacity>
           </>
         ) : (
-          <TouchableOpacity onPress={() => navigate('/auth')}>
-            <Text style={styles.text}>Sign In</Text>
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity onPress={() => navigate('/auth')}>
+              <Text style={styles.text}>Sign In</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigate('/sign-up')}>
+              <Text style={styles.text}>Sign Up</Text>
+            </TouchableOpacity>
+          </>
         )}
       </ScrollView>
     </View>
