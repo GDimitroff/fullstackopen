@@ -71,36 +71,6 @@ export const RepositoryListContainer = ({
 
   return (
     <PaperProvider>
-      <Searchbar
-        placeholder='Search'
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-        style={styles.searchQueryInput}
-      />
-      {repositoryNodes.length > 0 && (
-        <View style={styles.sortByMenu}>
-          <Menu
-            visible={visible}
-            onDismiss={() => setVisible(false)}
-            anchor={
-              <Button onPress={() => setVisible(true)}>
-                {visible ? '▼' : '▶'} {sortItem.label || 'Select language'}
-              </Button>
-            }
-          >
-            {sortItems.map((item) => (
-              <Menu.Item
-                key={item.value}
-                onPress={() => {
-                  setSortItem(item)
-                  setVisible(false)
-                }}
-                title={item.label}
-              />
-            ))}
-          </Menu>
-        </View>
-      )}
       <FlatList
         data={repositoryNodes}
         ItemSeparatorComponent={ItemSeparator}
@@ -119,6 +89,40 @@ export const RepositoryListContainer = ({
           >
             No repositories
           </Text>
+        }
+        ListHeaderComponent={
+          <>
+            <Searchbar
+              placeholder='Search'
+              onChangeText={setSearchQuery}
+              value={searchQuery}
+              style={styles.searchQueryInput}
+            />
+            {repositoryNodes.length > 0 && (
+              <View style={styles.sortByMenu}>
+                <Menu
+                  visible={visible}
+                  onDismiss={() => setVisible(false)}
+                  anchor={
+                    <Button onPress={() => setVisible(true)}>
+                      {visible ? '▼' : '▶'} {sortItem.label || 'Select language'}
+                    </Button>
+                  }
+                >
+                  {sortItems.map((item) => (
+                    <Menu.Item
+                      key={item.value}
+                      onPress={() => {
+                        setSortItem(item)
+                        setVisible(false)
+                      }}
+                      title={item.label}
+                    />
+                  ))}
+                </Menu>
+              </View>
+            )}
+          </>
         }
       />
     </PaperProvider>
