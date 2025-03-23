@@ -2,7 +2,7 @@ import Constants from 'expo-constants'
 import { useApolloClient } from '@apollo/client'
 import { View, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native'
 import { useNavigate } from 'react-router-native'
-import useMe from '../hooks/useMe'
+import useUser from '../hooks/useUser'
 import useAuthStorage from '../hooks/useAuthStorage'
 
 const styles = StyleSheet.create({
@@ -23,7 +23,7 @@ const AppBar = () => {
   const authStorage = useAuthStorage()
   const apolloClient = useApolloClient()
   const navigate = useNavigate()
-  const { data } = useMe()
+  const { data } = useUser()
 
   const handleLogout = async () => {
     await authStorage.removeAccessToken()
