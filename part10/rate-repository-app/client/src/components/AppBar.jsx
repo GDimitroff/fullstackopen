@@ -38,9 +38,14 @@ const AppBar = () => {
           <Text style={styles.text}>Repositories</Text>
         </TouchableOpacity>
         {data?.me ? (
-          <TouchableOpacity onPress={handleLogout}>
-            <Text style={styles.text}>Logout</Text>
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity onPress={() => navigate('/create-review')}>
+              <Text style={styles.text}>Create a review</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleLogout}>
+              <Text style={styles.text}>Logout</Text>
+            </TouchableOpacity>
+          </>
         ) : (
           <TouchableOpacity onPress={() => navigate('/auth')}>
             <Text style={styles.text}>Sign In</Text>
