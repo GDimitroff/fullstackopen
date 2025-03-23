@@ -3,6 +3,8 @@ import { Text, TextInput, TouchableOpacity, View, StyleSheet } from 'react-nativ
 import { useNavigate } from 'react-router-native'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
+import useCreateUser from '../hooks/useCreateUser'
+import useSignIn from '../hooks/useSignIn'
 
 const validationSchema = yup.object().shape({
   username: yup
@@ -130,13 +132,17 @@ export const SignUpContainer = ({ onSubmit }) => {
 }
 
 const SignUp = () => {
+  const [createUser] = useCreateUser()
+  const [signIn] = useSignIn()
   const navigate = useNavigate()
 
   async function onSubmit(values) {
-    console.log(values)
+    const { username, password } = values
 
     try {
-      console.log('sign up...')
+      await createUser({ username, password })
+      await signIn({ username, password })
+      navigate('/')
     } catch (e) {
       console.log(e)
     }
