@@ -1,5 +1,5 @@
 import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
-import { Navigate } from 'react-router-native'
+import { Navigate, useNavigate } from 'react-router-native'
 import { format } from 'date-fns'
 
 import Text from './Text'
@@ -79,7 +79,10 @@ const styles = StyleSheet.create({
 })
 
 const MyReviewItem = ({ review }) => {
+  const navigate = useNavigate()
+
   const { text, rating, createdAt, repositoryId } = review
+  const formattedRepositoryId = repositoryId.replace('.', '/')
 
   return (
     <View style={styles.reviewContainer}>
@@ -95,7 +98,7 @@ const MyReviewItem = ({ review }) => {
               marginBottom: 5,
             }}
           >
-            {repositoryId.replace('.', '/')}
+            {formattedRepositoryId}
           </Text>
           <Text style={styles.reviewTimestamp}>{format(createdAt, 'dd MMMM yyyy HH:mm')}</Text>
           <Text style={styles.reviewText}>{text}</Text>
@@ -103,7 +106,7 @@ const MyReviewItem = ({ review }) => {
       </View>
       <View style={styles.reviewActions}>
         <TouchableOpacity
-          onPress={() => console.log('View repository')}
+          onPress={() => navigate(`/${repositoryId}`)}
           style={styles.viewRepositoryButton}
         >
           <Text style={styles.viewRepositoryText}>View repository</Text>
