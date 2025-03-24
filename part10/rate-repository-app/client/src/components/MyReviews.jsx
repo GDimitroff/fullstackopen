@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 })
 
 const MyReviewItem = ({ review }) => {
-  const { text, rating, createdAt } = review
+  const { text, rating, createdAt, repositoryId } = review
 
   return (
     <View style={styles.reviewContainer}>
@@ -57,6 +57,15 @@ const MyReviewItem = ({ review }) => {
         <Text style={styles.reviewRatingText}>{rating}</Text>
       </View>
       <View style={styles.reviewContent}>
+        <Text
+          fontSize='heading'
+          fontWeight='bold'
+          style={{
+            marginBottom: 5,
+          }}
+        >
+          {repositoryId.replace('.', '/')}
+        </Text>
         <Text style={styles.reviewTimestamp}>{format(createdAt, 'dd MMMM yyyy HH:mm')}</Text>
         <Text style={styles.reviewText}>{text}</Text>
       </View>
