@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Navigate, useNavigate } from 'react-router-native'
 import { format } from 'date-fns'
 
@@ -81,8 +81,24 @@ const styles = StyleSheet.create({
 const MyReviewItem = ({ review }) => {
   const navigate = useNavigate()
 
-  const { text, rating, createdAt, repositoryId } = review
+  const { id, text, rating, createdAt, repositoryId } = review
   const formattedRepositoryId = repositoryId.replace('.', '/')
+
+  const handleDeleteReview = (id) => {
+    Alert.alert('Delete review', 'Are you sure you want to delete this review?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          console.log('Deleting... ', id)
+        },
+      },
+    ])
+  }
 
   return (
     <View style={styles.reviewContainer}>
@@ -111,10 +127,7 @@ const MyReviewItem = ({ review }) => {
         >
           <Text style={styles.viewRepositoryText}>View repository</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => console.log('Delete review')}
-          style={styles.deleteReviewButton}
-        >
+        <TouchableOpacity onPress={() => handleDeleteReview(id)} style={styles.deleteReviewButton}>
           <Text style={styles.deleteButtonText}>Delete review</Text>
         </TouchableOpacity>
       </View>
