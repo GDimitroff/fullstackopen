@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Navigate } from 'react-router-native'
 import { format } from 'date-fns'
 
@@ -14,8 +14,10 @@ const styles = StyleSheet.create({
     height: 10,
   },
   reviewContainer: {
-    flexDirection: 'row',
     backgroundColor: 'white',
+  },
+  reviewInfo: {
+    flexDirection: 'row',
   },
   reviewRating: {
     width: 50,
@@ -36,7 +38,6 @@ const styles = StyleSheet.create({
   reviewContent: {
     flex: 1,
     paddingTop: 15,
-    paddingBottom: 15,
     paddingRight: 15,
   },
   reviewTimestamp: {
@@ -46,6 +47,35 @@ const styles = StyleSheet.create({
   reviewText: {
     fontSize: 16,
   },
+  reviewActions: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 10,
+    margin: 15,
+  },
+  viewRepositoryButton: {
+    backgroundColor: '#0366d6',
+    padding: 15,
+    flex: 1,
+    borderRadius: 5,
+  },
+  viewRepositoryText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  deleteReviewButton: {
+    backgroundColor: '#d73a4a',
+    padding: 15,
+    flex: 1,
+    borderRadius: 5,
+  },
+  deleteButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 })
 
 const MyReviewItem = ({ review }) => {
@@ -53,21 +83,37 @@ const MyReviewItem = ({ review }) => {
 
   return (
     <View style={styles.reviewContainer}>
-      <View style={styles.reviewRating}>
-        <Text style={styles.reviewRatingText}>{rating}</Text>
+      <View style={styles.reviewInfo}>
+        <View style={styles.reviewRating}>
+          <Text style={styles.reviewRatingText}>{rating}</Text>
+        </View>
+        <View style={styles.reviewContent}>
+          <Text
+            fontSize='heading'
+            fontWeight='bold'
+            style={{
+              marginBottom: 5,
+            }}
+          >
+            {repositoryId.replace('.', '/')}
+          </Text>
+          <Text style={styles.reviewTimestamp}>{format(createdAt, 'dd MMMM yyyy HH:mm')}</Text>
+          <Text style={styles.reviewText}>{text}</Text>
+        </View>
       </View>
-      <View style={styles.reviewContent}>
-        <Text
-          fontSize='heading'
-          fontWeight='bold'
-          style={{
-            marginBottom: 5,
-          }}
+      <View style={styles.reviewActions}>
+        <TouchableOpacity
+          onPress={() => console.log('View repository')}
+          style={styles.viewRepositoryButton}
         >
-          {repositoryId.replace('.', '/')}
-        </Text>
-        <Text style={styles.reviewTimestamp}>{format(createdAt, 'dd MMMM yyyy HH:mm')}</Text>
-        <Text style={styles.reviewText}>{text}</Text>
+          <Text style={styles.viewRepositoryText}>View repository</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => console.log('Delete review')}
+          style={styles.deleteReviewButton}
+        >
+          <Text style={styles.deleteButtonText}>Delete review</Text>
+        </TouchableOpacity>
       </View>
     </View>
   )
