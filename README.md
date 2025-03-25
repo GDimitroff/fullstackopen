@@ -11,7 +11,7 @@ The course also contains additional sections for the following:
 - GraphQL, a modern alternative to REST APIs.
 - TypeScript, an open-source typed superset of JavaScript that compiles to plain JavaScript.
 - React Native, an open-source UI software framework to create native mobile applications using
-  JavaScript. (not completed yet)
+  JavaScript.
 - CI/CD - Continuous Integration (CI) and Continuous Delivery (CD)
 - Docker Containers, an open platform for developing, shipping, and running applications by
   virtualizing the operating system of the computer on which it is installed and running.
@@ -36,10 +36,10 @@ The course also contains additional sections for the following:
 
 ## Certificates
 
-<p align="center"><img height="60%" width="100%" src="./certificates/certificate-fullstack.png" alt="FullStack Certificate"></p>
-<p align="center"><img height="60%" width="100%" src="./certificates/certificate-graphql.png" alt="GraphQL Certificate"></p>
-<p align="center"><img height="60%" width="100%" src="./certificates/certificate-typescript.png" alt="TypeScript Certificate"></p>
-<p align="center"><img height="60%" width="100%" src="./certificates/certificate-cicd.png" alt="CI/CD Certificate"></p>
-<p align="center"><img height="60%" width="100%" src="./certificates/certificate-containers.png" alt="Containers Certificate"></p>
-<p align="center"><img height="60%" width="100%" src="./certificates/certificate-psql.png" alt="Relational Databases Certificate"></p>
-<p align="center"><img height="60%" width="100%" src="./certificates/certificate-reactnative.png" alt="React Native Certificate"></p>
+<div align="center"><img height="60%" width="100%" src="./certificates/certificate-fullstack.png" alt="FullStack Certificate"></div>
+<div align="center"><img height="60%" width="100%" src="./certificates/certificate-graphql.png" alt="GraphQL Certificate"></div>
+<div align="center"><img height="60%" width="100%" src="./certificates/certificate-typescript.png" alt="TypeScript Certificate"></div>
+<div align="center"><img height="60%" width="100%" src="./certificates/certificate-reactnative.png" alt="React Native Certificate"></div>
+<div align="center"><img height="60%" width="100%" src="./certificates/certificate-cicd.png" alt="CI/CD Certificate"></div>
+<div align="center"><img height="60%" width="100%" src="./certificates/certificate-containers.png" alt="Containers Certificate"></div>
+<div align="center"><img height="60%" width="100%" src="./certificates/certificate-psql.png" alt="Relational Databases Certificate"></div>
