@@ -3,19 +3,31 @@ import { REPOSITORY_FRAGMENT } from './fragments'
 
 export const GET_REPOSITORIES = gql`
   query Repositories(
+    $first: Int
+    $after: String
     $orderBy: AllRepositoriesOrderBy
     $orderDirection: OrderDirection
     $searchKeyword: String
   ) {
     repositories(
+      first: $first
+      after: $after
       orderBy: $orderBy
       orderDirection: $orderDirection
       searchKeyword: $searchKeyword
     ) {
+      totalCount
       edges {
+        cursor
         node {
           ...RepositoryFragment
         }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+        hasPreviousPage
+        startCursor
       }
     }
   }

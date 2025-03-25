@@ -47,19 +47,20 @@ const sortItems = [
 const ItemSeparator = () => <View style={styles.separator} />
 
 export const RepositoryListContainer = ({
-  data,
+  repositories,
   loading,
   error,
   searchQuery,
   setSearchQuery,
   sortItem,
   setSortItem,
+  onEndReach,
 }) => {
   const navigate = useNavigate()
 
   const [visible, setVisible] = useState(false)
 
-  const repositoryNodes = data ? data.repositories.edges.map((edge) => edge.node) : []
+  const repositoryNodes = repositories ? repositories.edges.map((edge) => edge.node) : []
 
   if (loading) {
     return <Text>Loading...</Text>
@@ -72,6 +73,8 @@ export const RepositoryListContainer = ({
   return (
     <PaperProvider>
       <FlatList
+        onEndReached={onEndReach}
+        onEndReachedThreshold={0.5}
         data={repositoryNodes}
         ItemSeparatorComponent={ItemSeparator}
         keyExtractor={(item) => item.id}
@@ -133,17 +136,27 @@ const RepositoryList = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [debouncedSearchQuery] = useDebounce(searchQuery, 500)
   const [sortItem, setSortItem] = useState(sortItems[0])
-  const { data, error, loading } = useRepositories(debouncedSearchQuery, sortItem)
+  const { repositories, error, loading, fetchMore } = useRepositories({
+    first: 8,
+    searchKeyword: debouncedSearchQuery,
+    orderBy: sortItem.orderBy,
+    orderDirection: sortItem.orderDirection,
+  })
+
+  const onEndReach = () => {
+    fetchMore()
+  }
 
   return (
     <RepositoryListContainer
-      data={data}
+      repositories={repositories}
       loading={loading}
       error={error}
       searchQuery={searchQuery}
       setSearchQuery={setSearchQuery}
       sortItem={sortItem}
       setSortItem={setSortItem}
+      onEndReach={onEndReach}
     />
   )
 }
