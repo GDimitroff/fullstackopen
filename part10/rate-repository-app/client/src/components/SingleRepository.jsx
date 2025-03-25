@@ -199,7 +199,14 @@ const ReviewItem = ({ review }) => {
 
 const SingleRepository = () => {
   const { id } = useParams()
-  const { data: repository, loading, error } = useRepository(id)
+  const { repository, loading, error, fetchMore } = useRepository({
+    id,
+    first: 8,
+  })
+
+  const onEndReach = () => {
+    fetchMore()
+  }
 
   if (loading) {
     return <Text>Loading...</Text>
@@ -213,6 +220,8 @@ const SingleRepository = () => {
 
   return (
     <FlatList
+      onEndReached={onEndReach}
+      onEndReachedThreshold={0.5}
       data={reviews}
       renderItem={({ item }) => <ReviewItem review={item} />}
       keyExtractor={({ id }) => id}

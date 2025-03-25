@@ -56,12 +56,20 @@ export const GET_CURRENT_USER = gql`
 `
 
 export const GET_REPOSITORY = gql`
-  query getRepository($id: ID!) {
+  query getRepository($first: Int, $after: String, $id: ID!) {
     repository(id: $id) {
       ...RepositoryFragment
       url
-      reviews {
+      reviews(first: $first, after: $after) {
+        totalCount
+        pageInfo {
+          startCursor
+          hasPreviousPage
+          hasNextPage
+          endCursor
+        }
         edges {
+          cursor
           node {
             id
             text
