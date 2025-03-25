@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 
 import Text from './Text'
 import useUser from '../hooks/useUser'
+import useDeleteReview from '../hooks/useDeleteReview'
 
 const styles = StyleSheet.create({
   noReviews: {
@@ -78,8 +79,9 @@ const styles = StyleSheet.create({
   },
 })
 
-const MyReviewItem = ({ review }) => {
+const MyReviewItem = ({ review, refetch }) => {
   const navigate = useNavigate()
+  const [deleteUser] = useDeleteReview()
 
   const { id, text, rating, createdAt, repositoryId } = review
   const formattedRepositoryId = repositoryId.replace('.', '/')
@@ -94,7 +96,8 @@ const MyReviewItem = ({ review }) => {
         text: 'Delete',
         style: 'destructive',
         onPress: async () => {
-          console.log('Deleting... ', id)
+          await deleteUser(id)
+          await refetch()
         },
       },
     ])
@@ -136,7 +139,7 @@ const MyReviewItem = ({ review }) => {
 }
 
 const MyReviewsList = () => {
-  const { data: user, loading, error } = useUser({ includeReviews: true })
+  const { data: user, loading, error, refetch } = useUser({ includeReviews: true })
 
   if (loading) {
     return <Text>Loading...</Text>
@@ -155,7 +158,7 @@ const MyReviewsList = () => {
   return (
     <FlatList
       data={reviews}
-      renderItem={({ item }) => <MyReviewItem review={item} />}
+      renderItem={({ item }) => <MyReviewItem review={item} refetch={refetch} />}
       keyExtractor={({ id }) => id}
       ListEmptyComponent={() => (
         <View style={styles.noReviews}>
